@@ -11,20 +11,20 @@ const Footer = ({ theme, settings }) => {
       <AppBar color="primary" position="static">
         <Toolbar className="footer flex items-center">
           <div className="flex items-center container w-full">
-            <a
+            {/* <a
               href="https://ui-lib.com/downloads/matx-react-material-design-admin-template/"
               className="mr-2"
             >
               <Button variant="contained">Download Matx</Button>
-            </a>
-            <a href="https://ui-lib.com/downloads/matx-pro-react-material-design-admin-template/">
+            </a> */}
+            {/* <a href="https://ui-lib.com/downloads/matx-pro-react-material-design-admin-template/">
               <Button variant="contained" color="secondary">
                 Get MatX Pro
               </Button>
-            </a>
+            </a> */}
             <span className="m-auto"></span>
             <p className="m-0">
-              Design and Developed by <a href="http://ui-lib.com">UI Lib</a>
+              Developed by <a href="http://ui-lib.com">Biad Iritie</a>
             </p>
           </div>
         </Toolbar>

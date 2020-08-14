@@ -10,7 +10,7 @@ import MatxCssVars from "./MatxCssVars";
 
 const MatxTheme = ({ children, settings }) => {
   let activeTheme = { ...settings.themes[settings.activeTheme] };
-  // console.log(activeTheme);
+  //console.log(activeTheme);
   // cssVars();
   // activeTheme.direction = settings.direction;
   return (

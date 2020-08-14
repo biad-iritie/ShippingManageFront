@@ -1,6 +1,6 @@
 import history from "history.js";
-import jwtAuthService from "../../services/jwtAuthService";
-
+import { logout } from "../../services/jwtAuthService";
+import { removeUser, setSession } from "../../services/jwtAuthService"
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
@@ -11,19 +11,27 @@ export function setUserData(user) {
       type: SET_USER_DATA,
       data: user
     });
+    //console.log(user);
+    history.push({
+      pathname: "/"
+    });
   };
 }
 
 export function logoutUser() {
   return dispatch => {
-    jwtAuthService.logout();
+    //logout();
+    setSession();
+    removeUser();
+
+    dispatch({
+      type: USER_LOGGED_OUT
+    });
 
     history.push({
       pathname: "/session/signin"
     });
 
-    dispatch({
-      type: USER_LOGGED_OUT
-    });
+
   };
 }

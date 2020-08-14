@@ -105,7 +105,8 @@ class Layout1Sidenav extends Component {
     return (
       <div className="sidenav__user">
         <div className="username-photo">
-          <img src={user.photoURL} alt="user" />
+          {user.names}
+          {/* <img src={user.photoURL} alt="user" /> */}
         </div>
         <div className="ml-4">
           <span className="username">

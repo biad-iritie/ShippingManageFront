@@ -6,7 +6,7 @@ import {
 
 const initialState = {};
 
-const userReducer = function(state = initialState, action) {
+const userReducer = function (state = initialState, action) {
   switch (action.type) {
     case SET_USER_DATA: {
       return {
@@ -20,7 +20,7 @@ const userReducer = function(state = initialState, action) {
       };
     }
     case USER_LOGGED_OUT: {
-      return state;
+      return state = initialState;
     }
     default: {
       return state;

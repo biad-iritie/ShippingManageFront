@@ -30,11 +30,11 @@ const styles = theme => ({
   }
 });
 
-class Layout1Topbar extends Component {
-  state = {};
-
-  updateSidebarMode = sidebarSettings => {
-    let { settings, setLayoutSettings } = this.props;
+const Layout1Topbar = (props) => {
+  //state = {};
+  const user = props.user
+  const updateSidebarMode = sidebarSettings => {
+    let { settings, setLayoutSettings } = props;
 
     setLayoutSettings({
       ...settings,
@@ -48,8 +48,8 @@ class Layout1Topbar extends Component {
     });
   };
 
-  handleSidebarToggle = () => {
-    let { settings } = this.props;
+  const handleSidebarToggle = () => {
+    let { settings } = props;
     let { layout1Settings } = settings;
 
     let mode;
@@ -58,56 +58,72 @@ class Layout1Topbar extends Component {
     } else {
       mode = layout1Settings.leftSidebar.mode === "full" ? "close" : "full";
     }
-    this.updateSidebarMode({ mode });
+    updateSidebarMode({ mode });
   };
 
-  handleSignOut = () => {
-    this.props.logoutUser();
+  const handleSignOut = () => {
+    props.logoutUser();
   };
 
-  render() {
-    let { classes, fixed } = this.props;
+  /* render() { */
+  let { classes, fixed } = props;
 
-    return (
-      <div className={`topbar ${classes.topbar}`}>
-        <div className={classList({ "topbar-hold": true, fixed: fixed })}>
-          <div className="flex justify-between items-center h-full">
-            <div className="flex">
-              <IconButton
-                onClick={this.handleSidebarToggle}
-                className="hide-on-pc"
-              >
-                <Icon>menu</Icon>
+  return (
+    <div className={`topbar ${classes.topbar}`}>
+      <div className={classList({ "topbar-hold": true, fixed: fixed })}>
+        <div className="flex justify-between items-center h-full">
+          <div className="flex">
+            <IconButton
+              onClick={handleSidebarToggle}
+              className="hide-on-pc"
+            >
+              <Icon>menu</Icon>
+            </IconButton>
+
+            <div className="hide-on-mobile">
+              <IconButton>
+                <Icon>mail_outline</Icon>
               </IconButton>
 
-              <div className="hide-on-mobile">
-                <IconButton>
-                  <Icon>mail_outline</Icon>
-                </IconButton>
-
-                <IconButton>
-                  <Icon>web_asset</Icon>
-                </IconButton>
-
-                <IconButton>
-                  <Icon>star_outline</Icon>
-                </IconButton>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <MatxSearchBox />
-
-              <NotificationBar />
-
-              <ShoppingCart></ShoppingCart>
 
               <MatxMenu
                 menuButton={
-                  <img
-                    className="mx-2 align-middle circular-image-small cursor-pointer"
-                    src="/assets/images/face-6.jpg"
-                    alt="user"
-                  />
+                  <IconButton>
+                    <Icon>public</Icon>
+                  </IconButton>
+                }
+              >
+                <MenuItem>
+                  <Link className={classes.menuItem} to="/">
+                    <span className="pl-4"> FR </span>
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <span className="pl-4"> ENG </span>
+                </MenuItem>
+
+
+              </MatxMenu>
+              {/* <IconButton>
+                  <Icon>star_outline</Icon>
+                </IconButton> */}
+            </div>
+          </div>
+          <div className="flex items-center">
+            {/* <ShoppingCart></ShoppingCart> */}
+            <MatxSearchBox />
+            {
+              user.role && (<NotificationBar />)
+            }
+
+            {
+              user.role &&
+
+              <MatxMenu MatxMenu
+                menuButton={
+                  <IconButton>
+                    <Icon>person_pin</Icon>
+                  </IconButton>
                 }
               >
                 <MenuItem>
@@ -130,19 +146,21 @@ class Layout1Topbar extends Component {
                   <span className="pl-4"> Settings </span>
                 </MenuItem>
                 <MenuItem
-                  onClick={this.handleSignOut}
+                  onClick={handleSignOut}
                   className={classes.menuItem}
                 >
                   <Icon> power_settings_new </Icon>
                   <span className="pl-4"> Logout </span>
                 </MenuItem>
               </MatxMenu>
-            </div>
+            }
+
           </div>
         </div>
       </div>
-    );
-  }
+    </div >
+  );
+  //}
 }
 
 Layout1Topbar.propTypes = {
@@ -154,7 +172,8 @@ Layout1Topbar.propTypes = {
 const mapStateToProps = state => ({
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  settings: state.layout.settings
+  settings: state.layout.settings,
+  user: state.user,
 });
 
 export default withStyles(styles, { withTheme: true })(

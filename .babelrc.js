@@ -18,7 +18,8 @@ const plugins = [
       camel2DashComponentName: false
     },
     "icons"
-  ]
+  ],
+
 ];
 
 module.exports = { plugins };

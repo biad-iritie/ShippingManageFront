@@ -7,10 +7,66 @@ import "./_index.scss";
 
 import * as serviceWorker from "./serviceWorker";
 import App from "./app/App";
+//Configure URQL
+/* import { createClient, Provider } from 'urql'; */
 
+//Configure ApolloClient
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { createHttpLink } from 'apollo-link-http';
+//import { onError } from '@apollo/client/link/error';
+//import { logoutUser } from './app/redux/actions/UserActions';
+// 1
+/* import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory' */
+// 2
+/* const httpLink = createHttpLink({
+    uri: 'http://localhost:4000'
+})
+const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache()
+}) */
+const httpLink = createHttpLink({
+    uri: 'http://localhost:4000',
+});
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwt_token');
+    // return the headers to the context so httpLink can read them
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : "",
+        }
+    }
+});
+/* const logoutLink = onError(({ networkError }) => {
+    if (networkError.statusCode === 401) logout();
+  }) */
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache({
+        addTypename: false
+    })
+    //cache: new InMemoryCache()
+});
+
+
+//const client = createClient({ url: 'http://localhost:4000' });
 // cssVars();
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+    <ApolloProvider client={client}>
+        <App />
+    </ApolloProvider>,
+    document.getElementById("root"));
+/* ReactDOM.render(
+    <App />,
+    document.getElementById("root")); */
 
 // for IE-11 support un-comment cssVars() and it's import in this file
 // and in MatxTheme file

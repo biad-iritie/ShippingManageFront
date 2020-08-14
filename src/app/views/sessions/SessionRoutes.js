@@ -2,12 +2,15 @@ import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import NotFound from "./NotFound";
 import ForgotPassword from "./ForgotPassword";
+//OWN
+//import CompSignIn from "./CompSignIn";
+import CompSignUp from "./CompSignUp";
 
 const settings = {
   activeLayout: "layout1",
   layout1Settings: {
     topbar: {
-      show: false
+      show: true
     },
     leftSidebar: {
       show: false,
@@ -22,7 +25,7 @@ const settings = {
     navbar: { show: false }
   },
   secondarySidebar: { show: false },
-  footer: { show: false }
+  footer: { show: true }
 };
 
 const sessionRoutes = [
@@ -45,7 +48,19 @@ const sessionRoutes = [
     path: "/session/404",
     component: NotFound,
     settings
-  }
+  },
+  //OWN
+  /* {
+    path: "/session/comp-sign-in",
+    component: CompSignIn,
+    settings
+  }, */
+  {
+    path: "/session/comp-sign-up",
+    component: CompSignUp,
+    settings
+  },
+
 ];
 
 export default sessionRoutes;

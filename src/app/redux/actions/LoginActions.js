@@ -1,5 +1,5 @@
-import jwtAuthService from "../../services/jwtAuthService";
-import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
+import { setSession, setUser } from "../../services/jwtAuthService";
+//import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
 import { setUserData } from "./UserActions";
 import history from "history.js";
 
@@ -7,32 +7,88 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
 export const RESET_PASSWORD = "RESET_PASSWORD";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 
-export function loginWithEmailAndPassword({ email, password }) {
+
+export function loading() {
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
     });
+    return null
+  }
 
-    jwtAuthService
-      .loginWithEmailAndPassword(email, password)
-      .then(user => {
-        dispatch(setUserData(user));
+}
+export function error(error) {
+  return dispatch => {
+    dispatch({
+      type: LOGIN_ERROR,
+      payload: error
+    });
+  }
+}
+export function loginWithEmailAndPassword(user, token) {
+  return dispatch => {
+    dispatch({
+      type: LOGIN_LOADING
+    });
+    /* console.log("Action loginWithEmailAndPassword");
+    console.log(user, token); */
 
-        history.push({
-          pathname: "/"
-        });
+    /* jwtAuthService.loginWithEmailAndPassword(user, token)
+      .then((user) => { */
+    setSession(token);
+    // Set user
+    //console.log(user);
+    setUser(user);
+    dispatch(setUserData(user));
 
-        return dispatch({
-          type: LOGIN_SUCCESS
-        });
+    history.push({
+      pathname: "/dashboard/analytics"
+    });
+
+    return dispatch({
+      type: LOGIN_SUCCESS
+    });
+    /* })
+    .catch((error) => {
+      return dispatch({
+        type: LOGIN_ERROR,
+        payload: error
+      });
+    }); */
+  };
+}
+
+export function signUpCustomer({ email, password, names, phone }) {
+  return dispatch => {
+    dispatch({
+      type: LOGIN_LOADING
+    });
+    /*jwtAuthService
+      .signUpCustomerService(email, password, names, phone)
+       .then(result => {
+        if (!result.error) {
+          dispatch(setUserData(result.user));
+
+          history.push({
+            pathname: "/"
+          });
+
+          return dispatch({
+            type: SIGNUP_SUCCESS
+          });
+        } else {
+          alert("ERRor Login Action")
+        }
+
       })
       .catch(error => {
         return dispatch({
           type: LOGIN_ERROR,
           payload: error
         });
-      });
+      }); */
   };
 }
 
@@ -44,8 +100,7 @@ export function resetPassword({ email }) {
     });
   };
 }
-
-export function firebaseLoginEmailPassword({ email, password }) {
+/* export function firebaseLoginEmailPassword({ email, password }) {
   return dispatch => {
     FirebaseAuthService.signInWithEmailAndPassword(email, password)
       .then(user => {
@@ -84,4 +139,4 @@ export function firebaseLoginEmailPassword({ email, password }) {
         });
       });
   };
-}
+} */

@@ -5,6 +5,22 @@ export const navigations = [
     icon: "dashboard"
   },
   {
+    name: "Company",
+    icon: "business",
+    children: [
+      {
+        name: "Info",
+        path: "/company/info",
+        iconText: "I"
+      },
+      {
+        name: "Rate",
+        path: "/company/rate",
+        iconText: "E"
+      }
+    ]
+  },
+  {
     name: "Forms",
     icon: "description",
     children: [

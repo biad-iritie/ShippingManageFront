@@ -59,13 +59,13 @@ class SecondarySidebarContent extends Component {
 
         <MatxCustomizer />
 
-        <ShoppingCart />
+        {/* <ShoppingCart /> */}
 
-        <Link to="/chat">
+        {/* <Link to="/chat">
           <IconButton size="small" aria-label="delete" className="my-3">
             <Icon>comments</Icon>
           </IconButton>
-        </Link>
+        </Link> */}
 
         <span className="m-auto"></span>
       </div>

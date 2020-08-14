@@ -24,13 +24,13 @@ export const MatxLayoutSettings = {
 
   secondarySidebar: {
     show: true,
-    open: true,
+    open: false,
     theme: "slateDark1" // View all valid theme colors inside MatxTheme/themeColors.js
   },
   // Footer options
   footer: {
     show: true,
     fixed: false,
-    theme: "slateDark1" // View all valid theme colors inside MatxTheme/themeColors.js
+    theme: "white" // View all valid theme colors inside MatxTheme/themeColors.js
   }
 };

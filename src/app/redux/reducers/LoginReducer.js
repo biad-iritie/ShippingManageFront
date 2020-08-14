@@ -2,7 +2,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   LOGIN_LOADING,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  SIGNUP_SUCCESS
 } from "../actions/LoginActions";
 
 const initialState = {
@@ -14,7 +15,7 @@ const initialState = {
   }
 };
 
-const LoginReducer = function(state = initialState, action) {
+const LoginReducer = function (state = initialState, action) {
   switch (action.type) {
     case LOGIN_LOADING: {
       return {
@@ -23,6 +24,13 @@ const LoginReducer = function(state = initialState, action) {
       };
     }
     case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        success: true,
+        loading: false
+      };
+    }
+    case SIGNUP_SUCCESS: {
       return {
         ...state,
         success: true,

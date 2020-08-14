@@ -99,7 +99,7 @@ const MatxCustomizer = props => {
         }
       }
     },
-    {
+    /* {
       name: "Horizontal Navigation",
       thumbnail: "/assets/images/screenshots/layout4-customizer.png",
       isPro: true,
@@ -116,7 +116,7 @@ const MatxCustomizer = props => {
           theme: "slateDark1"
         }
       }
-    }
+    } */
   ];
 
   const updateSettings = newSettings => {

@@ -11,6 +11,8 @@ import dragAndDropRoute from "./views/Drag&Drop/DragAndDropRoute";
 import formsRoutes from "./views/forms/FormsRoutes";
 import mapRoutes from "./views/map/MapRoutes";
 
+import companyRoutes from "./views/company/CompanyRoutes";
+
 const redirectRoute = [
   {
     path: "/",
@@ -26,6 +28,7 @@ const errorRoute = [
 ];
 
 const routes = [
+  ...companyRoutes,
   ...sessionRoutes,
   ...dashboardRoutes,
   ...materialRoutes,
