@@ -6,13 +6,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
+import {
+    CircularProgress,
+} from "@material-ui/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Confirmation() {
-    const [open, setOpen] = React.useState(false);
+export default function Confirmation(props) {
+    /* const [open, setOpen] = React.useState(false);
 
     function handleClickOpen() {
         setOpen(true);
@@ -20,37 +23,41 @@ export default function Confirmation() {
 
     function handleClose() {
         setOpen(false);
-    }
-
+    } */
+    //console.log(props);
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Slide in alert dialog
-      </Button>
+
             <Dialog
-                open={open}
+                open={props.open}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={handleClose}
+                //onClose={props.handleClose}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle id="alert-dialog-slide-title">
-                    {"Use Google's location service?"}
+                    {props.title}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending
-                        anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
+                        {props.message}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={props.handleClose} color="primary" disabled={props.loading}>
                         Disagree
           </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={props.funcAction} color="primary" disabled={props.loading}>
                         Agree
-          </Button>
+                        {props.loading && (
+                            <CircularProgress
+                                size={24}
+                            //className={classes.buttonProgress}
+                            />
+                        )}
+
+
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

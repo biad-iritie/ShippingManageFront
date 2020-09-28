@@ -4,14 +4,17 @@ import {
     Grid,
     Button,
     Icon,
-    CircularProgress
+    CircularProgress,
+    FormControlLabel,
+    Switch,
+    FormGroup
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
-import { loading, error } from "../../redux/actions/LoginActions";
-import ShowInfo from '../message/message';
+import { loading, success } from "../../redux/actions/LoginActions";
+import ShowInfo from '../components/message';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { INFO_COMPANY, UPDATE_COMPANY } from '../../../graphql/User';
 import { Breadcrumb } from "matx";
@@ -46,12 +49,13 @@ const Info = (props) => {
         errorPolicy: 'all',
         onCompleted: (data) => {
             props.addCompany(data.info_company)
-            //console.log(data)
+            console.log(data)
             setName(data.info_company.name)
             setEmail(data.info_company.email)
             setPhone1(data.info_company.phone1)
             setPhone2(data.info_company.phone2)
             setAddress(data.info_company.address)
+            setIs_active(data.info_company.is_active)
         },
         onError: () => {
             console.log("onError");
@@ -120,7 +124,10 @@ const Info = (props) => {
             case "address":
                 setAddress(event.target.value)
                 break;
-
+            case "is_active":
+                //console.log(!false);
+                //console.log(typeof event.target.value);
+                setIs_active(event.target.value === 'true' ? false : true)
 
         }
         /* this.setState({
@@ -157,7 +164,7 @@ const Info = (props) => {
                 props.addCompany(res.data.update_company)
                 setVariant('success')
                 setShow(true);
-                props.error();
+                props.success();
 
             })
             .catch((error) => {
@@ -179,21 +186,22 @@ const Info = (props) => {
     };
     useEffect(() => {
         info_company()
-    }, [data])
+    }, [data]);
     /* render() { */
     //let { username, email, password } = this.state;
-    //console.log(props);
+    //console.log(typeof props.company.is_active);
     const classes = useStyles();
-    const [name, setName] = useState(props.company.name);
+    const [name, setName] = useState(props.company.name ? props.company.name : false);
     const [phone1, setPhone1] = useState(props.company.phone1);
     const [phone2, setPhone2] = useState(props.company.phone2);
     const [email, setEmail] = useState(props.company.email);
     const [address, setAddress] = useState(props.company.address);
+    const [is_active, setIs_active] = useState(props.company.is_active ? props.company.is_active : false);
     const [variant, setVariant] = useState('error');
     const [info, setInfo] = useState(null);
     const [show, setShow] = useState(false);
+    //console.log(is_active);
     return (
-
         <div className="m-sm-30">
             <ShowInfo
                 show={show}
@@ -202,16 +210,14 @@ const Info = (props) => {
             <div className="mb-sm-30">
                 <Breadcrumb
                     routeSegments={[
-                        { name: "Company", path: "/dashboard/analytics" },
-                        { name: "Info" }
+                        { name: "Dashboard", path: "/" },
+                        { name: "Company" }
                     ]}
                 />
             </div>
             <Card>
                 <div className="p-9 h-full">
                     <div className={classes.root}>
-
-
                         <ValidatorForm ref={useRef("form")} onSubmit={HandleFormSubmit}>
                             <Grid container spacing={6}>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -289,6 +295,20 @@ const Info = (props) => {
                                             "this field is required"
                                         ]}
                                     />
+                                    <FormGroup row>
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    checked={is_active}
+                                                    name="is_active"
+                                                    onChange={handleChange}
+                                                    value={is_active}
+                                                />
+                                            }
+                                            label="Available"
+                                        />
+                                    </FormGroup>
+
                                 </Grid>
                             </Grid>
                             <div className="flex items-center">
@@ -299,22 +319,22 @@ const Info = (props) => {
                                     disabled={props.login.loading}
                                 >
                                     <Icon>send</Icon>
-                                    <span className="pl-2 capitalize">Submit</span>
-
+                                    <span className="pl-2 capitalize">Update</span>
+                                    {props.login.loading && (
+                                        <CircularProgress
+                                            size={24}
+                                            color="secondary"
+                                            className={classes.buttonProgress}
+                                        />
+                                    )}
                                 </Button>
-                                {props.login.loading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
-
                             </div>
                         </ValidatorForm>
                     </div>
                 </div>
 
             </Card>
+
         </div>
     );
     //}
@@ -324,9 +344,9 @@ const mapStateToProps = state => ({
     // setUser: PropTypes.func.isRequired
     addCompany: PropTypes.func.isRequired,
     loading: PropTypes.func.isRequired,
-    error: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
     login: state.login,
     company: state.company
 });
 
-export default connect(mapStateToProps, { error, loading, addCompany })(Info);
+export default connect(mapStateToProps, { success, loading, addCompany })(Info);

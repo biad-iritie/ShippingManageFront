@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
     Card,
-    Checkbox,
-    FormControlLabel,
     Grid,
     Button,
     CircularProgress
@@ -17,7 +15,7 @@ import { useMutation } from '@apollo/client';
 /*import { SIGN_UP_CUSTOMER } from '../../../graphql/User' */
 //import { useQuery } from 'urql';
 import { SIGN_UP } from '../../../graphql/User';
-import ShowInfo from '../message/message';
+import ShowInfo from '../components/message';
 
 /* import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent"; */
@@ -286,13 +284,15 @@ const SignUp = (props) => {
                                                 disabled={props.login.loading}
                                             >
                                                 Sign up
-                                        </Button>
-                                            {props.login.loading && (
-                                                <CircularProgress
-                                                    size={24}
-                                                    className={classes.buttonProgress}
-                                                />
-                                            )}
+                                                {props.login.loading && (
+                                                    <CircularProgress
+                                                        size={24}
+                                                        color="secondary"
+                                                        className={classes.buttonProgress}
+                                                    />
+                                                )}
+                                            </Button>
+
                                         </div>
                                         <span className="mx-2 ml-5">or</span>
 

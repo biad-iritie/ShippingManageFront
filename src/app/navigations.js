@@ -8,17 +8,32 @@ export const navigations = [
     name: "Company",
     icon: "business",
     children: [
-      {
+      /* {
         name: "Info",
         path: "/company/info",
         iconText: "I"
-      },
+      }, */
       {
         name: "Rate",
         path: "/company/rate",
         iconText: "E"
+      },
+      {
+        name: "Info",
+        path: "/company/info",
+        iconText: 'I'
       }
     ]
+  },
+  /* {
+    name: "New Package",
+    icon: "insert_drive_file",
+    path: "/order/add_order"
+  }, */
+  {
+    name: "Package",
+    icon: "view_list",
+    path: "/order/list_order"
   },
   {
     name: "Forms",

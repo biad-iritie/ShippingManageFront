@@ -1,7 +1,13 @@
 import { gql } from '@apollo/react-hooks';
 
+export const DELETE_RATE = gql`
+mutation delete_rate($id:ID!){
+  delete_rate(id:$id){
+    id
+  }
+}`;
 export const UPDATE_RATE = gql`
-mutation update_rate($id:ID!,$country:ID!,$shipMethod: String!,$interKg:String!, $price:String!, $typeService:String, $goods:String!, 
+mutation update_rate($id:ID!,$country:String!,$shipMethod: String!,$interKg:String!, $price:String!, $typeService:String, $goods:String!, 
     $time:String!, 
     $cities:String!
 ){
@@ -21,7 +27,7 @@ mutation update_rate($id:ID!,$country:ID!,$shipMethod: String!,$interKg:String!,
 }`;
 
 export const ADD_RATE = gql`
-mutation add_rate($country:ID!,$shipMethod: String!, $interKg:String!, $price:String!, $typeService:String, $goods:String!, 
+mutation add_rate($country:String!,$shipMethod: String!, $interKg:String!, $price:String!, $typeService:String, $goods:String!, 
     $time:String!, 
     $cities:String!
     ){
@@ -37,15 +43,15 @@ export const LIST_RATE = gql`
 query list_rate($email_company: String){
   list_rate(email_company:$email_company){
     id
-    shipMethod
-    interKg
-    price
-    typeService
-    goods
-    time
-    cities
     country{
       name
     }
+    cities
+    shipMethod
+    typeService
+    goods
+    interKg
+    price
+    time  
   }
 }`

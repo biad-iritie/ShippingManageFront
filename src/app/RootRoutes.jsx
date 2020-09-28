@@ -12,6 +12,7 @@ import formsRoutes from "./views/forms/FormsRoutes";
 import mapRoutes from "./views/map/MapRoutes";
 
 import companyRoutes from "./views/company/CompanyRoutes";
+import orderRoutes from "./views/order/OrderRoutes";
 
 const redirectRoute = [
   {
@@ -28,6 +29,7 @@ const errorRoute = [
 ];
 
 const routes = [
+  ...orderRoutes,
   ...companyRoutes,
   ...sessionRoutes,
   ...dashboardRoutes,

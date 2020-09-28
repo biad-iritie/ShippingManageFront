@@ -10,7 +10,7 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen, classList } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
-import ShoppingCart from "../SharedCompoents/ShoppingCart";
+//import ShoppingCart from "../SharedCompoents/ShoppingCart";
 
 const styles = theme => ({
   topbar: {
@@ -73,17 +73,21 @@ const Layout1Topbar = (props) => {
       <div className={classList({ "topbar-hold": true, fixed: fixed })}>
         <div className="flex justify-between items-center h-full">
           <div className="flex">
-            <IconButton
-              onClick={handleSidebarToggle}
-              className="hide-on-pc"
-            >
-              <Icon>menu</Icon>
-            </IconButton>
+            {
+              user.role && (
+                <IconButton
+                  onClick={handleSidebarToggle}
+                  className="hide-on-pc"
+                >
+                  <Icon>menu</Icon>
+                </IconButton>)
+            }
+
 
             <div className="hide-on-mobile">
-              <IconButton>
+              {/* <IconButton>
                 <Icon>mail_outline</Icon>
-              </IconButton>
+              </IconButton> */}
 
 
               <MatxMenu

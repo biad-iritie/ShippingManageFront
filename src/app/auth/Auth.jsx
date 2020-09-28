@@ -19,11 +19,16 @@ const checkJwtAuth = (setUserData, data) => {
   //let user = await jwtAuthService.loginWithToken();
   /* console.log("checkJwtAuth");
   console.log(data != undefined); */
-  if (data != undefined) {
+
+  if (data !== undefined) {
     //console.log(data.verifyToken.__typename);
     //delete data.verifyToken.__typename
     //console.log(data.verifyToken);
     setUserData(data.verifyToken)
+    //console.log(data);
+    /* history.push({
+      pathname: "/dashboard/analytics"
+    }); */
   }
   else {
     history.push({
@@ -49,10 +54,11 @@ const checkJwtAuth = (setUserData, data) => {
 const Auth = ({ children, setUserData, getNavigationByUser }) => {
   //Check the TOKEN 
   const { loading, error, data } = useQuery(VERIFY_TOKEN);
-  /* console.log("Auth");
-  console.log(data); */
+  //console.log("Auth");
+  //console.log(data);
 
   useEffect(() => {
+    //console.log("useEffect");
     checkJwtAuth(setUserData, data);
     getNavigationByUser();
   }, [setUserData, getNavigationByUser, data]);

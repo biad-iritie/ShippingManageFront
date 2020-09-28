@@ -14,8 +14,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
-import { loginWithEmailAndPassword, loading, error } from "../../redux/actions/LoginActions";
-import ShowInfo from '../message/message';
+import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
+import ShowInfo from '../components/message';
 import { useMutation } from '@apollo/client';
 import { SIGN_UP } from '../../../graphql/User';
 
@@ -43,16 +43,16 @@ const CompSignUp = (props) => {
     }; */
     const classes = useStyles();
     const [expanded, setExpanded] = useState("panel1");
-    const [names, setNames] = useState("Biad Boss");
-    const [phone, setPhone] = useState("+13872112262");
-    const [password, setPassword] = useState("admin");
-    const [repassword, setRepassword] = useState("admin");
-    const [email, setEmail] = useState("biad@bs.com");
-    const [name_company, setName_company] = useState("Biad Ship");
-    const [phone_company1, setPhone_company1] = useState("+13872112263");
-    const [phone_company2, setPhone_company2] = useState("+22507203382");
-    const [email_company, setEmail_company] = useState("biad@sh.com");
-    const [address, setAddress] = useState("石港区社区工作管理委员会 湖北省黄石市黄石港区磁湖路11号 湖北师范大学 22栋 303号");
+    const [names, setNames] = useState();
+    const [phone, setPhone] = useState();
+    const [password, setPassword] = useState();
+    const [repassword, setRepassword] = useState();
+    const [email, setEmail] = useState();
+    const [name_company, setName_company] = useState();
+    const [phone_company1, setPhone_company1] = useState();
+    const [phone_company2, setPhone_company2] = useState();
+    const [email_company, setEmail_company] = useState();
+    const [address, setAddress] = useState();
     const [variant, setVariant] = useState('error')
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
@@ -143,7 +143,7 @@ const CompSignUp = (props) => {
                     );
                 //setInfo(error);
                 setShow(true);
-                props.error()
+                props.success()
             })
     };
     const next = event => {
@@ -292,7 +292,7 @@ const CompSignUp = (props) => {
                                                         className="capitalize"
                                                         disabled={props.login.loading}
                                                         onClick={() =>
-                                                            this.props.history.push("/session/signin")
+                                                            props.history.push("/session/signin")
                                                         }
                                                     >
                                                         Sign in
@@ -397,19 +397,21 @@ const CompSignUp = (props) => {
                                                         disabled={props.login.loading}
                                                     >
                                                         Sign Up
+                                                        {props.login.loading && (
+                                                            <CircularProgress
+                                                                size={24}
+                                                                color="secondary"
+                                                                className={classes.buttonProgress}
+                                                            />
+                                                        )}
                                                     </Button>
-                                                    {props.login.loading && (
-                                                        <CircularProgress
-                                                            size={24}
-                                                            className={classes.buttonProgress}
-                                                        />
-                                                    )}
+
                                                     <span className="mx-2 ml-5">or</span>
                                                     <Button
                                                         className="capitalize"
                                                         disabled={props.login.loading}
                                                         onClick={() =>
-                                                            this.props.history.push("/session/signin")
+                                                            props.history.push("/session/signin")
                                                         }
                                                     >
                                                         Sign in
@@ -434,6 +436,7 @@ const mapStateToProps = state => ({
     loginWithEmailAndPassword: PropTypes.func.isRequired,
     loading: PropTypes.func.isRequired,
     login: state.login,
+    success: PropTypes.func.isRequired
 });
 
-export default connect(mapStateToProps, { error, loading, loginWithEmailAndPassword })(CompSignUp);
+export default connect(mapStateToProps, { success, loading, loginWithEmailAndPassword })(CompSignUp);

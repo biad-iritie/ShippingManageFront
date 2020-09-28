@@ -1,12 +1,9 @@
 import React, { useState, useRef } from "react";
 import {
   Card,
-  Checkbox,
-  FormControlLabel,
   Grid,
   Button,
   CircularProgress,
-  Icon
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
@@ -14,10 +11,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
-import { loginWithEmailAndPassword, loading, error } from "../../redux/actions/LoginActions";
+import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../../../graphql/User';
-import ShowInfo from '../message/message';
+import ShowInfo from '../components/message';
 
 const styles = theme => ({
   wrapper: {
@@ -89,7 +86,7 @@ const SignIn = (props) => {
           );
         //setInfo(error);
         setShow(true);
-        props.error()
+        props.success()
       })
   };
 
@@ -154,14 +151,16 @@ const SignIn = (props) => {
                         disabled={props.login.loading}
                         type="submit"
                       >
-                        Sign in to Enter Dashboard
-                        </Button>
-                      {props.login.loading && (
-                        <CircularProgress
-                          size={24}
-                          className={classes.buttonProgress}
-                        />
-                      )}
+                        <span className="pl-2 capitalize">Sign in to Enter Dashboard</span>
+                        {props.login.loading && (
+                          <CircularProgress
+                            size={24}
+                            color="secondary"
+                            className={classes.buttonProgress}
+                          />
+                        )}
+                      </Button>
+
                     </div>
                     <span className="mr-2 ml-5">or</span>
                     <Button
@@ -211,8 +210,8 @@ const mapStateToProps = state => ({
   loginWithEmailAndPassword: PropTypes.func.isRequired,
   login: state.login,
   loading: PropTypes.func.isRequired,
-  error: PropTypes.func.isRequired,
+  success: PropTypes.func.isRequired,
 });
 export default withStyles(styles, { withTheme: true })(
-  withRouter(connect(mapStateToProps, { error, loading, loginWithEmailAndPassword })(SignIn))
+  withRouter(connect(mapStateToProps, { success, loading, loginWithEmailAndPassword })(SignIn))
 );

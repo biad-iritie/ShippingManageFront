@@ -102,7 +102,7 @@ export default function ShowInfo(props) {
     }, [props.show]);
     //alert(info)
     //console.log(props);
-    const classes = useStyles2();
+    //const classes = useStyles2();
 
     const [open, setOpen] = useState(props.show);
     // variant = {"success", "warning", "error", "info"}

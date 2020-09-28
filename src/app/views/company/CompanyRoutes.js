@@ -1,4 +1,3 @@
-import React from "react";
 import { authRoles } from "../../auth/authRoles";
 import Info from "./Info";
 import Rate from "./Rate";
@@ -13,7 +12,7 @@ const companyRoutes = [
     {
         path: "/company/rate",
         component: Rate,
-        auth: authRoles.admin
+        auth: authRoles.editor
     },
     {
         path: "/company/action_rate",

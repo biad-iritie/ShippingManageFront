@@ -8,10 +8,14 @@ query{
     role
   }
 }`;
+
+export const CHECK_COMPANY = gql`
+query check_company($email: String!){
+    check_company(email: $email)
+}`;
 export const LIST_COUNTRY = gql`
 query{
     listCountry{
-      id
       name
     }
 }`;
@@ -43,6 +47,7 @@ query info_company {
         phone1
         phone2
         email
+        is_active
     }}`;
 
 export const SIGN_UP = gql`
@@ -68,6 +73,7 @@ export const SIGN_UP = gql`
                 role 
             }
         }}`;
+
 export const LOGIN = gql`
 mutation login($email: String!, $password: String!) {
     login(
@@ -82,6 +88,7 @@ mutation login($email: String!, $password: String!) {
             role 
         }
     }}`;
+
 export const FEED = gql`
 query GetLaunch {
   feed{

@@ -8,8 +8,10 @@ import EcommerceReducer from "./EcommerceReducer";
 import NavigationReducer from "./NavigationReducer";
 import CompanyReducer from "./CompanyReducer";
 import RateReducer from "./RateReducer";
+import OrderReducer from "./OrderReducer";
 
 const RootReducer = combineReducers({
+  order: OrderReducer,
   rate: RateReducer,
   login: LoginReducer,
   company: CompanyReducer,

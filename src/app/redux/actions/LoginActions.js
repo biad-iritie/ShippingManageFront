@@ -19,11 +19,10 @@ export function loading() {
   }
 
 }
-export function error(error) {
+export function success() {
   return dispatch => {
     dispatch({
-      type: LOGIN_ERROR,
-      payload: error
+      type: SIGNUP_SUCCESS,
     });
   }
 }
@@ -43,9 +42,9 @@ export function loginWithEmailAndPassword(user, token) {
     setUser(user);
     dispatch(setUserData(user));
 
-    history.push({
+    /* history.push({
       pathname: "/dashboard/analytics"
-    });
+    }); */
 
     return dispatch({
       type: LOGIN_SUCCESS

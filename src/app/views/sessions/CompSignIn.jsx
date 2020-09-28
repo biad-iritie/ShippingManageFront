@@ -31,8 +31,8 @@ const styles = theme => ({
 
 class CompSignIn extends Component {
     state = {
-        email: "watson@example.com",
-        password: "testpass",
+        email: "",
+        password: "",
         agreement: ""
     };
     handleChange = event => {

@@ -1,85 +1,44 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
-    Table,
-    TableHead,
-    TableCell,
-    TableBody,
     IconButton,
     Icon,
     Button,
-    TableRow,
     Grid,
-    LinearProgress
+    LinearProgress,
+    Typography
 } from "@material-ui/core";
-import { Breadcrumb, SimpleCard } from "matx";
-import Confirmation from '../message/Confirmation';
-import ShowInfo from '../message/message';
-import { loading, error } from "../../redux/actions/LoginActions";
-import { LIST_RATE } from '../../../graphql/Rate';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { addRate } from '../../redux/actions/RateAction';
+import MUIDataTable from "mui-datatables";
+import { Breadcrumb } from "matx";
+import Confirmation from '../components/Confirmation';
+import ShowInfo from '../components/message';
+import { loading, success } from "../../redux/actions/LoginActions";
+import { LIST_RATE, DELETE_RATE } from '../../../graphql/Rate';
+import { useMutation, useQuery } from '@apollo/client';
+import { addRate, deleteRate, refetchRate, } from '../../redux/actions/RateAction';
 
-const subscribarList = [
-    {
-        name: "john doe",
-        date: "18 january, 2019",
-        amount: 1000,
-        status: "close",
-        company: "ABC Fintech LTD."
-    },
-    {
-        name: "kessy bryan",
-        date: "10 january, 2019",
-        amount: 9000,
-        status: "open",
-        company: "My Fintech LTD."
-    },
-    {
-        name: "james cassegne",
-        date: "8 january, 2019",
-        amount: 5000,
-        status: "close",
-        company: "Collboy Tech LTD."
-    },
-    {
-        name: "lucy brown",
-        date: "1 january, 2019",
-        amount: 89000,
-        status: "open",
-        company: "ABC Fintech LTD."
-    },
-    {
-        name: "lucy brown",
-        date: "1 january, 2019",
-        amount: 89000,
-        status: "open",
-        company: "ABC Fintech LTD."
-    },
-    {
-        name: "lucy brown",
-        date: "1 january, 2019",
-        amount: 89000,
-        status: "open",
-        company: "ABC Fintech LTD."
-    }
-];
+
 
 const Rate = (props) => {
-    const [variant, setVariant] = useState('error')
+    const [variant, setVariant] = useState()
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
-
-    const [list_rate, { loading, error, data }] = useLazyQuery(LIST_RATE, {
+    const [openModal, setOpenModal] = useState(false)
+    const [idDelete, setIdDelete] = useState()
+    /* const [updateState, setupdateState] = useState(
+        props.history.location.state[0].action === "refresh" ? "true" : "false"
+    ) */
+    const { refetch, loading, error, data } = useQuery(LIST_RATE, {
         errorPolicy: 'all',
         onCompleted: (data) => {
-            //console.log(data);
-            props.addRate(data.list_rate)
+            //console.log("OKKK");
+            props.refetchRate(data.list_rate)
+            //props.success();
         },
         onError: () => {
-            console.log("onError");
-            console.log(error);
+            //console.log("onError");
+            //console.log(error);
             setVariant("error");
             if (error.networkError) {
                 setInfo("Please try after this action");
@@ -91,11 +50,263 @@ const Rate = (props) => {
             //setInfo(error);
 
         }
-    })
-    useEffect(() => {
+    });
+    const [delete_rate] = useMutation(DELETE_RATE);
+    const deleteRate = () => {
+        //console.log(idDelete);
+        setShow(false);
         props.loading();
-        list_rate()
-    }, [data])
+        delete_rate({
+            variables: {
+                id: parseInt(idDelete)
+            }
+        })
+            .then(data => {
+                if (data.data.delete_rate.id) {
+                    setInfo("Rate deleted !");
+                    setVariant('success');
+                } else {
+                    setInfo("Error, Try after !");
+                    setVariant('error');
+                }
+                props.deleteRate(data.data.delete_rate.id)
+                setShow(true);
+                props.success();
+            })
+            .catch(error => {
+                setVariant("error");
+                //setInfo("You can't modify now , try it later .");
+                if (error.networkError) {
+                    setInfo("Check your internet, and try again");
+                }
+                if (error.graphQLErrors)
+                    error.graphQLErrors.map(({ message, locations, path }) =>
+                        setInfo(message)
+                    );
+
+                props.success();
+            })
+        handleClose()
+    }
+    useEffect(() => {
+        //console.log(loading);
+        //console.log(data);
+        loading === false &&
+            (async () => {
+                //alert("OK")
+                await refetch()
+                    .then(res => {
+                        props.refetchRate(res.data.list_rate)
+                        props.success();
+                    })
+                    .catch(error => {
+                        console.log("onError");
+                        console.log(error);
+                        setVariant("error");
+                        if (error.networkError) {
+                            setInfo("Please try after this action");
+                        }
+                        if (error.graphQLErrors)
+                            error.graphQLErrors.map(({ message, locations, path }) =>
+                                setInfo(message)
+                            );
+                        //setInfo(error);
+                    })
+
+            })();
+    }, [loading,]);
+
+    //Close modal
+    const handleClose = () => {
+        setOpenModal(false);
+    }
+    const askConfirmation = (id) => {
+        //console.log("OK");
+        setOpenModal(true)
+        setIdDelete(id)
+
+    }
+    //console.log(props.rate);
+    //DELETE
+    /*     <button onClick={() => {
+            const { data } = this.state;
+            data.shift();
+            this.setState({ data });
+        }}>
+            Delete
+        </button> */
+    const columns = [
+
+        {
+            name: "id",
+            label: "ID",
+            options: {
+                filter: false,
+                sort: false,
+                display: 'excluded',
+            }
+        },
+        {
+            name: "country",
+            label: "Country",
+            options: {
+                filter: true,
+                sort: true,
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    //console.log('customBodyRender');
+                    //console.dir(value);
+                    return value.name;
+                }
+            }
+        },
+        {
+            name: "cities",
+            label: "Cities",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "shipMethod",
+            label: "Method",
+            options: {
+                filter: true,
+                sort: true,
+            },
+        },
+        {
+            name: "typeService",
+            label: "Service",
+            options: {
+                filter: true,
+                sort: true,
+            },
+        },
+        {
+            name: "goods",
+            label: "Goods",
+            options: {
+                filter: true,
+                sort: true,
+                setCellHeaderProps: value => {
+                    return {
+                        style: {
+                            width: '200px'
+                        }
+                    };
+                },
+            },
+        },
+        {
+            name: "interKg",
+            label: "Weights",
+            options: {
+                filter: true,
+                sort: false,
+            },
+        },
+        {
+            name: "price",
+            label: "Price",
+            options: {
+                filter: true,
+                sort: false,
+                setCellHeaderProps: value => {
+                    return {
+                        style: {
+                            width: '150px'
+                        }
+                    };
+                },
+            },
+        },
+        {
+            name: "time",
+            label: "Time",
+            options: {
+                filter: false,
+                sort: false,
+            },
+        },
+        {
+            name: "Edit",
+            options: {
+                filter: false,
+                sort: false,
+                empty: true,
+                setCellHeaderProps: value => {
+                    return {
+                        style: {
+                            width: '50px'
+                        }
+                    };
+                },
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    //console.log('customBodyRender');
+                    //console.log(tableMeta);
+                    return (
+                        <IconButton
+                            onClick={() => {
+                                props.history.push("/company/action_rate", [{
+                                    rate: {
+                                        id: tableMeta.rowData[0],
+                                        cities: tableMeta.rowData[2],
+                                        shipMethod: tableMeta.rowData[3],
+                                        typeService: tableMeta.rowData[4],
+                                        goods: tableMeta.rowData[5],
+                                        interKg: tableMeta.rowData[6],
+                                        price: tableMeta.rowData[7],
+                                        time: tableMeta.rowData[8],
+                                        country: tableMeta.rowData[1]
+                                    },
+                                    action: "update"
+                                }])
+                            }}>
+                            <Icon color="primary">edit</Icon>
+                        </IconButton>
+                    )
+                }
+            }
+        },
+        {
+            name: "Delete",
+            options: {
+                filter: false,
+                sort: false,
+                empty: true,
+                /* setCellHeaderProps: value => {
+                    return {
+                        style: {
+                            width: '50px'
+                        }
+                    };
+                }, */
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    //alert(dataIndex)
+                    return (
+                        <IconButton onClick={() => {
+                            askConfirmation(tableMeta.rowData[0])
+                        }}>
+                            <Icon color="error">delete</Icon>
+                        </IconButton >
+                    );
+                }
+            }
+        },
+
+    ];
+
+    const options = {
+        //filterType: 'checkbox',
+        sortOrder: {
+            name: 'id',
+            direction: 'desc'
+        },
+        rowsPerPage: 10,
+        responsible: 'standard',
+        selectableRows: false,
+    };
     //console.log(props.rate);
     return (
         <div className="m-sm-30">
@@ -103,13 +314,19 @@ const Rate = (props) => {
                 show={show}
                 info={info}
                 variant={variant} />
-            <Confirmation />
+            <Confirmation open={openModal}
+                handleClose={handleClose}
+                loading={props.login.loading}
+                funcAction={deleteRate}
+                message="You won't see anymore this rate on your table"
+                title="Are you sure to delete this row ?" />
+
             <div className="mb-sm-30">
                 <Grid container spacing={6}>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                         <Breadcrumb
                             routeSegments={[
-                                { name: "Company", path: "/dashboard/analytics" },
+                                { name: "Dashboard", path: "/dashboard/analytics" },
                                 { name: "Rate" }
                             ]}
                         />
@@ -134,75 +351,16 @@ const Rate = (props) => {
                 </Grid>
             </div>
             <div className="w-full overflow-auto">
-                <Table className="whitespace-pre">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell className="px-0">Country</TableCell>
-                            <TableCell className="px-0">Cities</TableCell>
-                            <TableCell className="px-0">Method</TableCell>
-                            <TableCell className="px-0">Service</TableCell>
-                            <TableCell className="px-0">Goods</TableCell>
-                            <TableCell className="px-0">Weights</TableCell>
-                            <TableCell className="px-0">Price</TableCell>
-                            <TableCell className="px-0">Time </TableCell>
-                            <TableCell className="px-0">Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-
-                        {props.login.loading ? (
-                            <LinearProgress style={{ width: '100%' }} color="secondary" />
-
-
-                        ) : null}
-                        {
-                            props.rate.length !== 0 && props.login.loading ? (
-                                props.rate.map((rate, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell className="px-0 capitalize" align="left">
-                                            {rate.country.name}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize" align="left">
-                                            {rate.cities}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize" align="left">
-                                            {rate.shipMethod}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize">
-                                            {rate.typeService}
-                                        </TableCell>
-                                        <TableCell className="px-0  capitalize">
-                                            {rate.goods}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize">
-                                            {rate.interKg}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize">
-                                            {rate.price}
-                                        </TableCell>
-                                        <TableCell className="px-0 capitalize">
-                                            {rate.time}
-                                        </TableCell>
-                                        <TableCell className="px-0">
-                                            <IconButton>
-                                                <Icon color="primary"
-                                                    onClick={() => {
-                                                        props.history.push("/company/action_rate", [{
-                                                            rate: rate,
-                                                            action: "update"
-                                                        }])
-                                                    }}>edit</Icon>
-                                            </IconButton>
-                                            <IconButton>
-                                                <Icon color="error">delete</Icon>
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : null
-                        }
-                    </TableBody>
-                </Table>
+                <MUIDataTable
+                    title={<Typography variant="h6">
+                        Rate list
+                    {loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                    </Typography>
+                    }
+                    data={props.rate}
+                    columns={columns}
+                    options={options}
+                />
 
             </div>
         </div>
@@ -213,9 +371,22 @@ const Rate = (props) => {
 const mapStateToProps = state => ({
     // setUser: PropTypes.func.isRequired
     addRate: PropTypes.func.isRequired,
+    refetchRate: PropTypes.func.isRequired,
+    updateRate: PropTypes.func.isRequired,
+    deleteRate: PropTypes.func.isRequired,
     loading: PropTypes.func.isRequired,
-    error: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
     login: state.login,
     rate: state.rate
 });
-export default connect(mapStateToProps, { error, loading, addRate })(Rate);
+export default connect(mapStateToProps, { success, loading, addRate, refetchRate, deleteRate })(Rate);
+/* const myTheme = createMuiTheme({
+    overrides: {
+        MUIDataTable: {
+            responsiveScroll: {
+                maxWidth: "2600px",
+                //overflowY: 'scroll',
+            }
+        }
+    }
+}); */

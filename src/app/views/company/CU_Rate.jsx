@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Breadcrumb } from "matx";
-import ShowInfo from '../message/message';
+import ShowInfo from '../components/message';
 import {
     Card,
     Grid,
@@ -9,17 +9,18 @@ import {
     CircularProgress,
     TextField,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { loading, error } from "../../redux/actions/LoginActions";
-import history from "history.js";
+import { loading, success } from "../../redux/actions/LoginActions";
+//import history from "history.js";
 import { connect } from "react-redux";
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { LIST_COUNTRY } from '../../../graphql/User';
 import { ADD_RATE, UPDATE_RATE } from '../../../graphql/Rate';
 import { addRate, updateRate } from '../../redux/actions/RateAction'
+import ShippingWay from '../components/ShippingWay';
 
 
 const useStyles = makeStyles(theme => ({
@@ -34,16 +35,24 @@ const useStyles = makeStyles(theme => ({
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
         color: theme.palette.text.secondary
+    },
+    group: {
+        margin: theme.spacing(1, 5)
     }
 }));
-
+const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => option.name,
+});
 const CU_Rate = (props) => {
     const classes = useStyles();
     const [variant, setVariant] = useState("success");
     const [info, setInfo] = useState(null);
     const [show, setShow] = useState(false);
 
-    const [countryId, setCountryId] = useState();
+    const [country, setCountry] = useState(
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].rate.country
+    );
     const [cities, setCities] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].rate.cities
     );
@@ -75,7 +84,7 @@ const CU_Rate = (props) => {
 
     const [add_rate] = useMutation(ADD_RATE);
     const [update_rate] = useMutation(UPDATE_RATE);
-    const { refetch, data, loading, error } = useQuery(LIST_COUNTRY, {
+    const { refetch, data, error } = useQuery(LIST_COUNTRY, {
         errorPolicy: 'all',
         onCompleted: () => {
             //props.addCompany(data.info_company)
@@ -83,7 +92,7 @@ const CU_Rate = (props) => {
             //console.log("List country");
             //console.log(data);
             countries = data.listCountry;
-            console.log(countries);
+            //console.log(countries);
             if (active) {
                 setOptions((countries).map(country => country));
             }
@@ -94,7 +103,7 @@ const CU_Rate = (props) => {
             // console.log(error);
             setVariant("error");
             if (error.networkError) {
-                setInfo("Please try after this action");
+                setInfo("Please try this action after !");
             }
             if (error.graphQLErrors)
                 error.graphQLErrors.map(({ message, locations, path }) =>
@@ -104,7 +113,8 @@ const CU_Rate = (props) => {
 
         }
 
-    })
+    });
+
     const handleChange = event => {
         event.persist();
         switch (event.target.name) {
@@ -132,6 +142,7 @@ const CU_Rate = (props) => {
                 break;
         }
     }
+
     const handleFormSubmit = event => {
         //console.log(variant);
         event.preventDefault();
@@ -140,16 +151,18 @@ const CU_Rate = (props) => {
 
         //history.goBack();
 
-        if (!countryId) {
+        if (!country) {
             setInfo("Select a country!");
             setVariant('error');
             setShow(true);
-            props.error();
+            props.success();
         } else {
             if (props.history.location.state[0].action === "add") {
-                add_rate({
+                console.log(shipMethod);
+                console.log(typeService);
+                /* add_rate({
                     variables: {
-                        country: parseInt(countryId.id),
+                        country: country.name,
                         shipMethod: shipMethod,
                         interKg: interKG,
                         price: price,
@@ -169,7 +182,7 @@ const CU_Rate = (props) => {
                         }
                         props.addRate([{
                             id: res.data.add_rate.id,
-                            country: countryId,
+                            country: country.name,
                             shipMethod: shipMethod,
                             interKg: interKG,
                             price: price,
@@ -179,8 +192,8 @@ const CU_Rate = (props) => {
                             cities: cities
                         }]);
                         setShow(true);
-                        props.error();
-                        history.goBack();
+                        props.success();
+                        //history.goBack();
 
                     })
                     .catch(error => {
@@ -193,14 +206,14 @@ const CU_Rate = (props) => {
                             error.graphQLErrors.map(({ message, locations, path }) =>
                                 setInfo(message)
                             );
-
-
-                    });
+                        setShow(true);
+                        props.success();
+                    }); */
             } else {
                 update_rate({
                     variables: {
                         id: parseInt(props.history.location.state[0].rate.id),
-                        country: parseInt(countryId.id),
+                        country: country.name,
                         shipMethod: shipMethod,
                         interKg: interKG,
                         price: price,
@@ -220,7 +233,7 @@ const CU_Rate = (props) => {
                         }
                         props.updateRate({
                             id: res.data.update_rate.id,
-                            country: countryId,
+                            country: country.name,
                             shipMethod: shipMethod,
                             interKg: interKG,
                             price: price,
@@ -230,8 +243,22 @@ const CU_Rate = (props) => {
                             cities: cities
                         });
                         setShow(true);
-                        props.error();
-                        history.goBack();
+                        props.success();
+                        //history.goBack();
+                        /* props.history.push("/company/rate", [{
+                            rate: {
+                                id: res.data.update_rate.id,
+                                country: country,
+                                shipMethod: shipMethod,
+                                interKg: interKG,
+                                price: price,
+                                typeService: typeService,
+                                goods: goods,
+                                time: time,
+                                cities: cities
+                            },
+                            action: "refresh"
+                        }]) */
 
                     })
                     .catch(error => {
@@ -244,32 +271,34 @@ const CU_Rate = (props) => {
                             error.graphQLErrors.map(({ message, locations, path }) =>
                                 setInfo(message)
                             );
-
+                        setShow(true)
+                        props.success()
                     })
             }
             setShow(true);
-            props.error()
+
         }
 
     }
+
     useEffect(() => {
         active = true;
-        console.log(loadingInput);
+        //console.log(loadingInput);
         if (!loadingInput) {
-            console.log("!loadingInput");
+            //console.log("!loadingInput");
             return undefined;
         }
 
-        (async () => {
-            console.log("SYNC");
+        /* (async () => {
+            //console.log("SYNC");
             await refetch()
                 .then(res => {
                     //console.log("List country");
-                    console.log(data);
+                    //console.log(data);
                     countries = data.listCountry;
-                    console.log(countries);
+                    //console.log(countries);
                     if (active) {
-                        setOptions((countries).map(country => country));
+                        setOptions((countries).map(country => country.name));
                     }
                 })
                 .catch(error => {
@@ -288,18 +317,18 @@ const CU_Rate = (props) => {
 
             //await sleep(1e3); // For demo purposes.
 
-        })();
+        })(); */
 
         return () => {
             active = false;
         };
     }, [loadingInput,]);
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (!open) {
             setOptions([]);
         }
-    }, [open]);
+    }, [open]); */
     //console.log(props.history.location.state[0]);
     return (
 
@@ -319,11 +348,10 @@ const CU_Rate = (props) => {
             <Card>
                 <div className="p-9 h-full">
                     <div className={classes.root}>
-
-
                         <ValidatorForm ref={useRef("form")} onSubmit={handleFormSubmit}>
                             <Grid container spacing={6}>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
+
                                     <Autocomplete
                                         id="asynchronous-demo"
                                         //openOnFocus={true}
@@ -335,19 +363,21 @@ const CU_Rate = (props) => {
                                         onClose={() => {
                                             setOpen(false);
                                         }}
-                                        getOptionSelected={(option, value) => option.name === value.name}
+                                        //getOptionSelected={(option, value) => option.name === value}
                                         getOptionLabel={option => option.name}
                                         options={options}
                                         loading={loadingInput}
-                                        inputValue={countryId}
+                                        /* inputValue={country}
                                         onInputChange={(event, value) => {
-                                            value != null && setCountryId(value)
-                                        }}
-                                        value={countryId}
+                                            value != null && setCountry(value.name)
+                                        }} */
+                                        value={country}
                                         onChange={(event, value) => {
-                                            value != null && setCountryId(value)
+                                            //console.log(value);
+                                            value != null && setCountry(value)
 
                                         }}
+                                        filterOptions={filterOptions}
                                         renderInput={params => (
                                             <TextField
                                                 {...params}
@@ -380,7 +410,12 @@ const CU_Rate = (props) => {
                                         validators={["required"]}
                                         errorMessages={["this field is required"]}
                                     />
-                                    <TextValidator
+                                    <ShippingWay
+                                        shipMethod={shipMethod}
+                                        typeService={typeService}
+                                        handleChange={handleChange} />
+
+                                    {/* <TextValidator
 
                                         className="mb-6 w-full"
                                         variant="outlined"
@@ -401,7 +436,7 @@ const CU_Rate = (props) => {
                                         type="text"
                                         name="typeService"
                                         value={typeService}
-                                    />
+                                    /> */}
                                 </Grid>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
                                     <TextValidator
@@ -495,14 +530,17 @@ const CU_Rate = (props) => {
                                             props.history.location.state[0].action === "add" ? "Submit" : "Update"
                                         }
                                     </span>
+                                    {props.login.loading && (
+                                        <CircularProgress
+                                            size={24}
+                                            color="secondary"
+                                            className={classes.buttonProgress}
+                                        />
+                                    )}
+
 
                                 </Button>
-                                {props.login.loading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
+
 
                             </div>
                         </ValidatorForm>
@@ -518,8 +556,9 @@ const mapStateToProps = state => ({
     addRate: PropTypes.func.isRequired,
     updateRate: PropTypes.func.isRequired,
     loading: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
     login: state.login,
     rate: state.rate
 });
 
-export default connect(mapStateToProps, { error, loading, addRate, updateRate })(CU_Rate);
+export default connect(mapStateToProps, { success, loading, addRate, updateRate })(CU_Rate);
