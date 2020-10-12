@@ -7,21 +7,29 @@ query statut_list{
       name
   }
 }`;
+
+export const COUNT_PACKAGE = gql`
+query count_package($role:String!,$current_statut:String!){
+  count_package(role:$role, current_statut:$current_statut)
+}`;
+
+
 export const ADD_ORDER = gql`
 mutation add_order($company:ID!,$status:String!,$name_agence_sender: String!,$numKuadi:String!,
 $content:String!,$current_statut:String,$weight:String,$r_name:String!,$r_phone:String!,
-$r_city:String!,$r_country:String!){
+$r_city:String!,$r_country:String!, $shipMethod:String,$typeService:String,){
  add_order(company:$company,
     status:$status,
     name_agence_sender:$name_agence_sender,
     numKuadi:$numKuadi,
     content:$content,
-    current_statut:$current_statut
+    current_statut:$current_statut,
     weight:$weight,
     r_name:$r_name,
     r_phone:$r_phone,
     r_city:$r_city,
-    r_country:$r_country)
+    r_country:$r_country,
+    shipMethod:$shipMethod,typeService:$typeService)
   {
     code
     id
@@ -31,7 +39,38 @@ $r_city:String!,$r_country:String!){
     r_city
     r_phone
     content
-  
+    shipMethod
+    typeService
+  }
+
+}`;
+
+export const UPDATE_ORDER = gql`
+mutation update_order($id:ID!,$company:ID!,$name_agence_sender: String!,$numKuadi:String!,
+$content:String!,$weight:String,$r_name:String!,$r_phone:String!,
+$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!,){
+  update_order(id:$id,company:$company,
+    name_agence_sender:$name_agence_sender,
+    numKuadi:$numKuadi,
+    content:$content,
+    weight:$weight,
+    r_name:$r_name,
+    r_phone:$r_phone,
+    r_city:$r_city,
+    r_country:$r_country,
+    shipMethod:$shipMethod,
+    typeService:$typeService)
+  {
+    code
+    id
+    paid
+    current_statut
+    r_name
+    r_city
+    r_phone
+    content
+    shipMethod
+    typeService
   }
 
 }`;
@@ -77,6 +116,8 @@ query order_list($role: String!,$skip:Int,$take:Int){
       email
     }
     weight
+    shipMethod
+    typeService
   }
 }`;
 

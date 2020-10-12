@@ -331,7 +331,24 @@ const ListOrder = (props) => {
                 display: 'excluded',
             }
         },
-
+        {
+            name: "shipMethod",
+            label: "shipMethod",
+            options: {
+                filter: false,
+                sort: false,
+                display: 'excluded',
+            }
+        },
+        {
+            name: "typeService",
+            label: "typeService",
+            options: {
+                filter: false,
+                sort: false,
+                display: 'excluded',
+            }
+        },
         {
             name: "Statut",
             options: {
@@ -390,25 +407,33 @@ const ListOrder = (props) => {
                     return (
                         <IconButton disabled={tableMeta.rowData[2] === "SIGNED" && true}
                             onClick={() => {
+                                if (tableMeta.rowData[2] !== "STAND BY" && props.user.role === "GUEST") {
+                                    setVariant("warning");
+                                    setInfo("Sorry, you're not allow to do this request. Contact the company.");
+                                    setShow(true);
+                                } else {
+                                    props.history.push("/order/add_order", [{
+                                        acion: "update",
+                                        order: {
+                                            id: tableMeta.rowData[0],
+                                            current_statut: tableMeta.rowData[2],
+                                            code: tableMeta.rowData[3],
+                                            r_city: tableMeta.rowData[4],
+                                            r_phone: tableMeta.rowData[5],
+                                            r_name: tableMeta.rowData[6],
+                                            content: tableMeta.rowData[7],
+                                            name_agence_sender: tableMeta.rowData[9],
+                                            numKuadi: tableMeta.rowData[10],
+                                            email_company: tableMeta.rowData[11].email,
+                                            weight: tableMeta.rowData[12],
+                                            r_country: tableMeta.rowData[13],
+                                            shipMethod: tableMeta.rowData[14],
+                                            typeService: tableMeta.rowData[15],
+                                        },
+                                        action: "update"
+                                    }])
+                                }
 
-                                props.history.push("/order/add_order", [{
-                                    acion: "update",
-                                    order: {
-                                        id: tableMeta.rowData[0],
-                                        current_statut: tableMeta.rowData[2],
-                                        code: tableMeta.rowData[3],
-                                        r_city: tableMeta.rowData[4],
-                                        r_phone: tableMeta.rowData[5],
-                                        r_name: tableMeta.rowData[6],
-                                        content: tableMeta.rowData[7],
-                                        name_agence_sender: tableMeta.rowData[9],
-                                        numKuadi: tableMeta.rowData[10],
-                                        email_company: tableMeta.rowData[11].email,
-                                        weight: tableMeta.rowData[12],
-                                        r_country: tableMeta.rowData[13],
-                                    },
-                                    action: "update"
-                                }])
                             }}>
                             <Icon color="primary" >edit</Icon>
                         </IconButton>
@@ -490,7 +515,7 @@ const ListOrder = (props) => {
         })
             .then(data => {
                 if (data.data.delete_rate.id) {
-                    setInfo("Rate deleted !");
+                    setInfo("Deleted !");
                     setVariant('success');
                 } else {
                     setInfo("Error, Try after !");
@@ -601,8 +626,8 @@ const ListOrder = (props) => {
                         props.success();
                     })
                     .catch(error => {
-                        console.log("onError");
-                        console.log(error);
+                        //console.log("onError");
+                        //console.log(error);
                         setVariant("error");
                         if (error.networkError) {
                             setInfo("Please try after this action");

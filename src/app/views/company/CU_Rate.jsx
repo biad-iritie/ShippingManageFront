@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { loading, success } from "../../redux/actions/LoginActions";
-//import history from "history.js";
+import history from "history.js";
 import { connect } from "react-redux";
 import { useMutation, useQuery } from '@apollo/client';
 import { LIST_COUNTRY } from '../../../graphql/User';
@@ -158,9 +158,8 @@ const CU_Rate = (props) => {
             props.success();
         } else {
             if (props.history.location.state[0].action === "add") {
-                console.log(shipMethod);
-                console.log(typeService);
-                /* add_rate({
+
+                add_rate({
                     variables: {
                         country: country.name,
                         shipMethod: shipMethod,
@@ -180,6 +179,14 @@ const CU_Rate = (props) => {
                             setInfo("Error, Try after !");
                             setVariant('error');
                         }
+                        setCities("")
+                        setShipMethod("")
+                        setTypeService("")
+                        setGoods("")
+                        setTime("")
+                        setPrice("")
+                        setInterKG("")
+
                         props.addRate([{
                             id: res.data.add_rate.id,
                             country: country.name,
@@ -208,7 +215,7 @@ const CU_Rate = (props) => {
                             );
                         setShow(true);
                         props.success();
-                    }); */
+                    });
             } else {
                 update_rate({
                     variables: {
@@ -227,23 +234,24 @@ const CU_Rate = (props) => {
                         if (res.data.update_rate.id) {
                             setInfo("Update Success !");
                             setVariant('success');
+                            props.updateRate({
+                                id: res.data.update_rate.id,
+                                country: country.name,
+                                shipMethod: shipMethod,
+                                interKg: interKG,
+                                price: price,
+                                typeService: typeService,
+                                goods: goods,
+                                time: time,
+                                cities: cities
+                            });
+                            props.success();
+                            history.goBack();
                         } else {
                             setInfo("Error, Try after !");
                             setVariant('error');
                         }
-                        props.updateRate({
-                            id: res.data.update_rate.id,
-                            country: country.name,
-                            shipMethod: shipMethod,
-                            interKg: interKG,
-                            price: price,
-                            typeService: typeService,
-                            goods: goods,
-                            time: time,
-                            cities: cities
-                        });
                         setShow(true);
-                        props.success();
                         //history.goBack();
                         /* props.history.push("/company/rate", [{
                             rate: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles, ThemeProvider } from "@material-ui/core/styles";
-import { Button, Toolbar, AppBar } from "@material-ui/core";
+import { IconButton, Toolbar, AppBar, Icon } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -24,7 +24,15 @@ const Footer = ({ theme, settings }) => {
             </a> */}
             <span className="m-auto"></span>
             <p className="m-0">
-              Developed by <a href="http://ui-lib.com">Biad Iritie</a>
+              Developed by Biad Iritie
+              <IconButton>
+                <a href="http://ui-lib.com">
+                  <Icon color="primary">
+                    twitter
+                  </Icon>
+                </a>
+
+              </IconButton>
             </p>
           </div>
         </Toolbar>

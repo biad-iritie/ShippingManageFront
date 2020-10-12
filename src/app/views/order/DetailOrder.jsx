@@ -486,12 +486,14 @@ const DetailOrder = (props) => {
         </div>
     )
 }
+
 const mapStateToProps = state => ({
     login: state.login,
     loading: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
     user: state.user,
 });
+
 export default withStyles(styles, { withTheme: true })(
     withRouter(connect(mapStateToProps, { success, loading })(DetailOrder))
 )

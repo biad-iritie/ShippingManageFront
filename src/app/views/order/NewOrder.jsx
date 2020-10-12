@@ -17,15 +17,17 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import history from "history.js";
 import { Autocomplete } from "@material-ui/lab";
 import { LIST_COUNTRY, CHECK_COMPANY } from '../../../graphql/User';
-import { ADD_ORDER } from '../../../graphql/Order';
+import { ADD_ORDER, UPDATE_ORDER } from '../../../graphql/Order';
 import { useMutation, useQuery } from '@apollo/client';
 import { loading, success } from "../../redux/actions/LoginActions";
 import ShowInfo from '../components/message';
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { addOrder } from '../../redux/actions/OrderActions';
+import { addOrder, updateOrder } from '../../redux/actions/OrderActions';
+import ShippingWay from '../components/ShippingWay';
 
 const styles = theme => ({
     wrapper: {
@@ -65,32 +67,39 @@ const NewOrder = (props) => {
     const user = props.user
     const [expanded, setExpanded] = useState("panel1");
     const [name_agence_sender, setName_agence_sender] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.name_agence_sender
+        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.name_agence_sender
     );
     const [numKuadi, setNumKuadi] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.numKuadi
+        props.history.location.state[0].action === "add" ? "ascas" : props.history.location.state[0].order.numKuadi
     );
     const [id_company, setId_company] = useState();
+
     const [email_company, setEmail_company] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.email_company
+        props.history.location.state[0].action === "add" ? "biad@sh.com" : props.history.location.state[0].order.email_company
     );
     const [weight, setWeight] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.weight
+        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.weight
     );
     const [content, setContent] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.content
+        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.content
     );
     const [r_name, setR_name] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_name
+        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.r_name
     );
     const [r_phone, setR_phone] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_phone
+        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.r_phone
     );
     const [r_country, setR_country] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_country
     );
     const [r_city, setR_city] = useState(
-        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_city
+        props.history.location.state[0].action === "add" ? "ascscasc" : props.history.location.state[0].order.r_city
+    );
+    const [shipMethod, setShipMethod] = useState(
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.shipMethod
+    );
+    const [typeService, setTypeService] = useState(
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.typeService
     );
     const [variant, setVariant] = useState('error')
     const [info, setInfo] = useState(null)
@@ -133,58 +142,9 @@ const NewOrder = (props) => {
         }
 
     })
-    const [add_order, { data: dataOrder, loading: loadingOrder, error: errorOrder }] = useMutation(ADD_ORDER, {
-        errorPolicy: 'all',
-        variables: {
-            company: Number(id_company),
-            status: user.role === "GUEST" ? "STAND BY" : "RECEIVED",
-            current_statut: user.role === "GUEST" ? "STAND BY" : "RECEIVED",
-            name_agence_sender: name_agence_sender.toUpperCase(),
-            numKuadi: numKuadi.toUpperCase(),
-            content: content.toUpperCase(),
-            weight: weight,
-            r_name: r_name,
-            r_phone: r_phone,
-            r_city: r_city,
-            r_country: r_country
-        },
-        onCompleted: (dataOrder) => {
-            console.log(dataOrder);
-            setVariant("success");
-            if (dataOrder.add_order) {
-                setInfo("Order created, tracking number: " + dataOrder.add_order.code);
-                setShow(true);
-                setExpanded("panel1");
-                setName_agence_sender("");
-                setNumKuadi("");
-                setWeight("");
-                setContent("");
-                setR_name("");
-                setR_phone("");
-                setR_city("");
-                props.addOrder([data.add_order])
+    const [add_order, { data: dataOrder, loading: loadingOrder, error: errorOrder }] = useMutation(ADD_ORDER)
+    const [update_order, { data: dataOrder1, loading: loadingOrder1, error: errorOrder1 }] = useMutation(UPDATE_ORDER)
 
-
-            }
-
-
-        },
-        onError: () => {
-            //console.log("onError");
-            //console.log(error);
-
-            if (error.networkError) {
-                setVariant("warning");
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
-            setShow(true);
-
-        }
-    })
     const { refetch: check_company, data: data_check_company, loading: loading_check_company, error: error_check_company } = useQuery(CHECK_COMPANY, {
         variables: {
             email: email_company
@@ -262,6 +222,12 @@ const NewOrder = (props) => {
             case "content":
                 setContent(event.target.value)
                 break;
+            case "shipMethod":
+                setShipMethod(event.target.value)
+                break;
+            case "typeService":
+                setTypeService(event.target.value)
+                break;
             case "weight":
                 setWeight(event.target.value)
                 break;
@@ -293,9 +259,101 @@ const NewOrder = (props) => {
             loadingOrder = false;
         } else {
             if (props.history.location.state[0].action === "add") {
-                add_order();
+
+                add_order({
+                    //errorPolicy: 'all',
+                    variables: {
+                        company: Number(id_company),
+                        status: user.role === "GUEST" ? "STAND BY" : "RECEIVED",
+                        current_statut: user.role === "GUEST" ? "STAND BY" : "RECEIVED",
+                        name_agence_sender: name_agence_sender.toUpperCase(),
+                        numKuadi: numKuadi.toUpperCase(),
+                        content: content.toUpperCase(),
+                        weight: weight,
+                        r_name: r_name.toUpperCase(),
+                        r_phone: r_phone,
+                        r_city: r_city,
+                        r_country: r_country,
+                        shipMethod: shipMethod,
+                        typeService: typeService,
+                    }
+                })
+                    .then(res => {
+                        //alert("ok")
+                        setVariant("success");
+                        if (res.data.add_order) {
+                            setInfo("Order created, tracking number: " + res.data.add_order.code);
+                            setShow(true);
+                            setExpanded("panel1");
+                            setName_agence_sender("");
+                            setNumKuadi("");
+                            setWeight("");
+                            setContent("");
+                            setR_name("");
+                            setR_phone("");
+                            setR_city("");
+                            props.addOrder([res.data.add_order])
+                            setShow(true);
+
+                        }
+                    })
+                    .catch(error => {
+                        //alert("error")
+                        if (error.networkError) {
+                            setVariant("warning");
+                            setInfo("Please check your network and try again this action");
+                        }
+                        if (error.graphQLErrors)
+                            setVariant("error");
+                        error.graphQLErrors.map(({ message, locations, path }) =>
+                            setInfo(message)
+                        );
+                        setShow(true);
+                    })
             } else {
-                alert("UPDATE");
+                update_order({
+                    //errorPolicy: 'all',
+                    variables: {
+                        id: parseInt(props.history.location.state[0].order.id),
+                        company: Number(id_company),
+                        name_agence_sender: name_agence_sender.toUpperCase(),
+                        numKuadi: numKuadi.toUpperCase(),
+                        content: content.toUpperCase(),
+                        weight: weight,
+                        r_name: r_name.toUpperCase(),
+                        r_phone: r_phone,
+                        r_city: r_city,
+                        r_country: r_country,
+                        shipMethod: shipMethod,
+                        typeService: typeService,
+                    }
+                })
+                    .then(res => {
+                        //alert("ok")
+                        if (res.data.update_order.id) {
+                            setInfo("Update Success !");
+                            setVariant('success');
+                            props.updateOrder([res.data.update_order])
+                            history.goBack();
+                        } else {
+                            setInfo("Error, Try after !");
+                            setVariant('error');
+                        }
+                        setShow(true);
+                    })
+                    .catch(error => {
+                        //alert("error")
+                        if (error.networkError) {
+                            setVariant("warning");
+                            setInfo("Please check your network and try again this request");
+                        }
+                        if (error.graphQLErrors)
+                            setVariant("error");
+                        error.graphQLErrors.map(({ message, locations, path }) =>
+                            setInfo(message)
+                        );
+                        setShow(true);
+                    })
             }
             /* console.log("handleSubmit");
             setVariant("success");
@@ -348,7 +406,7 @@ const NewOrder = (props) => {
                 setOptions([]);
             }
         }, [open]); */
-
+    //console.log(typeService);
     return (
         <div className="m-sm-30">
             <ShowInfo
@@ -377,7 +435,7 @@ const NewOrder = (props) => {
                             >
                                 <Typography className={classes.heading}>Package information</Typography>
                                 <Typography className={classes.secondaryHeading}>
-                                    Fill all blanks to have more informations about your package
+                                    Fill in all blanks to get more information about your package
                                             </Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
@@ -485,7 +543,7 @@ const NewOrder = (props) => {
                             >
                                 <Typography className={classes.heading}>Receiver informations</Typography>
                                 <Typography className={classes.secondaryHeading}>
-                                    Fill all blanks to have more information about the receiver
+                                    Fill in all blanks to get more information about the recipient
                                             </Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
@@ -514,6 +572,10 @@ const NewOrder = (props) => {
                                                 validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
+                                            <ShippingWay
+                                                shipMethod={shipMethod}
+                                                typeService={typeService}
+                                                handleChange={handleChange} />
                                         </Grid>
                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                             <Autocomplete
@@ -589,7 +651,7 @@ const NewOrder = (props) => {
                                                     props.history.location.state[0].action === "add" ? "Submit" : "Update"
                                                 }
                                             </span>
-                                            {loadingOrder && (
+                                            {(loadingOrder || loadingOrder1) && (
                                                 <CircularProgress
                                                     size={24}
                                                     color="secondary"
@@ -622,7 +684,8 @@ const mapStateToProps = state => ({
     success: PropTypes.func.isRequired,
     user: state.user,
     addOrder: PropTypes.func.isRequired,
+    updateOrder: PropTypes.func.isRequired
 });
 export default withStyles(styles, { withTheme: true })(
-    withRouter(connect(mapStateToProps, { success, loading, addOrder })(NewOrder))
+    withRouter(connect(mapStateToProps, { success, loading, addOrder, updateOrder })(NewOrder))
 );

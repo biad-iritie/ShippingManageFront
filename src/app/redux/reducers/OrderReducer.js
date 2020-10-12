@@ -1,7 +1,8 @@
 import {
     ADD_ORDER,
     REFETCH_ORDER,
-    UPDATE_ORDER
+    UPDATE_ORDER,
+    DELETE_ORDER
 } from "../actions/OrderActions";
 
 const initialState = [];
@@ -31,10 +32,10 @@ const orderReducer = function (state = initialState, action) {
             })
             console.log(newrates);
             return newrates;
+        }*/
+        case DELETE_ORDER: {
+            return state.filter(order => order.id !== action.data);
         }
-        case DELETE_RATE: {
-            return state.filter(rate => rate.id !== action.data);
-        } */
 
         default: {
             return state;
