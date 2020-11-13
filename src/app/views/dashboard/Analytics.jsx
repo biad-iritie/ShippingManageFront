@@ -15,13 +15,14 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/styles";
 import ShowInfo from '../components/message';
 import { loading, success } from "../../redux/actions/LoginActions";
-import { useQuery } from '@apollo/client';
-import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
+import { useQuery, useSubscription } from '@apollo/client';
+import { ORDER_LIST, COUNT_PACKAGE, SUB_NEW_PACK } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
+//import { addCompany } from "../../redux/actions/CompanyAction";
 
 const Dashboard1 = (props) => {
   //state = {};
-  //console.log(props.user);
+  //console.log(props);
   const [variant, setVariant] = useState('error')
   const [info, setInfo] = useState(null)
   const [show, setShow] = useState(false)
@@ -58,14 +59,20 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
     }
   });
 
+  // To have the number of package in different status
   const { refetch: check1 } = useQuery(COUNT_PACKAGE, {
     errorPolicy: 'all',
     variables: {
@@ -83,8 +90,14 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
+
         );
       //setInfo(error);
 
@@ -99,7 +112,7 @@ const Dashboard1 = (props) => {
     onCompleted: (data) => {
       set_nb_received(data.count_package)
     },
-    onError: () => {
+    onError: (error) => {
       //console.log("onError");
       //console.log(error);
       setVariant("error");
@@ -107,8 +120,13 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
@@ -131,8 +149,13 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
@@ -155,8 +178,13 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
@@ -179,8 +207,13 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
@@ -203,14 +236,28 @@ const Dashboard1 = (props) => {
         setInfo("Please try after this action");
       }
       if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) =>
-          setInfo(message)
+        error.graphQLErrors.map(({ message, locations, path }) => {
+          if (message === "Not authenticated" || message === "jwt expired") {
+            window.location.reload()
+          } else {
+            setInfo(message)
+          }
+        }
         );
       //setInfo(error);
 
     }
   });
 
+  //RealTime check for the new package
+  const {
+    data: newPack,
+  } = useSubscription(SUB_NEW_PACK, {
+    variables: { company: props.company.id, userId: user.id },
+    onSubscriptionData: (newPack) => {
+      console.log(newPack.subscriptionData.data.newPack);
+    }
+  });
   useEffect(() => {
 
     loading === false &&
@@ -229,8 +276,13 @@ const Dashboard1 = (props) => {
               setInfo("Please try after this action");
             }
             if (error.graphQLErrors)
-              error.graphQLErrors.map(({ message, locations, path }) =>
-                setInfo(message)
+              error.graphQLErrors.map(({ message, locations, path }) => {
+                if (message === "Not authenticated" || message === "jwt expired") {
+                  window.location.reload()
+                } else {
+                  setInfo(message)
+                }
+              }
               );
             //setInfo(error);
           })
@@ -300,7 +352,7 @@ const Dashboard1 = (props) => {
           </Grid>
 
           <Grid item lg={4} md={4} sm={12} xs={12}>
-            <Card className="px-6 py-4 mb-6">
+            {/* <Card className="px-6 py-4 mb-6">
               <div className="card-title">Traffic Shipping</div>
               <div className="card-subtitle">Last 3 Months</div>
               <DoughnutChart
@@ -311,7 +363,7 @@ const Dashboard1 = (props) => {
                   theme.palette.primary.light
                 ]}
               />
-            </Card>
+            </Card> */}
 
             {/* <UpgradeCard /> */}
 
@@ -334,6 +386,7 @@ const mapStateToProps = state => ({
   user: state.user,
   orders: state.order,
   refetchOrder: PropTypes.func.isRequired,
+  company: state.company
 });
 
 //export default withStyles({}, { withTheme: true })(Dashboard1);

@@ -18,8 +18,6 @@ import { LIST_RATE, DELETE_RATE } from '../../../graphql/Rate';
 import { useMutation, useQuery } from '@apollo/client';
 import { addRate, deleteRate, refetchRate, } from '../../redux/actions/RateAction';
 
-
-
 const Rate = (props) => {
     const [variant, setVariant] = useState()
     const [info, setInfo] = useState(null)
@@ -303,9 +301,14 @@ const Rate = (props) => {
             name: 'id',
             direction: 'desc'
         },
+        responsive: "simple",
+        //selectableRows: 'single',
         rowsPerPage: 10,
-        responsible: 'standard',
         selectableRows: false,
+        responsive: 'standard',
+        fixedHeader: true,
+        download: false,
+        print: false,
     };
     //console.log(props.rate);
     return (

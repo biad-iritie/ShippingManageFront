@@ -11,9 +11,10 @@ import { useQuery } from '@apollo/client';
 import history from "history.js";
 
 import { VERIFY_TOKEN } from '../../graphql/User';
+import { addCompany } from "../redux/actions/CompanyAction"
 
 
-const checkJwtAuth = (setUserData, data) => {
+const checkJwtAuth = (setUserData, data, addCompany) => {
   // You need to send token to your server to check token is valid
   // modify loginWithToken method in jwtService
   //let user = await jwtAuthService.loginWithToken();
@@ -24,7 +25,9 @@ const checkJwtAuth = (setUserData, data) => {
     //console.log(data.verifyToken.__typename);
     //delete data.verifyToken.__typename
     //console.log(data.verifyToken);
-    setUserData(data.verifyToken)
+    setUserData(data.verifyToken.user)
+    //console.log(data.verifyToken.check);
+    addCompany(data.verifyToken.check)
     //console.log(data);
     /* history.push({
       pathname: "/dashboard/analytics"
@@ -51,7 +54,7 @@ const checkJwtAuth = (setUserData, data) => {
 //   });
 // };
 
-const Auth = ({ children, setUserData, getNavigationByUser }) => {
+const Auth = ({ children, setUserData, getNavigationByUser, addCompany }) => {
   //Check the TOKEN 
   const { loading, error, data } = useQuery(VERIFY_TOKEN);
   //console.log("Auth");
@@ -59,7 +62,7 @@ const Auth = ({ children, setUserData, getNavigationByUser }) => {
 
   useEffect(() => {
     //console.log("useEffect");
-    checkJwtAuth(setUserData, data);
+    checkJwtAuth(setUserData, data, addCompany);
     getNavigationByUser();
   }, [setUserData, getNavigationByUser, data]);
 
@@ -69,9 +72,10 @@ const Auth = ({ children, setUserData, getNavigationByUser }) => {
 const mapStateToProps = state => ({
   setUserData: PropTypes.func.isRequired,
   getNavigationByUser: PropTypes.func.isRequired,
-  login: state.login
+  login: state.login,
+  addCompany: PropTypes.func.isRequired
 });
 
-export default connect(mapStateToProps, { setUserData, getNavigationByUser })(
+export default connect(mapStateToProps, { setUserData, addCompany, getNavigationByUser })(
   Auth
 );

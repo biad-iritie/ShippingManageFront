@@ -3,6 +3,7 @@ import {
   Card,
   Grid,
   Button,
+  Icon,
   CircularProgress,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -12,6 +13,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
+import { addCompany } from "../../redux/actions/CompanyAction"
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../../../graphql/User';
 import ShowInfo from '../components/message';
@@ -64,29 +66,36 @@ const SignIn = (props) => {
       }
     })
       .then((res) => {
-        /* console.log("onCompleted");
-        console.log(res.data.login.user); */
+        /* console.log("onCompleted");*/
+        //console.log(res.data.login);
         //delete res.data.login.user.__typename;
+        //GET INFORMATION ABOUT THE USER
         let user = res.data.login.user;
         //console.log(res.data.login.user);
+        //GET THE TOKEN
         let token = res.data.login.token;
         props.loginWithEmailAndPassword(user, token);
+        if (res.data.login.check) props.addCompany(res.data.login.check)
         setShow(false);
       })
       .catch((error) => {
-        console.log("onError");
-        console.log(error);
         setVariant("error");
+        //setInfo("You can't modify now , try it later .");
         if (error.networkError) {
-          setInfo("Please try after this action");
+          setInfo("Check your internet, and try again");
         }
         if (error.graphQLErrors)
-          error.graphQLErrors.map(({ message, locations, path }) =>
-            setInfo(message)
+          error.graphQLErrors.map(({ message, locations, path }) => {
+            if (message === "Not authenticated" || message === "jwt expired") {
+              window.location.reload()
+            } else {
+              setInfo(message)
+            }
+            setPassword("")
+          }
           );
-        //setInfo(error);
         setShow(true);
-        props.success()
+        props.success();
       })
   };
 
@@ -173,7 +182,7 @@ const SignIn = (props) => {
                       Sign up
                       </Button>
                   </div>
-                  <Button
+                  {/* <Button
                     className="text-primary"
                     disabled={props.login.loading}
                     onClick={() =>
@@ -181,7 +190,7 @@ const SignIn = (props) => {
                     }
                   >
                     Forgot password?
-                    </Button>
+                    </Button> */}
                   <Button
                     className="capitalize"
                     style={{ marginLeft: "165px" }}
@@ -194,8 +203,12 @@ const SignIn = (props) => {
                   //disabled={this.props.login.loading}
                   //type="submit"
                   >
-                    Company
-                        </Button>
+                    <Icon>business</Icon>
+                    <span className="pl-2 capitalize">
+                      Company
+                                    </span>
+
+                  </Button>
                 </ValidatorForm>
               </div>
             </Grid>
@@ -211,7 +224,8 @@ const mapStateToProps = state => ({
   login: state.login,
   loading: PropTypes.func.isRequired,
   success: PropTypes.func.isRequired,
+  addCompany: PropTypes.func.isRequired
 });
 export default withStyles(styles, { withTheme: true })(
-  withRouter(connect(mapStateToProps, { success, loading, loginWithEmailAndPassword })(SignIn))
+  withRouter(connect(mapStateToProps, { addCompany, success, loading, loginWithEmailAndPassword })(SignIn))
 );

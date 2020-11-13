@@ -11,7 +11,7 @@ const StatCards2 = (props) => {
               size="medium"
               className="bg-light-green circle-44 box-shadow-none overflow-hidden"
             >
-              <Icon>star_outline</Icon>
+              <Icon>store</Icon>
             </Fab>
             <h5 className="font-medium text-secondary m-0 ml-3">Ready For Pick Up</h5>
             <h2 className="m-0 ml-5 text-muted">{props.step5}</h2>
@@ -32,7 +32,7 @@ const StatCards2 = (props) => {
               size="medium"
               className="bg-green circle-44 box-shadow-none"
             >
-              <Icon >trending_up</Icon>
+              <Icon >done_all</Icon>
             </Fab>
             <h5 className="font-medium text-green m-0 ml-3">Signed</h5>
 

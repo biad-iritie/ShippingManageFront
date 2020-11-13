@@ -9,6 +9,7 @@ import NavigationReducer from "./NavigationReducer";
 import CompanyReducer from "./CompanyReducer";
 import RateReducer from "./RateReducer";
 import OrderReducer from "./OrderReducer";
+import EmployeesReducer from './EmployeesReducer'
 
 const RootReducer = combineReducers({
   order: OrderReducer,
@@ -20,7 +21,8 @@ const RootReducer = combineReducers({
   scrumboard: ScrumBoardReducer,
   notification: NotificationReducer,
   ecommerce: EcommerceReducer,
-  navigations: NavigationReducer
+  navigations: NavigationReducer,
+  employees: EmployeesReducer,
 });
 
 export default RootReducer;

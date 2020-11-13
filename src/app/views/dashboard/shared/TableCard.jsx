@@ -1,14 +1,15 @@
 import React from "react";
 import {
   Card,
-  Icon,
-  IconButton,
+  //Icon,
+  //IconButton,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody
 } from "@material-ui/core";
+import history from "history.js";
 
 const TableCard = (props) => {
   /* const productList = [
@@ -75,7 +76,11 @@ const TableCard = (props) => {
                   <TableRow key={index} align="center">
                     <TableCell className="px-0 capitalize" colSpan={4} >
                       <div className="flex items-center" onClick={() => {
-                        alert("OK")
+                        history.push("/order/detail_order", [{
+                          order: {
+                            id: order.id
+                          },
+                        }])
                       }}>
                         <p className="m-0 ml-8">{order.code}</p>
                       </div>

@@ -18,7 +18,7 @@ const StatCards = (props) => {
       <Grid item xs={12} md={6}>
         <Card className="play-card p-sm-24 bg-paper" elevation={6}>
           <div className="flex items-center">
-            <Icon className={props.classes.icon}>group</Icon>
+            <Icon className={props.classes.icon}>hourglass_empty</Icon>
             <div className="ml-3">
               <small className="text-muted">Stand By</small>
               <h6 className="m-0 mt-1 text-primary font-medium">{props.step1} Package(s)</h6>
@@ -34,7 +34,7 @@ const StatCards = (props) => {
       <Grid item xs={12} md={6}>
         <Card className="play-card p-sm-24 bg-paper" elevation={6}>
           <div className="flex items-center">
-            <Icon className={props.classes.icon}>attach_money</Icon>
+            <Icon className={props.classes.icon}>hourglass_full</Icon>
             <div className="ml-3">
               <small className="text-muted">Received</small>
               <h6 className="m-0 mt-1 text-primary font-medium">{props.step2} Package(s)</h6>
@@ -50,7 +50,7 @@ const StatCards = (props) => {
       <Grid item xs={12} md={6}>
         <Card className="play-card p-sm-24 bg-paper" elevation={6}>
           <div className="flex items-center">
-            <Icon className={props.classes.icon}>store</Icon>
+            <Icon className={props.classes.icon}>redo</Icon>
             <div className="ml-3">
               <small className="text-muted">In Transit</small>
               <h6 className="m-0 mt-1 text-primary font-medium">

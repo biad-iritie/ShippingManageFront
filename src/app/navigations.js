@@ -16,6 +16,11 @@ export const navigations = [
       {
         name: "Rate",
         path: "/company/rate",
+        iconText: "R"
+      },
+      {
+        name: "Employees",
+        path: "/company/employees",
         iconText: "E"
       },
       {

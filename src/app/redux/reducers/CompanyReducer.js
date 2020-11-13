@@ -6,6 +6,7 @@ const initialState = {};
 const companyReducer = function (state = initialState, action) {
     switch (action.type) {
         case ADD_COMPANY: {
+            //console.log(action.data);
             return state = action.data;
         }
         default: {

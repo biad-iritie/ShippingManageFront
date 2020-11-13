@@ -85,9 +85,9 @@ const Layout1Topbar = (props) => {
 
 
             <div className="hide-on-mobile">
-              {/* <IconButton>
-                <Icon>mail_outline</Icon>
-              </IconButton> */}
+              <IconButton>
+                <Icon>help</Icon>
+              </IconButton>
 
 
               <MatxMenu
@@ -136,19 +136,18 @@ const Layout1Topbar = (props) => {
                     <span className="pl-4"> Home </span>
                   </Link>
                 </MenuItem>
-                <MenuItem>
-                  {/* <Link
-                    className={classes.menuItem}
-                    to="/page-layouts/user-profile"
-                  > */}
+                <MenuItem onClick={() => {
+                  props.history.push("/session/profile")
+                }}>
+
                   <Icon> person </Icon>
                   <span className="pl-4"> Profile </span>
-                  {/* </Link> */}
+
                 </MenuItem>
-                <MenuItem className={classes.menuItem}>
+                {/* <MenuItem className={classes.menuItem}>
                   <Icon> settings </Icon>
                   <span className="pl-4"> Settings </span>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                   onClick={handleSignOut}
                   className={classes.menuItem}

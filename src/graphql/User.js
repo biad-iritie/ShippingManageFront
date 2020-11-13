@@ -4,8 +4,17 @@ import { gql } from '@apollo/react-hooks';
 export const VERIFY_TOKEN = gql`
 query{
   verifyToken{
-    names
-    role
+    user {
+            id
+            names
+            email
+            phone
+            role 
+        }
+    check {
+            id
+        }
+      
   }
 }`;
 
@@ -13,12 +22,31 @@ export const CHECK_COMPANY = gql`
 query check_company($email: String!){
     check_company(email: $email)
 }`;
+
 export const LIST_COUNTRY = gql`
 query{
     listCountry{
       name
     }
 }`;
+
+export const LIST_EMPLOYEES = gql`
+query list_employees($role: String!){
+ list_employees(role:$role)
+  {
+      
+    user{
+        id
+    	names
+    	phone
+        email
+    	role
+    	last_login
+        is_active
+    }
+    
+  }
+}`
 
 export const UPDATE_COMPANY = gql`
 mutation update_company($id:ID!,$name: String, $address: String, 
@@ -49,7 +77,7 @@ query info_company {
         email
         is_active
     }}`;
-
+// FOR SIGN UP
 export const SIGN_UP = gql`
     mutation signup($names: String!, $email: String!, $password: String!, $phone: String!,$role:String,
         $id_company: Int,$name_company:String , $phone_company1: String,$phone_company2: String,$email_company: String,$address: String) {
@@ -73,7 +101,7 @@ export const SIGN_UP = gql`
                 role 
             }
         }}`;
-
+// FOR LOGIN
 export const LOGIN = gql`
 mutation login($email: String!, $password: String!) {
     login(
@@ -82,12 +110,62 @@ mutation login($email: String!, $password: String!) {
     ) {
         token
         user {
+            id
             names
             email
             phone
             role 
         }
-    }}`;
+        check {
+            id
+        }
+}}`;
+// FOR UPDATE THE USER'S information
+export const UPDATE = gql`
+mutation update($names:String, $email:String, $phone:String){
+    update(
+        names:$names,
+        email:$email,
+        phone:$phone
+    ){
+        names
+        phone
+        email
+    }
+}`;
+
+export const UPDATE_PASSWORD = gql`
+mutation update_password($password:String!, $new_password:String!){
+    update_password(
+        password:$password,
+        new_password:$new_password,
+    )
+}`;
+
+export const ADD_EMPLOYEE = gql`
+mutation add_employee($roleRequest: String!, $names:String!, $phone:String!,
+$email:String!, $password:String!, $role:String!){
+  add_employee(roleRequest:$roleRequest,
+  names:$names,
+  phone:$phone,
+  email:$email,
+  password:$password,
+  role:$role){
+    id
+    names
+    phone
+    email
+    role
+    last_login
+  }
+}`
+
+export const DELETE_USER = gql`
+mutation delete_user($id:ID!,$role:String!){
+    delete_user(role:$role, id:$id){
+    id
+  }
+}`;
 
 export const FEED = gql`
 query GetLaunch {

@@ -106,8 +106,13 @@ const CU_Rate = (props) => {
                 setInfo("Please try this action after !");
             }
             if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
+                error.graphQLErrors.map(({ message, locations, path }) => {
+                    if (message === "Not authenticated" || message === "jwt expired") {
+                        window.location.reload()
+                    } else {
+                        setInfo(message)
+                    }
+                }
                 );
             //setInfo(error);
 
@@ -210,8 +215,13 @@ const CU_Rate = (props) => {
                             setInfo("Check your internet, and try again");
                         }
                         if (error.graphQLErrors)
-                            error.graphQLErrors.map(({ message, locations, path }) =>
-                                setInfo(message)
+                            error.graphQLErrors.map(({ message, locations, path }) => {
+                                if (message === "Not authenticated" || message === "jwt expired") {
+                                    window.location.reload()
+                                } else {
+                                    setInfo(message)
+                                }
+                            }
                             );
                         setShow(true);
                         props.success();
@@ -276,8 +286,13 @@ const CU_Rate = (props) => {
                             setInfo("Check your internet, and try again");
                         }
                         if (error.graphQLErrors)
-                            error.graphQLErrors.map(({ message, locations, path }) =>
-                                setInfo(message)
+                            error.graphQLErrors.map(({ message, locations, path }) => {
+                                if (message === "Not authenticated" || message === "jwt expired") {
+                                    window.location.reload()
+                                } else {
+                                    setInfo(message)
+                                }
+                            }
                             );
                         setShow(true)
                         props.success()

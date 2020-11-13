@@ -252,7 +252,6 @@ const SignUp = (props) => {
                                         name="password"
                                         type="password"
                                         value={password}
-
                                         validators={["required"]}
                                         errorMessages={['this field is required']}
                                     />

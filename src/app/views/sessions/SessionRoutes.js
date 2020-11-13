@@ -5,6 +5,7 @@ import ForgotPassword from "./ForgotPassword";
 //OWN
 //import CompSignIn from "./CompSignIn";
 import CompSignUp from "./CompSignUp";
+import Profile from "./Profile";
 
 const settings = {
   activeLayout: "layout1",
@@ -48,6 +49,10 @@ const sessionRoutes = [
     path: "/session/404",
     component: NotFound,
     settings
+  },
+  {
+    path: "/session/profile",
+    component: Profile,
   },
   //OWN
   /* {

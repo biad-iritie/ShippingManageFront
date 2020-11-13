@@ -115,37 +115,40 @@ class Layout1Sidenav extends Component {
           </span>
           <div className="user__menu">
             <MatxMenu
-              menuButton={
-                <Tooltip title="Settings">
-                  <IconButtonWhite
-                    aria-label="Delete"
-                    className=""
-                    size="small"
-                  >
-                    <IconSmall> settings </IconSmall>
-                  </IconButtonWhite>
-                </Tooltip>
-              }
+            /* menuButton={
+              <Tooltip title="Settings">
+                <IconButtonWhite
+                  aria-label="Delete"
+                  className=""
+                  size="small"
+                >
+                  <IconSmall> settings </IconSmall>
+                </IconButtonWhite>
+              </Tooltip>
+            } */
             >
-              <MenuItem className="flex items-center">
+              {/* <MenuItem className="flex items-center">
                 <Icon> home </Icon>
                 <span className="pl-4"> Home </span>
-              </MenuItem>
-              <MenuItem className="flex items-center">
+              </MenuItem> */}
+              {/* <MenuItem className="flex items-center">
                 <Icon> settings </Icon>
                 <span className="pl-4"> Account Setting </span>
-              </MenuItem>
+              </MenuItem> */}
             </MatxMenu>
 
-            <Tooltip title="Profile">
-              <IconButtonWhite aria-label="Delete" className="" size="small">
+            <Tooltip title="Profile" >
+              <IconButtonWhite aria-label="Delete" className="flex items-right" size="small"
+                onClick={() => {
+                  this.props.history.push("/session/profile")
+                }}>
                 <IconSmall>person</IconSmall>
               </IconButtonWhite>
             </Tooltip>
-            <Tooltip title="Sign out">
+            <Tooltip title="Sign out" >
               <IconButtonWhite
                 aria-label="Delete"
-                className=""
+                className="flex items-right"
                 size="small"
                 onClick={this.handleSignOut}
               >

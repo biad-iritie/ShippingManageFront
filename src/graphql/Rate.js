@@ -6,6 +6,7 @@ mutation delete_rate($id:ID!){
     id
   }
 }`;
+
 export const UPDATE_RATE = gql`
 mutation update_rate($id:ID!,$country:String!,$shipMethod: String!,$interKg:String!, $price:String!, $typeService:String, $goods:String!, 
     $time:String!, 

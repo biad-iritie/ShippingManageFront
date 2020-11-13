@@ -8,7 +8,8 @@ const redirectRoute = props => {
   const { pathname } = location;
 
   history.push({
-    pathname: "/session/signin",
+    //pathname: "/session/signin",
+    pathname: "/dashboard/analytics",
     state: { redirectUrl: pathname }
   });
 };
@@ -33,6 +34,7 @@ const AuthGuard = ({ children, ...props }) => {
   );
 
   useEffect(() => {
+    //console.log(authenticated);
     if (!authenticated) {
       redirectRoute(props);
     }
