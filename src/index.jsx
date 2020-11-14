@@ -14,6 +14,10 @@ import App from "./app/App";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { createHttpLink } from 'apollo-link-http';
+/* import { WebSocketLink } from '@apollo/client/link/ws';
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities'; */
+
 //import { onError } from '@apollo/client/link/error';
 //import { logoutUser } from './app/redux/actions/UserActions';
 // 1
@@ -32,9 +36,20 @@ const client = new ApolloClient({
 const httpLink = createHttpLink({
     uri: 'http://localhost:4000',
 });
+/*const httpLink = new HttpLink({
+    uri: 'http://localhost:4000'
+});
+ const wsLink = new WebSocketLink({
+    uri: `ws://localhost:5000/`,
+    options: {
+        reconnect: true
+    }
+}); */
+
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
     const token = localStorage.getItem('jwt_token');
+    //console.log(token);
     // return the headers to the context so httpLink can read them
     return {
         headers: {
@@ -55,6 +70,22 @@ const client = new ApolloClient({
     //cache: new InMemoryCache()
 });
 
+// The split function takes three parameters:
+//
+// * A function that's called for each operation to execute
+// * The Link to use for an operation if the function returns a "truthy" value
+// * The Link to use for an operation if the function returns a "falsy" value
+/* const splitLink = split(
+    ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+        );
+    },
+    wsLink,
+    httpLink,
+); */
 
 //const client = createClient({ url: 'http://localhost:4000' });
 // cssVars();

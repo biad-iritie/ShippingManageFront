@@ -1,6 +1,8 @@
 import React from "react";
 import { withStyles, ThemeProvider } from "@material-ui/core/styles";
 import { IconButton, Toolbar, AppBar, Icon } from "@material-ui/core";
+import TwitterIcon from '@material-ui/icons/Twitter';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -23,16 +25,19 @@ const Footer = ({ theme, settings }) => {
               </Button>
             </a> */}
             <span className="m-auto"></span>
-            <p className="m-0">
-              Developed by Biad Iritie
-              <IconButton>
-                <a href="http://ui-lib.com">
-                  <Icon color="primary">
-                    twitter
-                  </Icon>
-                </a>
+            <p className="m-5">
+              Developed by Biad Iritie 
+              
+              <TwitterIcon onClick={() => {
+                window.open("https://twitter.com/BoliIritie");
+              }}>
+              </TwitterIcon>
+              <LinkedInIcon onClick={() => {
+                window.open("https://www.linkedin.com/in/bi-iriti%C3%A9-boli-467767153/");
+              }}>
 
-              </IconButton>
+              </LinkedInIcon>
+              
             </p>
           </div>
         </Toolbar>

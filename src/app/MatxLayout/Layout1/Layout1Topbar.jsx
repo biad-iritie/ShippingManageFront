@@ -117,7 +117,7 @@ const Layout1Topbar = (props) => {
             {/* <ShoppingCart></ShoppingCart> */}
             <MatxSearchBox />
             {
-              user.role && (<NotificationBar />)
+              //user.role && (<NotificationBar />)
             }
 
             {

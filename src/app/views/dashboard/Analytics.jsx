@@ -1,9 +1,9 @@
-import React, { Component, Fragment, useState, useEffect } from "react";
-import { Grid, Card } from "@material-ui/core";
+import React, { Fragment, useState, useEffect } from "react";
+import { Grid } from "@material-ui/core";
 
-import DoughnutChart from "../charts/echarts/Doughnut";
+//import DoughnutChart from "../charts/echarts/Doughnut";
 
-import ModifiedAreaChart from "./shared/ModifiedAreaChart";
+//import ModifiedAreaChart from "./shared/ModifiedAreaChart";
 import StatCards from "./shared/StatCards";
 import TableCard from "./shared/TableCard";
 //import RowCards from "./shared/RowCards";
@@ -15,8 +15,10 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/styles";
 import ShowInfo from '../components/message';
 import { loading, success } from "../../redux/actions/LoginActions";
-import { useQuery, useSubscription } from '@apollo/client';
-import { ORDER_LIST, COUNT_PACKAGE, SUB_NEW_PACK } from '../../../graphql/Order';
+import { useQuery } from '@apollo/client';
+//import { useSubscription } from '@apollo/client';
+import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
+//import { SUB_NEW_PACK } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
 //import { addCompany } from "../../redux/actions/CompanyAction";
 
@@ -170,7 +172,7 @@ const Dashboard1 = (props) => {
     onCompleted: (data) => {
       set_nb_arrived(data.count_package)
     },
-    onError: () => {
+    onError: (error) => {
       //console.log("onError");
       //console.log(error);
       setVariant("error");
@@ -250,14 +252,15 @@ const Dashboard1 = (props) => {
   });
 
   //RealTime check for the new package
-  const {
+  /* const {
     data: newPack,
   } = useSubscription(SUB_NEW_PACK, {
     variables: { company: props.company.id, userId: user.id },
-    onSubscriptionData: (newPack) => {
-      console.log(newPack.subscriptionData.data.newPack);
+    shouldResubscribe: true,
+    onSubscriptionData: (data) => {
+      console.log(data.subscriptionData.data.newPack);
     }
-  });
+  }); */
   useEffect(() => {
 
     loading === false &&
@@ -270,7 +273,7 @@ const Dashboard1 = (props) => {
           })
           .catch(error => {
             //console.log("onError");
-            //console.log(error);
+            console.log(error);
             setVariant("error");
             if (error.networkError) {
               setInfo("Please try after this action");
@@ -284,6 +287,7 @@ const Dashboard1 = (props) => {
                 }
               }
               );
+            //setShow(true)
             //setInfo(error);
           })
 
@@ -383,6 +387,7 @@ const Dashboard1 = (props) => {
 }
 const mapStateToProps = state => ({
   loading: PropTypes.func.isRequired,
+  success: PropTypes.func.isRequired,
   user: state.user,
   orders: state.order,
   refetchOrder: PropTypes.func.isRequired,
@@ -391,5 +396,5 @@ const mapStateToProps = state => ({
 
 //export default withStyles({}, { withTheme: true })(Dashboard1);
 export default withStyles({}, { withTheme: true })(
-  connect(mapStateToProps, { refetchOrder, loading })(Dashboard1)
+  connect(mapStateToProps, { refetchOrder, loading, success })(Dashboard1)
 );

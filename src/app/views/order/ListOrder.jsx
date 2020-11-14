@@ -17,7 +17,7 @@ import ShowInfo from '../components/message';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { useMutation, useQuery } from '@apollo/client';
 import { ORDER_LIST, DELETE_ORDER, ADD_POSITION, ADD_PRICE } from '../../../graphql/Order';
-import { addOrder, refetchOrder, updateOrder } from '../../redux/actions/OrderActions';
+import { refetchOrder, updateOrder } from '../../redux/actions/OrderActions';
 
 const ListOrder = (props) => {
     const [variant, setVariant] = useState('error')
