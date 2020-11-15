@@ -34,7 +34,8 @@ const client = new ApolloClient({
     cache: new InMemoryCache()
 }) */
 const httpLink = createHttpLink({
-    uri: 'http://localhost:4000',
+    //uri: 'http://localhost:4000',
+    uri: 'https://shipmanage-back.herokuapp.com/'
 });
 /*const httpLink = new HttpLink({
     uri: 'http://localhost:4000'
