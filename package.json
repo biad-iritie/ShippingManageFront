@@ -66,7 +66,7 @@
     "victory": "^32.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -100,9 +100,5 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "gh-pages": "^2.1.1",
     "react-app-rewired": "^2.1.5"
-  },
-  "engines": {
-    "node": "14.5.0",
-    "npm": "6.14.0"
   }
 }
