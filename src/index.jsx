@@ -35,7 +35,7 @@ const client = new ApolloClient({
 }) */
 const httpLink = createHttpLink({
     //uri: 'http://localhost:4000',
-    uri: 'https://shipmanage-back.herokuapp.com/'
+    uri: '/graphql/'
 });
 /*const httpLink = new HttpLink({
     uri: 'http://localhost:4000'
