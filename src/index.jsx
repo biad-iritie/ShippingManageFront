@@ -14,6 +14,7 @@ import App from "./app/App";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { createHttpLink } from 'apollo-link-http';
+const { API } = process.env;
 /* import { WebSocketLink } from '@apollo/client/link/ws';
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities'; */
@@ -34,8 +35,8 @@ const client = new ApolloClient({
     cache: new InMemoryCache()
 }) */
 const httpLink = createHttpLink({
-    //uri: 'http://localhost:4000',
-    uri: '/api/'
+    //uri: "http://localhost:4000",
+    uri: 'https://shipping-manage-back-dx9b5.ondigitalocean.app/'
 });
 /*const httpLink = new HttpLink({
     uri: 'http://localhost:4000'
