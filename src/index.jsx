@@ -36,7 +36,7 @@ const client = new ApolloClient({
 }) */
 const httpLink = createHttpLink({
     //uri: "http://localhost:4000",
-    uri: 'https://shipping-manage-back-dx9b5.ondigitalocean.app/'
+    uri: "https://shipping-manage-back-dx9b5.ondigitalocean.app/api"
 });
 /*const httpLink = new HttpLink({
     uri: 'http://localhost:4000'
