@@ -1,0 +1,7 @@
+name: mshipping
+static_sites:
+- name: https://shipping-manage-back-dx9b5.ondigitalocean.app/
+  github:
+    repo: https://github.com/biad-iritie/ShippingManageFront
+    branch: master
+  error_document: index.html
