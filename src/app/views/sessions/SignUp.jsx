@@ -9,7 +9,7 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import { loginWithEmailAndPassword, loading } from "../../redux/actions/LoginActions";
+import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { connect } from "react-redux";
 import { useMutation } from '@apollo/client';
 /*import { SIGN_UP_CUSTOMER } from '../../../graphql/User' */
@@ -116,7 +116,7 @@ const SignUp = (props) => {
         props.loading();
         signup({
             variables: {
-                names: names, email: email, password: password, phone: phone
+                names: names, email: email, password: password, phone: phone, role: "GUEST"
             }
         })
             .then((res) => {
@@ -142,7 +142,7 @@ const SignUp = (props) => {
                     );
                 //setInfo(error);
                 setShow(true);
-                props.error()
+                props.success()
             })
         /* console.log("IN");
         console.log(loading);
@@ -324,5 +324,5 @@ const mapStateToProps = state => ({
 
 
 export default withStyles(styles, { withTheme: true })(
-    withRouter(connect(mapStateToProps, { loading, loginWithEmailAndPassword })(SignUp))
+    withRouter(connect(mapStateToProps, { success, loading, loginWithEmailAndPassword })(SignUp))
 );
