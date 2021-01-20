@@ -26,7 +26,7 @@ const Footer = ({ theme, settings }) => {
             </a> */}
             <span className="m-auto"></span>
             <p className="m-5">
-              Developed by Biad Iritie 
+              Developed by Boli Iritie 
               
               <TwitterIcon onClick={() => {
                 window.open("https://twitter.com/BoliIritie");

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
-import { Icon, IconButton, MenuItem } from "@material-ui/core";
+import { Icon, IconButton, Button, MenuItem } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
@@ -152,12 +152,30 @@ const Layout1Topbar = (props) => {
                   onClick={handleSignOut}
                   className={classes.menuItem}
                 >
-                  <Icon> power_settings_new </Icon>
+                  <Icon> exit_to_app </Icon>
                   <span className="pl-4"> Logout </span>
                 </MenuItem>
               </MatxMenu>
             }
+            {
+              !user.role &&
+              <Button
+                className="capitalize"
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  props.history.push("/session/signin")
+                }}
+              //disabled={this.props.login.loading}
+              //type="submit"
+              >
+                <Icon>perm_identity</Icon>
+                <span className="pl-2 capitalize">
+                  Login
+                                    </span>
 
+              </Button>
+            }
           </div>
         </div>
       </div>

@@ -11,11 +11,14 @@ import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { connect } from "react-redux";
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 /*import { SIGN_UP_CUSTOMER } from '../../../graphql/User' */
 //import { useQuery } from 'urql';
-import { SIGN_UP } from '../../../graphql/User';
+import { SIGN_UP, GET_PUBLIC_KEY } from '../../../graphql/User';
 import ShowInfo from '../components/message';
+import { encryptData } from '../../../utils';
+import { manageMsg, checkError } from "../../../utils";
+
 
 /* import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent"; */
@@ -50,9 +53,10 @@ const SignUp = (props) => {
     const [repassword, setRepassword] = useState()
     const [email, setEmail] = useState()
 
-    const [variant, setVariant] = useState('error')
-    const [info, setInfo] = useState(null)
-    const [show, setShow] = useState(false)
+    const [variant, setVariant] = useState('error');
+    const [info, setInfo] = useState(null);
+    const [show, setShow] = useState(false);
+    const [public_key, setPublicKey] = useState();
 
     const { classes } = props;
     const handleChange = event => {
@@ -81,6 +85,18 @@ const SignUp = (props) => {
             [event.target.name]: event.target.value
         }); */
     };
+    const { data, error } = useQuery(GET_PUBLIC_KEY, {
+        onCompleted: (data) => {
+            setPublicKey(data.getPublicKey)
+        },
+        onError: () => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
+        }
+    });
     const [signup] = useMutation(SIGN_UP/* , {
         errorPolicy: 'all',
         onCompleted: () => {
@@ -116,7 +132,11 @@ const SignUp = (props) => {
         props.loading();
         signup({
             variables: {
-                names: names, email: email, password: password, phone: phone, role: "GUEST"
+                names: names,
+                email: encryptData(email, public_key.toString()),
+                password: encryptData(password, public_key.toString()),
+                phone: phone,
+                role: "GUEST"
             }
         })
             .then((res) => {
@@ -129,20 +149,11 @@ const SignUp = (props) => {
                 setShow(false);
             })
             .catch((error) => {
-                console.log("onError");
-                console.log(error);
                 setVariant("error");
-                if (error.networkError) {
-                    //console.log(error.networkError);
-                    setInfo("Be sure you have a connection or it's a technical issues");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) =>
-                        setInfo(message)
-                    );
-                //setInfo(error);
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
                 setShow(true);
-                props.success()
+                props.success();
             })
         /* console.log("IN");
         console.log(loading);

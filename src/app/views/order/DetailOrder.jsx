@@ -37,6 +37,8 @@ import ShowInfo from '../components/message';
 import { useQuery } from '@apollo/client';
 import { loading, success } from "../../redux/actions/LoginActions";
 import Loading from '../Loading';
+import { setLayoutSettings } from "app/redux/actions/LayoutActions";
+import { manageMsg, checkError } from "../../../utils";
 
 const styles = theme => ({
     wrapper: {
@@ -90,16 +92,44 @@ const DetailOrder = (props) => {
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
     const [order, setOrder] = useState(null)
-    
+    const user = props.user
 
     //const [prevStatus, setPrevStatus] = useState(null)
     //const [firstIndexStatut, setFirstIndexStatut] = useState(true)
+//console.log(user);
 
+  const updateSidebarMode = () => {
+    let { settings, setLayoutSettings } = props;
+
+    setLayoutSettings({
+      ...settings,
+      layout1Settings: {
+        topbar: {
+          show: true
+        },
+        leftSidebar: {
+          show: false,
+          mode: "close"
+        }
+      },
+      layout2Settings: {
+        mode: "full",
+        topbar: {
+          show: false
+        },
+        navbar: { show: false }
+      },
+    });
+  };
+    if(!user.id){
+        //updateSidebarMode()
+    }
     const handleChangePanel = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
     //console.log(props.location.state[0].order.id);
-    const { refetch,loading, error, data } = useQuery(ORDER_DETAIL, {
+    const {loading, error, data } = useQuery(ORDER_DETAIL, {
         errorPolicy: 'all',
         variables: {
             id: props.location.state[0].order.id,
@@ -124,30 +154,50 @@ const DetailOrder = (props) => {
                 setOrder(null);
             }
             
-            
-            //props.addOrder(data.order_list)
-            //props.success();
         },
         onError: () => {
-            //console.log("onError");
-            //console.log(error);
             setVariant("error");
-            if (error.networkError) {
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
-            //setInfo(error);
-
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
+                setShow(true);
+                props.success();
         }
     });
+
     useEffect(() => {
         //console.log(step3);
         loading === false &&
             (async () => {
-                await refetch();
+                /* await refetch()
+                .then(data => {
+                    if (data.order_detail.length>0) {
+                        setOrder(data.order_detail[0]);
+                        step1 = [];
+                        step2 = [];
+                        step3 = [];
+                        step4 = [];
+                        step5 = [];
+                        step6 = [];
+                    data.order_detail[0].detailStatuts.map((detail) =>{
+                        findStep(detail)
+                    })
+                    }else{
+                        setOrder(null);
+                    }
+                })
+                .catch(error => {
+                    //console.log("onError");
+                    console.log(error);
+                    setVariant("error");
+                    if (error.networkError) {
+                        setInfo("Please try after this action");
+                    }
+                    if (error.graphQLErrors)
+                        error.graphQLErrors.map(({ message, locations, path }) =>
+                            setInfo(message)
+                        );
+                    //setInfo(error);
+                }) */
             })();
     }, [loading]);
 
@@ -231,12 +281,17 @@ const DetailOrder = (props) => {
                 variant={variant} />
             <Loading open={loading} />
             <div className="mb-sm-30">
-                <Breadcrumb
+                {
+                    user.id ? 
+                    <Breadcrumb
                     routeSegments={[
                         { name: "Package List", path: "/order/list_order" },
                         { name: "Package Detail" }
                     ]}
                 />
+                : ""
+                }
+                
                 {
                     order !== null ? (
                         <Card>
@@ -492,9 +547,10 @@ const mapStateToProps = state => ({
     loading: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
     user: state.user,
+    setLayoutSettings : PropTypes.func.isRequired
 });
 
 export default withStyles(styles, { withTheme: true })(
-    withRouter(connect(mapStateToProps, { success, loading })(DetailOrder))
+    withRouter(connect(mapStateToProps, { setLayoutSettings,success, loading })(DetailOrder))
 )
 

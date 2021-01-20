@@ -2,6 +2,7 @@ import { authRoles } from "../../auth/authRoles";
 import NewOrder from "./NewOrder";
 import ListOrder from "./ListOrder";
 import DetailOrder from './DetailOrder';
+
 const orderRoutes = [
     {
         path: "/order/add_order",

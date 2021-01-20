@@ -1,12 +1,81 @@
 import { differenceInSeconds } from "date-fns";
+var crypto = require('crypto');
 
+// For the encryption
+export function encryptData(data, public_key) {
+  // publicEncrypt() method with its parameters 
+  const encrypted = crypto.publicEncrypt(
+    public_key,
+    Buffer.from(data, 'utf8')).toString("base64");
+  //console.log(encrypted);
+  return encrypted;
+}
+
+export function checkError(error) {
+  let msg = "ERROR IN SERVER";
+
+  if (error.networkError) {
+    msg = error.networkError.toString();
+  }
+  if (error.graphQLErrors)
+    error.graphQLErrors.map(({ message, locations, path }) => {
+      /* if (message === "Not authenticated" || message === "jwt expired") {
+          window.location.reload()
+      } else {
+          setInfo(message)
+      } */
+      msg = message.toString()
+      //console.log(message);
+    }
+    );
+  return msg;
+}
+//MANAGE MESSAGES
+export function manageMsg(info) {
+  //console.log(error);
+  switch (info) {
+    case "Not authenticated" || "jwt expired":
+      window.location.reload()
+      break;
+    case "TypeError: Failed to fetch" || "ERROR IN SERVER":
+      return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
+      break;
+    case "PWD_SUCCESS":
+      return "Password updated !"
+      break;
+    case "PWD_WRONG":
+      return "Wrong password , verify your password"
+      break;
+    case "PROFILE_UPDATED":
+      return "Profile updated !"
+      break;
+    case "COMPANY_EXIST":
+      return "A company exist already with this informations"
+      break;
+    case "USER_EXIST":
+      return "Sorry, a user use this email"
+      break;
+    case "LOGIN_FAILLED" || "USER_NOT_FIND":
+      return "Invalid email or password "
+      break;
+    case "ACCOUNT_CLOSED":
+      return "Account closed, contact your Manager"
+      break;
+
+    default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
+      break;
+  }
+}
+/* export function encr(params) {
+  //const bcrypt = require('bcryptjs')
+} */
 export function debounce(func, wait, immediate) {
   var timeout;
-  return function() {
+  return function () {
     var context = this,
       args = arguments;
     clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    timeout = setTimeout(function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);
@@ -72,7 +141,7 @@ export function scrollTo(scrollableElement, elmID) {
   if (stopY > startY) {
     for (var i = startY; i < stopY; i += step) {
       setTimeout(
-        (function(leapY) {
+        (function (leapY) {
           return () => {
             scrollableElement.scrollTo(0, leapY);
           };
@@ -87,7 +156,7 @@ export function scrollTo(scrollableElement, elmID) {
   }
   for (let i = startY; i > stopY; i -= step) {
     setTimeout(
-      (function(leapY) {
+      (function (leapY) {
         return () => {
           scrollableElement.scrollTo(0, leapY);
         };
@@ -126,7 +195,7 @@ export function getQueryParam(prop) {
     window.location.href.slice(window.location.href.indexOf("?") + 1)
   );
   var definitions = search.split("&");
-  definitions.forEach(function(val, key) {
+  definitions.forEach(function (val, key) {
     var parts = val.split("=", 2);
     params[parts[0]] = parts[1];
   });

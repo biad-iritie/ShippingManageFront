@@ -167,6 +167,12 @@ mutation delete_user($id:ID!,$role:String!){
   }
 }`;
 
+export const GET_PUBLIC_KEY = gql`
+query get_public_key {
+    getPublicKey
+}
+`
+
 export const FEED = gql`
 query GetLaunch {
   feed{

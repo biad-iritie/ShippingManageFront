@@ -14,11 +14,12 @@ import Divider from '@material-ui/core/Divider';
 import PropTypes from "prop-types";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { loading, success } from "../../redux/actions/LoginActions";
-import { useMutation } from '@apollo/client';
-import { UPDATE_PASSWORD, UPDATE } from '../../../graphql/User';
+import { useMutation, useQuery } from '@apollo/client';
+import { UPDATE_PASSWORD, UPDATE, GET_PUBLIC_KEY } from '../../../graphql/User';
 import { connect } from "react-redux";
 import { updateUser } from '../../redux/actions/UserActions';
-
+import { manageMsg, checkError } from "../../../utils";
+import { encryptData } from '../../../utils';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -52,10 +53,25 @@ const Profile = (props) => {
     const [oldPwd, setOldPwd] = useState();
     const [pwd, setPwd] = useState();
     const [rpwd, setRpwd] = useState();
+    const [public_key, setPublicKey] = useState();
+
 
     //const [role, setRole] = useState();
     const [update_password] = useMutation(UPDATE_PASSWORD);
     const [update] = useMutation(UPDATE);
+    const { data, error } = useQuery(GET_PUBLIC_KEY, {
+        onCompleted: (data) => {
+            setPublicKey(data.getPublicKey)
+        },
+        onError: () => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
+        }
+    });
+
     const handleChange = event => {
         event.persist();
         switch (event.target.name) {
@@ -97,26 +113,15 @@ const Profile = (props) => {
         })
             .then((res) => {
                 props.updateUser(res.data.update)
-                setInfo("Profile modified !");
+                setInfo(manageMsg("PROFILE_UPDATED"));
                 setVariant('success');
                 setShow(true);
                 props.success();
             })
             .catch((error) => {
                 setVariant("error");
-                //setInfo("You can't modify now , try it later .");
-                if (error.networkError) {
-                    setInfo("Check your internet, and try again");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) => {
-                        if (message === "Not authenticated" || message === "jwt expired") {
-                            window.location.reload()
-                        } else {
-                            setInfo(message)
-                        }
-                    }
-                    );
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
                 setShow(true);
                 props.success();
             })
@@ -127,40 +132,29 @@ const Profile = (props) => {
         props.loading();
         update_password({
             variables: {
-                password: oldPwd,
-                new_password: pwd,
+                password: encryptData(oldPwd, public_key.toString()),
+                new_password: encryptData(pwd, public_key.toString()),
             }
         })
             .then((res) => {
                 //props.updateUser(res.data.update)
                 if (res.data.update_password === "PWD_SUCCESS") {
                     setVariant('success');
-                    setInfo("Password modified !");
                     setOldPwd("");
                     setPwd("");
                     setRpwd("");
                 } else {
                     setVariant('error');
-                    setInfo("Wrong password.");
+
                 }
+                setInfo(manageMsg(res.data.update_password));
                 setShow(true);
                 props.success();
             })
             .catch((error) => {
                 setVariant("error");
-                //setInfo("You can't modify now , try it later .");
-                if (error.networkError) {
-                    setInfo("Check your internet, and try again");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) => {
-                        if (message === "Not authenticated" || message === "jwt expired") {
-                            window.location.reload()
-                        } else {
-                            setInfo(message)
-                        }
-                    }
-                    );
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
                 setShow(true);
                 props.success();
             })

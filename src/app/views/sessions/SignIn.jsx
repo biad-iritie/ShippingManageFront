@@ -14,9 +14,12 @@ import { withRouter } from "react-router-dom";
 
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { addCompany } from "../../redux/actions/CompanyAction"
-import { useMutation } from '@apollo/client';
-import { LOGIN } from '../../../graphql/User';
+import { useMutation, useQuery } from '@apollo/client';
+import { LOGIN, GET_PUBLIC_KEY } from '../../../graphql/User';
 import ShowInfo from '../components/message';
+import { encryptData } from '../../../utils';
+import { manageMsg, checkError } from "../../../utils";
+
 
 const styles = theme => ({
   wrapper: {
@@ -43,6 +46,7 @@ const SignIn = (props) => {
   const [variant, setVariant] = useState('error');
   const [info, setInfo] = useState(null);
   const [show, setShow] = useState(false);
+  const [public_key, setPublicKey] = useState();
 
   const handleChange = event => {
     event.persist();
@@ -55,14 +59,31 @@ const SignIn = (props) => {
         break;
     }
   };
+  const { data, error } = useQuery(GET_PUBLIC_KEY, {
+    onCompleted: (data) => {
+      setPublicKey(data.getPublicKey)
+    },
+    onError: () => {
+      setVariant("error");
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
+      props.success();
+    }
+  });
+
   const [login] = useMutation(LOGIN)
+
   const handleFormSubmit = event => {
     //props.loginWithEmailAndPassword({ ...this.state });
     setShow(false);
+    var passwordEncrypted = encryptData(password, public_key.toString())
+    var emailEncrypted = encryptData(email, public_key.toString())
+    //console.log(passwordEncrypted);
     props.loading();
     login({
       variables: {
-        email: email, password: password
+        email: emailEncrypted, password: passwordEncrypted
       }
     })
       .then((res) => {
@@ -80,29 +101,17 @@ const SignIn = (props) => {
       })
       .catch((error) => {
         setVariant("error");
-        //setInfo("You can't modify now , try it later .");
-        if (error.networkError) {
-          setInfo("Check your internet, and try again");
-        }
-        if (error.graphQLErrors)
-          error.graphQLErrors.map(({ message, locations, path }) => {
-            if (message === "Not authenticated" || message === "jwt expired") {
-              window.location.reload()
-            } else {
-              setInfo(message)
-            }
-            setPassword("")
-          }
-          );
+        console.log();
+        let msg = checkError(error)
+        setInfo(manageMsg(msg));
         setShow(true);
         props.success();
       })
   };
-
   //let { email, password } = this.state;
   const { classes } = props;
   return (
-    <div className="signup flex justify-center w-full h-full-screen">
+    <div className="signup flex justify-center h-full-screen">
       <ShowInfo
         show={show}
         info={info}

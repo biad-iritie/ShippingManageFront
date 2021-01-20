@@ -16,8 +16,11 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import ShowInfo from '../components/message';
-import { useMutation } from '@apollo/client';
-import { SIGN_UP } from '../../../graphql/User';
+import { useMutation, useQuery } from '@apollo/client';
+import { SIGN_UP, GET_PUBLIC_KEY } from '../../../graphql/User';
+import { encryptData } from '../../../utils';
+import { manageMsg, checkError } from "../../../utils";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -56,7 +59,7 @@ const CompSignUp = (props) => {
     const [variant, setVariant] = useState('error')
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
-
+    const [public_key, setPublicKey] = useState();
 
 
     const handleChangePanel = panel => (event, isExpanded) => {
@@ -103,6 +106,19 @@ const CompSignUp = (props) => {
             [event.target.name]: event.target.value
         }); */
     };
+
+    const { data, error } = useQuery(GET_PUBLIC_KEY, {
+        onCompleted: (data) => {
+            setPublicKey(data.getPublicKey)
+        },
+        onError: () => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
+        }
+    });
     const [signup] = useMutation(SIGN_UP);
     const HandleFormSubmit = event => {
         event.preventDefault();
@@ -112,7 +128,10 @@ const CompSignUp = (props) => {
         props.loading();
         signup({
             variables: {
-                names: names, email: email, password: password, phone: phone,
+                names: names,
+                email: encryptData(email, public_key.toString()),
+                password: encryptData(password, public_key.toString()),
+                phone: phone,
                 role: "OWNER",
                 name_company: name_company,
                 phone_company1: phone_company1,
@@ -131,19 +150,11 @@ const CompSignUp = (props) => {
                 setShow(false);
             })
             .catch((error) => {
-                console.log("onError");
-                console.log(error);
                 setVariant("error");
-                if (error.networkError) {
-                    setInfo("Please try after this action");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) =>
-                        setInfo(message)
-                    );
-                //setInfo(error);
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
                 setShow(true);
-                props.success()
+                props.success();
             })
     };
     const next = event => {
