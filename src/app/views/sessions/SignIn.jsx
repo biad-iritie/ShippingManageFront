@@ -101,7 +101,7 @@ const SignIn = (props) => {
       })
       .catch((error) => {
         setVariant("error");
-        console.log();
+        //console.log(error);
         let msg = checkError(error)
         setInfo(manageMsg(msg));
         setShow(true);
