@@ -55,7 +55,10 @@ export function manageMsg(info) {
     case "USER_EXIST":
       return "Sorry, a user use this email"
       break;
-    case "LOGIN_FAILLED" || "USER_NOT_FIND":
+    case "LOGIN_FAILLED":
+      return "Invalid email or password "
+      break;
+    case "USER_NOT_FIND":
       return "Invalid email or password "
       break;
     case "ACCOUNT_CLOSED":
