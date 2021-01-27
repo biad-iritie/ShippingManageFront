@@ -217,7 +217,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Your full name"
+                                                            label="Your full name *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="names"
@@ -228,7 +228,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Email"
+                                                            label="Email *"
                                                             onChange={handleChange}
                                                             type="email"
                                                             name="email"
@@ -242,7 +242,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Phone with code eg: +86........."
+                                                            label="Phone with code eg: +86......... *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="phone"
@@ -257,7 +257,7 @@ const CompSignUp = (props) => {
                                                     <Grid item lg={6} md={6} sm={12} xs={12}>
                                                         <TextValidator
                                                             className="mb-4 w-full"
-                                                            label="Password"
+                                                            label="Password *"
                                                             variant="outlined"
                                                             onChange={handleChange}
                                                             name="password"
@@ -268,7 +268,7 @@ const CompSignUp = (props) => {
                                                         />
                                                         <TextValidator
                                                             className="mb-4 w-full"
-                                                            label="Rewrite Password"
+                                                            label="Rewrite Password *"
                                                             variant="outlined"
                                                             onChange={handleChange}
                                                             name="repassword"
@@ -333,7 +333,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Name"
+                                                            label="Name *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="name_company"
@@ -344,7 +344,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Phone with code eg: +86........."
+                                                            label="Phone with code eg: +86......... *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="phone_company1"
@@ -358,7 +358,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Phone with code eg: +86........."
+                                                            label="Phone with code eg: +86......... "
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="phone_company2"
@@ -373,7 +373,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Email"
+                                                            label="Email *"
                                                             onChange={handleChange}
                                                             type="email"
                                                             name="email_company"
@@ -387,7 +387,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Address"
+                                                            label="Address *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="address"
