@@ -18,12 +18,14 @@ export function checkError(error) {
     msg = error.networkError.toString();
   }
   if (error.graphQLErrors)
+    //console.log(error.graphQLErrors);
     error.graphQLErrors.map(({ message, locations, path }) => {
       /* if (message === "Not authenticated" || message === "jwt expired") {
           window.location.reload()
       } else {
           setInfo(message)
       } */
+
       msg = message.toString()
       //console.log(message);
     }
@@ -32,7 +34,7 @@ export function checkError(error) {
 }
 //MANAGE MESSAGES
 export function manageMsg(info) {
-  //console.log(info);
+  console.log(info);
   switch (info) {
     case "Not authenticated" || "jwt expired":
       window.location.reload()
@@ -53,6 +55,7 @@ export function manageMsg(info) {
       return "A company exist already with this informations"
       break;
     case "USER_EXIST":
+    case "Error: USER_EXIST":
       return "Sorry, a user use this email"
       break;
     case "LOGIN_FAILLED":
@@ -64,7 +67,12 @@ export function manageMsg(info) {
     case "ACCOUNT_CLOSED":
       return "Account closed, contact your Manager"
       break;
-
+    case "NOT_ALLOW":
+      return "Sorry you can\'t apply this request"
+      break;
+    case "EMPOYEE_EXIST":
+      return "Please check carefully if you have information that will belongs to another account. Thanks"
+      break;
     default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
   }

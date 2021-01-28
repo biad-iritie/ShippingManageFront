@@ -6,9 +6,9 @@ import {
     CircularProgress
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
@@ -196,11 +196,11 @@ const CompSignUp = (props) => {
                         <Grid item lg={9} md={7} sm={7} xs={12}>
                             <div className="p-9 h-full">
                                 <div className={classes.root}>
-                                    <ExpansionPanel
+                                    <Accordion
                                         expanded={expanded === "panel1"}
                                         onChange={handleChangePanel("panel1")}
                                     >
-                                        <ExpansionPanelSummary
+                                        <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1bh-content"
                                             id="panel1bh-header"
@@ -209,8 +209,8 @@ const CompSignUp = (props) => {
                                             <Typography className={classes.secondaryHeading}>
                                                 Put informations about you
                                             </Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
                                             <ValidatorForm ref={useRef("form")} onSubmit={next}>
                                                 <Grid container spacing={6}>
                                                     <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -310,13 +310,13 @@ const CompSignUp = (props) => {
                                                     </Button>
                                                 </div>
                                             </ValidatorForm>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    <ExpansionPanel
+                                        </AccordionDetails>
+                                    </Accordion>
+                                    <Accordion
                                         expanded={expanded === "panel2"}
                                     //onChange={handleChangePanel("panel2")}
                                     >
-                                        <ExpansionPanelSummary
+                                        <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel2bh-content"
                                             id="panel2bh-header"
@@ -325,8 +325,8 @@ const CompSignUp = (props) => {
                                             <Typography className={classes.secondaryHeading}>
                                                 Put informations about your company
                                             </Typography>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
                                             <ValidatorForm ref={useRef("form")} onSubmit={HandleFormSubmit}>
                                                 <Grid container spacing={6}>
                                                     <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -429,8 +429,8 @@ const CompSignUp = (props) => {
                                                     </Button>
                                                 </div>
                                             </ValidatorForm>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
+                                        </AccordionDetails>
+                                    </Accordion>
                                 </div>
                             </div>
                         </Grid>
