@@ -19,11 +19,11 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { loading, success } from "../../redux/actions/LoginActions";
 //import history from "history.js";
 import { connect } from "react-redux";
-import { useMutation } from '@apollo/client';
-import { ADD_EMPLOYEE } from '../../../graphql/User';
+import { useMutation, useQuery } from '@apollo/client';
+import { ADD_EMPLOYEE, GET_PUBLIC_KEY } from '../../../graphql/User';
 import { addEmployee, } from '../../redux/actions/EmployeesActions'
-
-
+import { manageMsg, checkError } from "../../../utils";
+import { encryptData } from '../../../utils';
 const useStyles = makeStyles(theme => ({
     root: {
         width: "100%"
@@ -47,6 +47,7 @@ const CU_Employees = (props) => {
     const [variant, setVariant] = useState("success");
     const [info, setInfo] = useState(null);
     const [show, setShow] = useState(false);
+    const [public_key, setPublicKey] = useState();
 
     const [names, setNames] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].employee.names
@@ -94,75 +95,74 @@ const CU_Employees = (props) => {
         }
     }
 
+    const { data, error } = useQuery(GET_PUBLIC_KEY, {
+        onCompleted: (data) => {
+            setPublicKey(data.getPublicKey)
+        },
+        onError: () => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
+        }
+    });
+
     const handleFormSubmit = event => {
         //console.log(variant);
         event.preventDefault();
         setShow(false);
         props.loading();
-
-
         if (props.history.location.state[0].action === "add") {
 
             add_employee({
                 variables: {
                     names: names,
                     phone: phone,
-                    email: email,
+                    email: encryptData(email, public_key.toString()),
                     role: role,
                     roleRequest: props.user.role,
-                    password: password
+                    password: encryptData(password, public_key.toString()),
                 }
             })
                 .then(res => {
-                    if (res.data.add_employee.id) {
-                        setInfo("Successful!");
-                        setVariant('success');
-                        setNames("")
-                        setPhone("")
-                        setEmail("")
-                        setRole("")
-                        props.addEmployee([{
-                            user: {
-                                id: res.data.add_employee.id,
-                                names: names,
-                                phone: phone,
-                                email: email,
-                                role: role,
+                    //if (res.data.add_employee.id) {
 
-                            }
-                        }]);
-                    } else {
-                        setInfo("Error, Try after !");
-                        setVariant('error');
-                    }
+                    setInfo(manageMsg("EMPLOYEE_CREATED"));
+                    setNames("")
+                    setPhone("")
+                    setEmail("")
+                    setRole("")
+                    props.addEmployee([{
+                        user: {
+                            id: res.data.add_employee.id,
+                            names: names,
+                            phone: phone,
+                            email: email,
+                            role: role,
 
+                        }
+                    }]);
 
-
-                    setShow(true);
+                    /* }  else {
+                         setInfo("Error, Try after !");
+                         setVariant('error');
+                     } */
+                    setVariant('success');
                     props.success();
+                    setShow(true);
                     //history.goBack();
 
                 })
                 .catch(error => {
                     setVariant("error");
-                    //setInfo("You can't modify now , try it later .");
-                    if (error.networkError) {
-                        setInfo("Check your internet, and try again");
-                    }
-                    if (error.graphQLErrors)
-                        error.graphQLErrors.map(({ message, locations, path }) => {
-                            if (message === "Not authenticated" || message === "jwt expired") {
-                                window.location.reload()
-                            } else {
-                                setInfo(message)
-                            }
-                        }
-                        );
+                    let msg = checkError(error)
+                    setInfo(manageMsg(msg));
                     setShow(true);
                     props.success();
                 });
         } else {
-            alert("Update")
+            //alert("Update")
             /* update_rate({
                 variables: {
                     id: parseInt(props.history.location.state[0].rate.id),

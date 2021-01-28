@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import {
     Icon,
     Button,
+    IconButton,
     Grid,
     LinearProgress,
     Typography
@@ -16,6 +17,7 @@ import ShowInfo from '../components/message';
 import { LIST_EMPLOYEES, DELETE_USER } from '../../../graphql/User';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { deleteEmployee, refetchEmployee, } from '../../redux/actions/EmployeesActions';
+import { manageMsg, checkError } from "../../../utils";
 
 const Employees = (props) => {
     var moment = require('moment');
@@ -47,32 +49,21 @@ const Employees = (props) => {
         })
             .then(data => {
                 if (data.data.delete_user.id) {
-                    setInfo("Employee deleted !");
+                    setInfo(manageMsg("EMPLOYEE_DELETED"));
                     setVariant('success');
-                } else {
+                } /* else {
                     setInfo("Error, Try after !");
                     setVariant('error');
-                }
+                } */
                 props.deleteEmployee(data.data.delete_user.id)
                 setShow(true);
                 props.success();
             })
             .catch(error => {
                 setVariant("error");
-                //setInfo("You can't modify now , try it later .");
-                if (error.networkError) {
-                    setInfo("Check your internet, and try again");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) => {
-                        if (message === "Not authenticated" || message === "jwt expired") {
-                            window.location.reload()
-                        } else {
-                            setInfo(message)
-                        }
-                    }
-                    );
-
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
+                setShow(true);
                 props.success();
             })
         handleClose()
@@ -214,9 +205,6 @@ const Employees = (props) => {
                         value != null ?
                             moment(Number(value)).format("YYYY-MM-DD HH:mm")
                             : "???")
-
-
-
                 },
                 setCellHeaderProps: value => {
                     return {
@@ -227,26 +215,26 @@ const Employees = (props) => {
                 },
             },
         },
-        /*  {
-             name: "Delete",
-             options: {
-                 filter: false,
-                 sort: false,
-                 empty: true,
-                 
-                 customBodyRender: (value, tableMeta, updateValue) => {
-                     //alert(dataIndex)
-                     return (
-                         <IconButton onClick={() => {
-                             //console.log(tableMeta);
-                             askConfirmation(tableMeta.rowData[0])
-                         }}>
-                             <Icon color="error">delete</Icon>
-                         </IconButton >
-                     );
-                 }
-             } 
-         },*/
+        {
+            name: "Delete",
+            options: {
+                filter: false,
+                sort: false,
+                empty: true,
+
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    //alert(dataIndex)
+                    return (
+                        <IconButton onClick={() => {
+                            //console.log(tableMeta);
+                            askConfirmation(tableMeta.rowData[0])
+                        }}>
+                            <Icon color="error">delete</Icon>
+                        </IconButton >
+                    );
+                }
+            }
+        },
 
     ];
     const options = {

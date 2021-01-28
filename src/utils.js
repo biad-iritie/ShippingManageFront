@@ -39,7 +39,8 @@ export function manageMsg(info) {
     case "Not authenticated" || "jwt expired":
       window.location.reload()
       break;
-    case "TypeError: Failed to fetch" || "ERROR IN SERVER":
+    case "TypeError: Failed to fetch":
+    case "ERROR IN SERVER":
       return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
     case "PWD_SUCCESS":
@@ -72,6 +73,12 @@ export function manageMsg(info) {
       break;
     case "EMPOYEE_EXIST":
       return "Please check carefully if you have information that will belongs to another account. Thanks"
+      break;
+    case "EMPLOYEE_CREATED":
+      return "Employee created"
+      break;
+    case "EMPLOYEE_DELETED":
+      return "Employee deleted"
       break;
     default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;

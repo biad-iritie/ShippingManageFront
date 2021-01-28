@@ -170,6 +170,7 @@ const Profile = (props) => {
             return true;
         });
     })
+
     return (
         <div className="m-sm-30">
             <ShowInfo

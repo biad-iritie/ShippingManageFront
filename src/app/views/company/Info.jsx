@@ -155,7 +155,7 @@ const Info = (props) => {
         })
             .then((res) => {
 
-                console.log(res);
+                //console.log(res);
                 if (res.data.update_company) {
                     setInfo("Modification done !");
                 } else {
@@ -243,7 +243,7 @@ const Info = (props) => {
                                         type="text"
                                         name="phone1"
                                         value={phone1}
-                                        defaultValue="okk"
+                                        defaultValue=" "
                                         validators={["required", 'matchRegexp:[^+][0-9]$']}
                                         errorMessages={[
                                             "this field is required",
@@ -258,7 +258,7 @@ const Info = (props) => {
                                         type="text"
                                         name="phone2"
                                         value={phone2}
-                                        defaultValue="ok"
+                                        defaultValue=" "
                                         validators={['matchRegexp:[^+][0-9]$']}
                                         errorMessages={[
                                             "The number is not valid"
@@ -274,7 +274,7 @@ const Info = (props) => {
                                         type="email"
                                         name="email"
                                         value={email}
-                                        defaultValue="ok"
+                                        defaultValue=" "
                                         validators={["required", "isEmail"]}
                                         errorMessages={[
                                             "this field is required",
@@ -289,7 +289,7 @@ const Info = (props) => {
                                         type="text"
                                         name="address"
                                         value={address}
-                                        defaultValue="ok"
+                                        defaultValue=" "
                                         validators={["required"]}
                                         errorMessages={[
                                             "this field is required"
