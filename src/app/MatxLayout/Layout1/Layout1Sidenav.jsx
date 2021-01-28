@@ -77,7 +77,7 @@ class Layout1Sidenav extends Component {
       }
     } = this.props;
 
-    console.log(mode);
+    //console.log(mode);
 
     this.updateSidebarMode({ mode: mode === "compact" ? "full" : "compact" });
   };
@@ -161,7 +161,7 @@ class Layout1Sidenav extends Component {
     );
   };
 
-  render() {
+  render(props) {
     let { user, theme, settings } = this.props;
     const sidenavTheme =
       settings.themes[settings.layout1Settings.leftSidebar.theme] || theme;
