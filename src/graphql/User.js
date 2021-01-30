@@ -114,7 +114,8 @@ mutation login($email: String!, $password: String!) {
             names
             email
             phone
-            role 
+            role
+            last_login 
         }
         check {
             id
@@ -172,15 +173,16 @@ query get_public_key {
     getPublicKey
 }
 `
-
-export const FEED = gql`
-query GetLaunch {
-  feed{
-id
-url
-}
-}
-`
+export const UPDATE_EMPLOYEE_ROLE = gql`
+mutation update_employee_role($id:ID!,$role:String!){
+    update_employee_role(id:$id,role:$role){
+        id,
+        names,
+        phone,
+        last_login,
+        role
+  }
+}`;
 
 /* export function SignUpCustomerService(email, password, names, phone) {
     const [SIGN_UP, { data, error }] = useMutation(SIGN_UP_CUSTOMER);

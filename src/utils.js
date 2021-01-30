@@ -68,8 +68,17 @@ export function manageMsg(info) {
     case "ACCOUNT_CLOSED":
       return "Account closed, contact your Manager"
       break;
+    case "PACKAGE_ADDED":
+      return "Package added"
+      break;
+    case "PACKAGE_DELETED":
+      return "Package deleted"
+      break;
     case "NOT_ALLOW":
       return "Sorry you can\'t apply this request"
+      break;
+    case "ROLE_ADDED":
+      return "Role added"
       break;
     case "EMPOYEE_EXIST":
       return "Please check carefully if you have information that will belongs to another account. Thanks"

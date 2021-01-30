@@ -13,8 +13,9 @@ import {
 import { useMutation, useQuery } from '@apollo/client';
 import MUIDataTable from "mui-datatables";
 import Confirmation from '../components/Confirmation';
+import InputModal from '../components/InputModal';
 import ShowInfo from '../components/message';
-import { LIST_EMPLOYEES, DELETE_USER } from '../../../graphql/User';
+import { LIST_EMPLOYEES, DELETE_USER, UPDATE_EMPLOYEE_ROLE } from '../../../graphql/User';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { deleteEmployee, refetchEmployee, } from '../../redux/actions/EmployeesActions';
 import { manageMsg, checkError } from "../../../utils";
@@ -27,8 +28,20 @@ const Employees = (props) => {
     const [openModal, setOpenModal] = useState(false)
     const [idDelete, setIdDelete] = useState()
 
+    const [openModalInput, setOpenModalInput] = useState(false)
+    const [id, setId] = useState();
+    const [role, setRole] = useState();
+    //const [numKuadi, setNumKuadi] = useState();
+    const [submitInputModal, setSubmitInputModal] = useState();
+    const [titleModal, setTitleModal] = useState();
+    const [contentTextModal, setContentTextModal] = useState();
+    const [action, setAction] = useState();
+    const [descriptionStatut, setDescriptionStatut] = useState();
+
+
     const handleClose = () => {
         setOpenModal(false);
+        setOpenModalInput(false)
     }
     const askConfirmation = (id) => {
         //console.log("OK");
@@ -68,6 +81,7 @@ const Employees = (props) => {
             })
         handleClose()
     }
+
     const { refetch, loading, error, data } = useQuery(LIST_EMPLOYEES, {
         errorPolicy: 'all',
         variables: {
@@ -80,22 +94,11 @@ const Employees = (props) => {
             //props.success();
         },
         onError: () => {
-            //console.log("onError");
-            //console.log(error);
             setVariant("error");
-            if (error.networkError) {
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) => {
-                    if (message === "Not authenticated" || message === "jwt expired") {
-                        window.location.reload()
-                    } else {
-                        setInfo(message)
-                    }
-                }
-                );
-            //setInfo(error);
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
 
         }
     });
@@ -133,7 +136,69 @@ const Employees = (props) => {
 
             })();
     }, [loading,]);
+    const addRole = (id, role) => {
+        //console.log("OK");
+        setOpenModalInput(true);
+        setId(id);
+        setTitleModal("Change the role");
+        setContentTextModal("Add the prices in different currencies");
+        setSubmitInputModal("addRole");
+        setAction("addRole")
+        setRole(role)
+    };
 
+    const submitModal = () => {
+        //console.log("submitModal");
+        //console.log(submitInputModal);
+        switch (submitInputModal) {
+            case "addRole":
+                //alert(role)
+                add_role();
+                break;
+            default:
+                break
+        }
+    }
+    const [add_role] = useMutation(UPDATE_EMPLOYEE_ROLE, {
+        errorPolicy: 'all',
+        variables: {
+            id: id,
+            role: role,
+        },
+        onCompleted: (data) => {
+            setOpenModalInput(false)
+            //console.log(dataPosition);
+            setVariant("success");
+            if (data.update_employee_role) {
+                setInfo(manageMsg("ROLE_ADDED"));
+                setShow(true);
+            }
+        },
+        onError: (error) => {
+            //console.log("onError");
+            //console.log(error);
+            setOpenModalInput(false)
+
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
+
+        }
+    });
+    const handleChange = event => {
+        //console.log(event);
+        event.persist();
+        switch (event.target.name) {
+            case "role":
+                setRole(event.target.value)
+                break;
+            default:
+                break
+        }
+
+    };
     const columns = [
 
         {
@@ -161,7 +226,7 @@ const Employees = (props) => {
                 /* customBodyRender: (value, tableMeta,) => {
                     //console.log(value);
                     return (value.names)
-
+ 
                 } */
             }
         },
@@ -174,7 +239,7 @@ const Employees = (props) => {
                 /* customBodyRender: (value, tableMeta,) => {
                     //console.log(value);
                     return (value.phone)
-
+ 
                 } */
             },
         },
@@ -185,10 +250,19 @@ const Employees = (props) => {
                 filter: true,
                 sort: true,
                 customBodyRender: (value, tableMeta,) => {
-                    //console.log(value);
 
-                    return (value === "STAFF_MEMBER" ?
-                        "STAFF" : "ADMIN")
+                    return (
+                        <div
+                            onClick={() => {
+                                //console.log();
+                                addRole(tableMeta.rowData[0], value)
+                            }}
+                        >
+                            {value === "STAFF_MEMBER" ?
+                                "STAFF" : "ADMIN"}
+                        </div>
+
+                    )
 
                 }
             },
@@ -237,6 +311,7 @@ const Employees = (props) => {
         },
 
     ];
+
     const options = {
         //filterType: 'checkbox',
         sortOrder: {
@@ -259,7 +334,18 @@ const Employees = (props) => {
                 show={show}
                 info={info}
                 variant={variant} />
-
+            <InputModal open={openModalInput}
+                loading={props.login.loading}
+                handleClose={handleClose}
+                handleChange={handleChange}
+                action={action}
+                title={titleModal}
+                ContentText={contentTextModal}
+                role={role}
+                descriptionStatut={descriptionStatut}
+                //numKuadi={numKuadi}
+                onSubmit={submitModal}
+            />
             <Confirmation open={openModal}
                 handleClose={handleClose}
                 loading={props.login.loading}
@@ -286,26 +372,16 @@ const Employees = (props) => {
                                 props.loading();
                                 await refetch()
                                     .then(res => {
-                                        props.refetchEmployee(res.data.list_employees)
+                                        const result = data.list_employees.map(res => res.user)
+                                        props.refetchEmployee(result)
                                         props.success();
                                     })
                                     .catch(error => {
-                                        console.log("onError");
-                                        console.log(error);
                                         setVariant("error");
-                                        if (error.networkError) {
-                                            setInfo("Please try after this action");
-                                        }
-                                        if (error.graphQLErrors)
-                                            error.graphQLErrors.map(({ message, locations, path }) => {
-                                                if (message === "Not authenticated" || message === "jwt expired") {
-                                                    window.location.reload()
-                                                } else {
-                                                    setInfo(message)
-                                                }
-                                            }
-                                            );
-                                        //setInfo(error);
+                                        let msg = checkError(error)
+                                        setInfo(manageMsg(msg));
+                                        setShow(true);
+                                        props.success();
                                     })
                             }}
                             disabled={props.login.loading}

@@ -12,12 +12,13 @@ import {
 import MUIDataTable from "mui-datatables";
 import { Breadcrumb } from "matx";
 import Confirmation from '../components/Confirmation';
-import InputModal from '../components/InputModal'
+import InputModal from '../components/InputModal';
 import ShowInfo from '../components/message';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { useMutation, useQuery } from '@apollo/client';
 import { ORDER_LIST, DELETE_ORDER, ADD_POSITION, ADD_PRICE } from '../../../graphql/Order';
 import { refetchOrder, updateOrder } from '../../redux/actions/OrderActions';
+import { manageMsg, checkError } from "../../../utils";
 
 const ListOrder = (props) => {
     const [variant, setVariant] = useState('error')
@@ -50,17 +51,11 @@ const ListOrder = (props) => {
 
         },
         onError: () => {
-            //console.log("onError");
-            //console.log(error);
             setVariant("error");
-            if (error.networkError) {
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
-            //setInfo(error);
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
 
         }
     });
@@ -74,10 +69,11 @@ const ListOrder = (props) => {
         },
         onCompleted: (data) => {
             setOpenModalInput(false)
-            console.log(dataPosition);
-            setVariant("success");
+            //console.log(dataPosition);
+
             if (data.add_position) {
-                setInfo("Submitted");
+                setVariant("success");
+                setInfo(manageMsg("PACKAGE_ADDED"));
                 setShow(true);
             }
         },
@@ -85,15 +81,12 @@ const ListOrder = (props) => {
             //console.log("onError");
             //console.log(error);
             setOpenModalInput(false)
-            if (error.networkError) {
-                setVariant("warning");
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
+
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
             setShow(true);
+            props.success();
 
         }
     });
@@ -140,15 +133,11 @@ const ListOrder = (props) => {
             //console.log("onError");
             //console.log(error);
             setOpenModalInput(false)
-            if (error.networkError) {
-                setVariant("warning");
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
             setShow(true);
+            props.success();
 
         }
     })
@@ -369,7 +358,7 @@ const ListOrder = (props) => {
                     return (
                         <IconButton disabled={tableMeta.rowData[2] === "SIGNED" && true}
                             onClick={() => {
-                                console.log(tableMeta.rowData);
+                                //console.log(tableMeta.rowData);
                                 tableMeta.rowData[2] !== "SIGNED" && addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
 
                             }}>
@@ -516,7 +505,8 @@ const ListOrder = (props) => {
         })
             .then(data => {
                 if (data.data.delete_rate.id) {
-                    setInfo("Deleted !");
+
+                    setInfo(manageMsg("PACKAGE_DELETED"));
                     setVariant('success');
                 } else {
                     setInfo("Error, Try after !");
@@ -528,15 +518,9 @@ const ListOrder = (props) => {
             })
             .catch(error => {
                 setVariant("error");
-                //setInfo("You can't modify now , try it later .");
-                if (error.networkError) {
-                    setInfo("Check your internet, and try again");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) =>
-                        setInfo(message)
-                    );
-
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
+                setShow(true);
                 props.success();
             })
         handleClose()
@@ -575,7 +559,7 @@ const ListOrder = (props) => {
                 setPrice(event.target.value)
                 break;
             case "packageStatut":
-                console.log(event.target.value);
+                //console.log(event.target.value);
                 setPackageStatut(event.target.value)
                 break;
             case "descriptionStatut":
@@ -588,8 +572,8 @@ const ListOrder = (props) => {
     };
     const submitAddPrice = () => {
         setOpenModalInput(false)
-        console.log(id);
-        console.log(price);
+        //console.log(id);
+        //console.log(price);
     };
     /*     const submitAddStatut = () => {
     

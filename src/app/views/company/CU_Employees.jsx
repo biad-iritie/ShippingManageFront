@@ -284,7 +284,7 @@ const CU_Employees = (props) => {
                                             onChange={handleChange}
                                         >
                                             <FormControlLabel value="STAFF_MEMBER" control={<Radio />} label="Staff" />
-                                            <FormControlLabel value="OWNER" control={<Radio />} label="Admin" />
+                                            <FormControlLabel value="ADMIN_MEMBER" control={<Radio />} label="Admin" />
 
                                         </RadioGroup>
                                     </FormControl>

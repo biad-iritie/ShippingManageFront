@@ -20,7 +20,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-const options = [
+const optionsStatut = [
     "STAND BY",
     "RECEIVED",
     "IN TRANSIT",
@@ -28,6 +28,10 @@ const options = [
     "READY FOR PICKUP",
     "SIGNED",
 ];
+const optionsRole = [
+    "STAFF_MEMBER",
+    "ADMIN_MEMBER"
+]
 function InputModal(props) {
     const radioGroupRef = React.useRef(null);
     return (
@@ -68,7 +72,7 @@ function InputModal(props) {
                                     value={props.statut}
                                     onChange={props.handleChange}
                                 >
-                                    {options.map(option => (
+                                    {optionsStatut.map(option => (
                                         <FormControlLabel
                                             className="capitalize"
                                             value={option}
@@ -93,6 +97,32 @@ function InputModal(props) {
                                     errorMessages={["this field is required"]}
 
                                 />
+                            </div>
+                        )
+                    }
+                    {
+                        props.action === "addRole" && (
+                            <div>
+                                <RadioGroup
+                                    ref={radioGroupRef}
+                                    aria-label="Ringtone"
+                                    name="role"
+                                    value={props.role}
+                                    onChange={props.handleChange}
+                                >
+                                    {optionsRole.map(option => (
+                                        <FormControlLabel
+                                            className="capitalize"
+                                            value={option}
+                                            key={option}
+                                            control={<Radio />}
+                                            label={option === "STAFF_MEMBER" ?
+                                                "STAFF" : "ADMIN"}
+                                            validators={["required"]}
+                                            errorMessages={["this field is required"]}
+                                        />
+                                    ))}
+                                </RadioGroup>
                             </div>
                         )
                     }
