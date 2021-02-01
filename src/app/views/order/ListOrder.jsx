@@ -73,7 +73,7 @@ const ListOrder = (props) => {
 
             if (data.add_position) {
                 setVariant("success");
-                setInfo(manageMsg("PACKAGE_ADDED"));
+                setInfo(manageMsg("POSITION_ADDED"));
                 setShow(true);
             }
         },
@@ -125,7 +125,7 @@ const ListOrder = (props) => {
                             );
                         //setInfo(error);
                     }) */
-                setInfo("Submitted");
+                setInfo(manageMsg("PRICE_ADDED"));
                 setShow(true);
             }
         },
@@ -614,14 +614,10 @@ const ListOrder = (props) => {
                         //console.log("onError");
                         //console.log(error);
                         setVariant("error");
-                        if (error.networkError) {
-                            setInfo("Please try after this action");
-                        }
-                        if (error.graphQLErrors)
-                            error.graphQLErrors.map(({ message, locations, path }) =>
-                                setInfo(message)
-                            );
-                        //setInfo(error);
+                        let msg = checkError(error)
+                        setInfo(manageMsg(msg));
+                        setShow(true);
+                        props.success();
                     })
 
             })();

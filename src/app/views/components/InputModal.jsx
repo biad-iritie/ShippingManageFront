@@ -149,13 +149,13 @@ function InputModal(props) {
                         Cancel
           </Button>
                     <Button type="submit" color="primary" disabled={props.loading}>
-                        Submit
-                        {props.loading && (
+
+                        {props.loading ? (
                             <CircularProgress
                                 size={24}
                             //className={classes.buttonProgress}
                             />
-                        )}
+                        ) : 'Submit'}
                     </Button>
                 </DialogActions>
             </ValidatorForm>

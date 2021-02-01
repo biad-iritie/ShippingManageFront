@@ -36,7 +36,10 @@ export function checkError(error) {
 export function manageMsg(info) {
   //console.log(info);
   switch (info) {
-    case "Not authenticated" || "jwt expired":
+    case "Not authenticated":
+    case "jwt expired":
+    case "TokenExpiredError: jwt expired":
+      //console.log(info);
       window.location.reload()
       break;
     case "TypeError: Failed to fetch":
@@ -70,6 +73,12 @@ export function manageMsg(info) {
       break;
     case "PACKAGE_ADDED":
       return "Package added"
+      break;
+    case "POSITION_ADDED":
+      return "Position updated"
+      break;
+    case "PRICE_ADDED":
+      return "Price added"
       break;
     case "PACKAGE_DELETED":
       return "Package deleted"

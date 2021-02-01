@@ -17,7 +17,7 @@ import InputModal from '../components/InputModal';
 import ShowInfo from '../components/message';
 import { LIST_EMPLOYEES, DELETE_USER, UPDATE_EMPLOYEE_ROLE } from '../../../graphql/User';
 import { loading, success } from "../../redux/actions/LoginActions";
-import { deleteEmployee, refetchEmployee, } from '../../redux/actions/EmployeesActions';
+import { deleteEmployee, refetchEmployee, updateEmployeeRole } from '../../redux/actions/EmployeesActions';
 import { manageMsg, checkError } from "../../../utils";
 
 const Employees = (props) => {
@@ -141,7 +141,7 @@ const Employees = (props) => {
         setOpenModalInput(true);
         setId(id);
         setTitleModal("Change the role");
-        setContentTextModal("Add the prices in different currencies");
+        setContentTextModal("Select the new role");
         setSubmitInputModal("addRole");
         setAction("addRole")
         setRole(role)
@@ -153,6 +153,7 @@ const Employees = (props) => {
         switch (submitInputModal) {
             case "addRole":
                 //alert(role)
+                props.loading();
                 add_role();
                 break;
             default:
@@ -171,6 +172,7 @@ const Employees = (props) => {
             setVariant("success");
             if (data.update_employee_role) {
                 setInfo(manageMsg("ROLE_ADDED"));
+                props.updateEmployeeRole(data.update_employee_role)
                 setShow(true);
             }
         },
@@ -428,6 +430,7 @@ const mapStateToProps = state => ({
 
     refetchEmployee: PropTypes.func.isRequired,
     deleteEmployee: PropTypes.func.isRequired,
+    updateEmployeeRole: PropTypes.func.isRequired,
     loading: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
     employees: state.employees,
@@ -435,4 +438,4 @@ const mapStateToProps = state => ({
     login: state.login
 
 });
-export default connect(mapStateToProps, { success, loading, refetchEmployee, deleteEmployee })(Employees);
+export default connect(mapStateToProps, { success, loading, refetchEmployee, updateEmployeeRole, deleteEmployee })(Employees);
