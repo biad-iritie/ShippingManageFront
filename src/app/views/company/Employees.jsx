@@ -175,6 +175,7 @@ const Employees = (props) => {
                 props.updateEmployeeRole(data.update_employee_role)
                 setShow(true);
             }
+            props.success()
         },
         onError: (error) => {
             //console.log("onError");

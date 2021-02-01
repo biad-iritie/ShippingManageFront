@@ -133,6 +133,7 @@ const CU_Employees = (props) => {
                     setPhone("")
                     setEmail("")
                     setRole("")
+                    setPassword("")
                     props.addEmployee([{
                         user: {
                             id: res.data.add_employee.id,
@@ -215,7 +216,7 @@ const CU_Employees = (props) => {
                     props.success()
                 }) */
         }
-        setShow(true);
+        //setShow(true);
 
 
 
@@ -313,7 +314,7 @@ const CU_Employees = (props) => {
                                                 variant="outlined"
                                                 label="Password"
                                                 onChange={handleChange}
-                                                type="text"
+                                                type="password"
                                                 name="password"
                                                 value={password}
                                                 validators={["required"]}

@@ -267,7 +267,7 @@ const Profile = (props) => {
                         <Divider variant="middle" />
                         <div>
                             <p className="center">
-                                <Typography variant="h6">Password</Typography>
+                                <Typography variant="h6">Change Password</Typography>
                             </p>
                             <ValidatorForm ref={useRef("form")} onSubmit={handleFormSubmit2}>
                                 <Grid container spacing={6}>

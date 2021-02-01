@@ -30,7 +30,7 @@ export function checkError(error) {
     );
   }
   //console.log(error.graphQLErrors);
-  console.log(error);
+  //console.log(error);
   return msg;
 }
 //MANAGE MESSAGES
