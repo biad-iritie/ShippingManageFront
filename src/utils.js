@@ -16,9 +16,7 @@ export function checkError(error) {
 
   if (error.networkError) {
     msg = error.networkError.toString();
-  }
-  if (error.graphQLErrors)
-    //console.log(error.graphQLErrors);
+  } else if (error.graphQLErrors) {
     error.graphQLErrors.map(({ message, locations, path }) => {
       /* if (message === "Not authenticated" || message === "jwt expired") {
           window.location.reload()
@@ -26,10 +24,13 @@ export function checkError(error) {
           setInfo(message)
       } */
 
-      msg = message.toString()
+      msg = (message.toString()).replace("Error: ", '')
       //console.log(message);
     }
     );
+  }
+  //console.log(error.graphQLErrors);
+  console.log(error);
   return msg;
 }
 //MANAGE MESSAGES
