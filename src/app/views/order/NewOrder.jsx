@@ -12,9 +12,9 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import history from "history.js";
@@ -28,6 +28,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { addOrder, updateOrder } from '../../redux/actions/OrderActions';
 import ShippingWay from '../components/ShippingWay';
+import { manageMsg, checkError } from "../../../utils";
 
 const styles = theme => ({
     wrapper: {
@@ -75,7 +76,7 @@ const NewOrder = (props) => {
     const [id_company, setId_company] = useState();
 
     const [email_company, setEmail_company] = useState(
-        props.history.location.state[0].action === "add" ? "biad@sh.com" : props.history.location.state[0].order.email_company
+        props.history.location.state[0].action === "add" ? "comp@bs.com" : props.history.location.state[0].order.email_company
     );
     const [weight, setWeight] = useState(
         props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.weight
@@ -118,26 +119,23 @@ const NewOrder = (props) => {
             //props.addCompany(data.info_company)
             //console.log(data)
             //console.log("List country");
-            //console.log(data);
+
             countries = data.listCountry;
+            setOptions((countries).map(country => country));
             //console.log(countries);
             if (active) {
                 setOptions((countries).map(country => country));
             }
-
+            console.log(options);
         },
-        onError: () => {
+        onError: (error) => {
             //console.log("onError");
             // console.log(error);
             setVariant("error");
-            if (error.networkError) {
-                setInfo("Please try this action after !");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
-            //setInfo(error);
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
 
         }
 
@@ -152,24 +150,21 @@ const NewOrder = (props) => {
         errorPolicy: 'all',
         onCompleted: () => {
             countries = data.listCountry;
-            //console.log(countries);
+            //console.log("check_company");
             if (active) {
                 setOptions((countries).map(country => country.name));
             }
-
+            console.log(options);
         },
         onError: (error) => {
 
-            setVariant("warning");
-            if (error.networkError) {
-                console.log("error.networkError");
-                //setVariant("error");
-                setInfo("Please check your Internet");
-                setShow(true)
-            }
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
 
         }
-
     })
 
     const handleChangePanel = panel => (event, isExpanded) => {
@@ -194,16 +189,11 @@ const NewOrder = (props) => {
                 //console.log(response)
             })
             .catch(error => {
-                props.success();
                 setVariant("error");
-                if (error.networkError) {
-                    setInfo("Please try after this action");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) =>
-                        setInfo(message)
-                    );
-                setShow(true)
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
+                setShow(true);
+                props.success();
             })
         //console.log(data_check);
 
@@ -252,8 +242,8 @@ const NewOrder = (props) => {
         setShow(false);
 
         event.preventDefault();
-        if (!r_country) {
-            setInfo("Select a country!");
+        if (!r_country || !shipMethod || !typeService) {
+            setInfo(manageMsg("INFO_NOT_ENOUGH"));
             setVariant('warning');
             setShow(true);
             loadingOrder = false;
@@ -282,7 +272,7 @@ const NewOrder = (props) => {
                         //alert("ok")
                         setVariant("success");
                         if (res.data.add_order) {
-                            setInfo("Order created, tracking number: " + res.data.add_order.code);
+                            setInfo(manageMsg("ORDER_CREATED") + res.data.add_order.code);
                             setShow(true);
                             setExpanded("panel1");
                             setName_agence_sender("");
@@ -299,16 +289,15 @@ const NewOrder = (props) => {
                     })
                     .catch(error => {
                         //alert("error")
-                        if (error.networkError) {
+                        /* if (error.networkError) {
                             setVariant("warning");
                             setInfo("Please check your network and try again this action");
-                        }
-                        if (error.graphQLErrors)
-                            setVariant("error");
-                        error.graphQLErrors.map(({ message, locations, path }) =>
-                            setInfo(message)
-                        );
+                        } */
+                        setVariant("error");
+                        let msg = checkError(error)
+                        setInfo(manageMsg(msg));
                         setShow(true);
+                        props.success();
                     })
             } else {
                 update_order({
@@ -343,16 +332,11 @@ const NewOrder = (props) => {
                     })
                     .catch(error => {
                         //alert("error")
-                        if (error.networkError) {
-                            setVariant("warning");
-                            setInfo("Please check your network and try again this request");
-                        }
-                        if (error.graphQLErrors)
-                            setVariant("error");
-                        error.graphQLErrors.map(({ message, locations, path }) =>
-                            setInfo(message)
-                        );
+                        setVariant("error");
+                        let msg = checkError(error)
+                        setInfo(manageMsg(msg));
                         setShow(true);
+                        props.success();
                     })
             }
             /* console.log("handleSubmit");
@@ -424,11 +408,11 @@ const NewOrder = (props) => {
             <Card>
                 <div className="p-9 h-full" >
                     <div className={classes.root}>
-                        <ExpansionPanel
+                        <Accordion
                             expanded={expanded === "panel1"}
                             onChange={handleChangePanel("panel1")}
                         >
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
@@ -437,8 +421,8 @@ const NewOrder = (props) => {
                                 <Typography className={classes.secondaryHeading}>
                                     Fill in all blanks to get more information about your package
                                             </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={next}>
                                     <Grid container spacing={6}>
                                         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -450,24 +434,24 @@ const NewOrder = (props) => {
                                                 type="text"
                                                 name="name_agence_sender"
                                                 value={name_agence_sender}
-                                                validators={["required"]}
+                                                //validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package number"
+                                                label="Package number "
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="numKuadi"
                                                 value={numKuadi}
-                                                validators={["required"]}
+                                                //validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package content"
+                                                label="Package content *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="content"
@@ -485,7 +469,7 @@ const NewOrder = (props) => {
                                                 type="text"
                                                 name="weight"
                                                 value={weight}
-                                                validators={["required"]}
+                                                //validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
                                             <TextValidator
@@ -494,7 +478,7 @@ const NewOrder = (props) => {
                                                 }} */
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Email of the shipping company"
+                                                label="Email of the shipping company *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="email_company"
@@ -529,31 +513,31 @@ const NewOrder = (props) => {
 
                                     </div>
                                 </ValidatorForm>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
 
-                        <ExpansionPanel
+                        <Accordion
                             expanded={expanded === "panel2"}
                         //onChange={handleChangePanel("panel2")}
                         >
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel2bh-content"
                                 id="panel2bh-header"
                             >
-                                <Typography className={classes.heading}>Receiver informations</Typography>
+                                <Typography className={classes.heading}>Receiver\Shipping informations</Typography>
                                 <Typography className={classes.secondaryHeading}>
                                     Fill in all blanks to get more information about the recipient
                                             </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={handleSubmit}>
                                     <Grid container spacing={6}>
                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Name"
+                                                label="Name *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_name"
@@ -564,7 +548,7 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Phone with code eg: +86........."
+                                                label="Phone with code eg: +86......... *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_phone"
@@ -585,6 +569,7 @@ const NewOrder = (props) => {
                                                 open={open}
                                                 onOpen={() => {
                                                     setOpen(true);
+
                                                 }}
                                                 onClose={() => {
                                                     setOpen(false);
@@ -605,7 +590,7 @@ const NewOrder = (props) => {
                                                 renderInput={params => (
                                                     <TextField
                                                         {...params}
-                                                        label="Country of destination"
+                                                        label="Country of destination *"
                                                         fullWidth
                                                         variant="outlined"
                                                         InputProps={{
@@ -625,7 +610,7 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="City"
+                                                label="City *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_city"
@@ -662,8 +647,8 @@ const NewOrder = (props) => {
 
                                     </div>
                                 </ValidatorForm>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
 
 
 

@@ -22,7 +22,7 @@ export default function ShippingWay(props) {
     return (
         <div>
             <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Shipping Method</FormLabel>
+                <FormLabel component="legend">Shipping Method *</FormLabel>
                 <RadioGroup
                     isRequired={true}
                     aria-label="shipMethod"
@@ -37,7 +37,7 @@ export default function ShippingWay(props) {
                 </RadioGroup>
             </FormControl>
             <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Service Type</FormLabel>
+                <FormLabel component="legend">Service Type *</FormLabel>
                 <RadioGroup
                     isRequired={true}
                     aria-label="typeService"

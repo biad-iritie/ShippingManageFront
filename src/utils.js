@@ -99,6 +99,21 @@ export function manageMsg(info) {
     case "EMPLOYEE_DELETED":
       return "Employee deleted"
       break;
+    case "COMPANY_NOT_AVAILABLE":
+      return "Oups ! sorry this company is not available, please choose another company. THANKS"
+      break;
+    case "COMPANY_NOT_EXIST":
+      return "This company does'nt exist, please verify again the email"
+      break;
+    case "ORDER_CREATED":
+      return "Order created, tracking number: "
+      break;
+    case "INFO_NOT_ENOUGH":
+      return "Please enter all the required informations"
+      break;
+    case "NOT_ALLOW_CONTACT_COMPANY":
+      return "Sorry, you're not allow to do this request. Contact the company."
+      break;
     default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
   }

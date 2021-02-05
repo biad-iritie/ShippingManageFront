@@ -1,5 +1,5 @@
 import history from "history.js";
-import { logout } from "../../services/jwtAuthService";
+//import { logout } from "../../services/jwtAuthService";
 import { removeUser, setSession } from "../../services/jwtAuthService"
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -16,6 +16,7 @@ export function setUserData(user) {
     history.push({
       pathname: "/"
     });
+    //window.location.reload()
   };
 }
 export function updateUser(user) {

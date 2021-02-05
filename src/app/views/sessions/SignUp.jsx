@@ -126,7 +126,6 @@ const SignUp = (props) => {
     const HandleFormSubmit = event => {
         //alert("ok")
         event.preventDefault();
-
         //ShowInfo("success", "Validation testing")
         setShow(false);
         props.loading();

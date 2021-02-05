@@ -259,7 +259,7 @@ const ListOrder = (props) => {
                                     addPrice(tableMeta.rowData[0], tableMeta.rowData[3])
                                 } else {
                                     setVariant("warning");
-                                    setInfo("Sorry, you're not allow to modify the price.");
+                                    setInfo(manageMsg("NOT_ALLOW"));
                                     setShow(true);
                                 }
 
@@ -356,7 +356,7 @@ const ListOrder = (props) => {
                 customBodyRender: (value, tableMeta, updateValue) => {
 
                     return (
-                        <IconButton disabled={tableMeta.rowData[2] === "SIGNED" && true}
+                        <div disabled={(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST") && true}
                             onClick={() => {
                                 //console.log(tableMeta.rowData);
                                 tableMeta.rowData[2] !== "SIGNED" && addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
@@ -364,15 +364,16 @@ const ListOrder = (props) => {
                             }}>
                             {
                                 tableMeta.rowData[2] === "SIGNED" ?
-                                    (
+                                    (<IconButton >
                                         <Icon color="secondary">check_circle</Icon>
-                                    ) :
-                                    (
-                                        <Icon color="primary">add_location</Icon>
-                                    )
+                                    </IconButton>
+                                    ) : tableMeta.rowData[2]
+                                /* (
+                                    <Icon color="primary">add_location</Icon>
+                                ) */
                             }
 
-                        </IconButton>
+                        </div>
                     )
                 }
             }
@@ -399,7 +400,7 @@ const ListOrder = (props) => {
                             onClick={() => {
                                 if (tableMeta.rowData[2] !== "STAND BY" && props.user.role === "GUEST") {
                                     setVariant("warning");
-                                    setInfo("Sorry, you're not allow to do this request. Contact the company.");
+                                    setInfo(manageMsg("NOT_ALLOW_CONTACT_COMPANY"));
                                     setShow(true);
                                 } else {
                                     props.history.push("/order/add_order", [{

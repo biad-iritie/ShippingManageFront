@@ -21,6 +21,7 @@ import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
 //import { SUB_NEW_PACK } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
 //import { addCompany } from "../../redux/actions/CompanyAction";
+import history from "history.js";
 
 const Dashboard1 = (props) => {
   //state = {};
