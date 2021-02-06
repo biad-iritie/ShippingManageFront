@@ -68,33 +68,33 @@ const NewOrder = (props) => {
     const user = props.user
     const [expanded, setExpanded] = useState("panel1");
     const [name_agence_sender, setName_agence_sender] = useState(
-        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.name_agence_sender
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.name_agence_sender
     );
     const [numKuadi, setNumKuadi] = useState(
-        props.history.location.state[0].action === "add" ? "ascas" : props.history.location.state[0].order.numKuadi
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.numKuadi
     );
     const [id_company, setId_company] = useState();
 
     const [email_company, setEmail_company] = useState(
-        props.history.location.state[0].action === "add" ? "comp@bs.com" : props.history.location.state[0].order.email_company
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.email_company
     );
     const [weight, setWeight] = useState(
-        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.weight
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.weight
     );
     const [content, setContent] = useState(
-        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.content
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.content
     );
     const [r_name, setR_name] = useState(
-        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.r_name
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_name
     );
     const [r_phone, setR_phone] = useState(
-        props.history.location.state[0].action === "add" ? "ascasc" : props.history.location.state[0].order.r_phone
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_phone
     );
     const [r_country, setR_country] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_country
     );
     const [r_city, setR_city] = useState(
-        props.history.location.state[0].action === "add" ? "ascscasc" : props.history.location.state[0].order.r_city
+        props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.r_city
     );
     const [shipMethod, setShipMethod] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.shipMethod
@@ -126,17 +126,16 @@ const NewOrder = (props) => {
             if (active) {
                 setOptions((countries).map(country => country));
             }
-            console.log(options);
+            //console.log(options);
         },
         onError: (error) => {
             //console.log("onError");
             // console.log(error);
             setVariant("error");
-            let msg = checkError(error)
+            let msg = checkError(error);
             setInfo(manageMsg(msg));
             setShow(true);
             props.success();
-
         }
 
     })
@@ -156,7 +155,7 @@ const NewOrder = (props) => {
             }
             console.log(options);
         },
-        onError: (error) => {
+        /* onError: (error) => {
 
             setVariant("error");
             let msg = checkError(error)
@@ -164,7 +163,7 @@ const NewOrder = (props) => {
             setShow(true);
             props.success();
 
-        }
+        } */
     })
 
     const handleChangePanel = panel => (event, isExpanded) => {
@@ -190,7 +189,7 @@ const NewOrder = (props) => {
             })
             .catch(error => {
                 setVariant("error");
-                let msg = checkError(error)
+                let msg = checkError(error);
                 setInfo(manageMsg(msg));
                 setShow(true);
                 props.success();
@@ -464,7 +463,7 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package weight"
+                                                label="Package weight eg:10KG"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="weight"

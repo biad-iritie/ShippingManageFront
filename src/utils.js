@@ -114,6 +114,13 @@ export function manageMsg(info) {
     case "NOT_ALLOW_CONTACT_COMPANY":
       return "Sorry, you're not allow to do this request. Contact the company."
       break;
+    case "TRACKING_I_P":
+      return "Tracking information of package :"
+      break;
+    case "PUT_I_P":
+      return "Put more informations about the position of the package"
+      break;
+
     default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
   }

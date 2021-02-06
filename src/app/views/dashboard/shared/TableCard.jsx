@@ -96,32 +96,39 @@ const TableCard = (props) => {
                       </div>
                     </TableCell>
                     <TableCell className="px-0 capitalize" align="left" colSpan={4}>
-                      {order.current_statut === "STAND BY" ? (
-                        <small className="border-radius-4 bg-primary text-white px-2 py-2px ">
+                      <small className={`border-radius-4 ${order.current_statut === "STAND BY" ? "bg-primary" :
+                        order.current_statut === "RECEIVED" ? "bg-secondary" :
+                          order.current_statut === "IN TRANSIT" ? "bg-light-primary" :
+                            order.current_statut === "ARRIVED" ? "bg-secondary" :
+                              order.current_statut === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
+                        {order.current_statut}
+                      </small>
+                      {/* {order.current_statut === "STAND BY" ? (
+                        <small className="border-radius-4 bg-gray text-black px-2 py-2px ">
                           STAND BY
                         </small>
                       ) : (
                           order.current_statut === "RECEIVED" ? (
-                            <small className="border-radius-4 bg-gray text-black px-2 py-2px ">
+                            <small className="border-radius-4 bg-secondary text-black px-2 py-2px ">
                               RECEIVED
                             </small>
                           ) : (
                               order.current_statut === "IN TRANSIT" ? (
-                                <small className="border-radius-4 bg-light-primary text-white px-2 py-2px ">
+                                <small className="border-radius-4 bg-light-primary text-black px-2 py-2px ">
                                   IN TRANSIT
                                 </small>
                               ) : (
                                   order.current_statut === "ARRIVED" ? (
-                                    <small className="border-radius-4 bg-secondary text-white px-2 py-2px ">
+                                    <small className="border-radius-4 bg-secondary text-black px-2 py-2px ">
                                       ARRIVED
                                     </small>
                                   ) : (
                                       order.current_statut === "READY FOR PICKUP" ? (
-                                        <small className="border-radius-4 bg-light-green text-white px-2 py-2px ">
+                                        <small className="border-radius-4 bg-light-green text-black px-2 py-2px ">
                                           READY FOR PICKUP
                                         </small>
                                       ) : (
-                                          <small className="border-radius-4 bg-green text-white px-2 py-2px ">
+                                          <small className="border-radius-4 bg-green text-black px-2 py-2px ">
                                             SIGNED
                                           </small>
                                         )
@@ -129,7 +136,7 @@ const TableCard = (props) => {
                                 )
 
                             )
-                        )}
+                        )} */}
                     </TableCell>
                     <TableCell className="px-0 capitalize" colSpan={4}>
                       {order.price ? order.price : (

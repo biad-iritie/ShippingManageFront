@@ -93,7 +93,7 @@ function InputModal(props) {
                                     label="Description of package's position"
                                     //type="text"
                                     fullWidth
-                                    validators={["required"]}
+                                    //validators={["required"]}
                                     errorMessages={["this field is required"]}
 
                                 />

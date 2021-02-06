@@ -72,10 +72,13 @@ const ListOrder = (props) => {
             //console.log(dataPosition);
 
             if (data.add_position) {
+                props.updateOrder(data.add_position)
                 setVariant("success");
                 setInfo(manageMsg("POSITION_ADDED"));
                 setShow(true);
+
             }
+            props.success()
         },
         onError: (error) => {
             //console.log("onError");
@@ -233,7 +236,8 @@ const ListOrder = (props) => {
                 setCellHeaderProps: value => {
                     return {
                         style: {
-                            width: '150px'
+                            //width: '150px'
+                            justify: 'center'
                         }
                     };
                 },
@@ -252,15 +256,17 @@ const ListOrder = (props) => {
                         <div
                             onClick={() => {
                                 setShow(false);
-                                //console.log(value);
-                                if (value === null) {
+                                console.log(value);
+                                if (props.user.role !== "GUEST") {
                                     addPrice(tableMeta.rowData[0], tableMeta.rowData[3])
-                                } else if (props.user.role === "OWNER" && value !== null) {
+                                } /* else if (props.user.role !== "OWNER" && value !== null) {
                                     addPrice(tableMeta.rowData[0], tableMeta.rowData[3])
-                                } else {
+                                }  */else {
+
                                     setVariant("warning");
                                     setInfo(manageMsg("NOT_ALLOW"));
                                     setShow(true);
+                                    //alert("ok")
                                 }
 
                             }}>
@@ -348,31 +354,50 @@ const ListOrder = (props) => {
                 setCellHeaderProps: value => {
                     return {
                         style: {
-                            width: '50px'
+                            //width: '120px',
+                            justify: 'center'
                         }
                     };
                 },
                 setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
                 customBodyRender: (value, tableMeta, updateValue) => {
-
+                    //console.log(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST")
                     return (
-                        <div disabled={(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST") && true}
+                        <div
                             onClick={() => {
                                 //console.log(tableMeta.rowData);
-                                tableMeta.rowData[2] !== "SIGNED" && addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
+                                //tableMeta.rowData[2] !== "SIGNED" && addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
 
+                                setShow(false);
+                                //console.log(value);
+                                if (props.user.role !== "GUEST") {
+                                    addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
+                                } else {
+
+                                    setVariant("warning");
+                                    setInfo(manageMsg("NOT_ALLOW"));
+                                    setShow(true);
+                                    //alert("ok")
+                                }
                             }}>
                             {
-                                tableMeta.rowData[2] === "SIGNED" ?
+                                /* tableMeta.rowData[2] === "SIGNED" ?
                                     (<IconButton >
                                         <Icon color="secondary">check_circle</Icon>
                                     </IconButton>
-                                    ) : tableMeta.rowData[2]
-                                /* (
-                                    <Icon color="primary">add_location</Icon>
-                                ) */
-                            }
+                                    ) :
+                                    ( */
+                                <small className={`border-radius-4 ${tableMeta.rowData[2] === "STAND BY" ? "bg-primary" :
+                                    tableMeta.rowData[2] === "RECEIVED" ? "bg-secondary" :
+                                        tableMeta.rowData[2] === "IN TRANSIT" ? "bg-light-primary" :
+                                            tableMeta.rowData[2] === "ARRIVED" ? "bg-secondary" :
+                                                tableMeta.rowData[2] === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
+                                    {tableMeta.rowData[2]}
+                                </small>
 
+                                //)
+                            }
+                            {/* <Icon color="primary">add_location</Icon> */}
                         </div>
                     )
                 }
@@ -388,7 +413,8 @@ const ListOrder = (props) => {
                 setCellHeaderProps: value => {
                     return {
                         style: {
-                            width: '50px'
+                            //width: '50px'
+                            justify: 'center'
                         }
                     };
                 },
@@ -547,10 +573,8 @@ const ListOrder = (props) => {
         setSubmitInputModal("addStatut");
         setAction("addStatut");
         setPackageStatut(statut);
-        setTitleModal("Tracking information of package " + code);
-        setContentTextModal("Put more informations about the position of the package");
-
-
+        setTitleModal(manageMsg("TRACKING_I_P") + code);
+        setContentTextModal(manageMsg("PUT_I_P"));
     };
     const handleChange = event => {
         //console.log(event);

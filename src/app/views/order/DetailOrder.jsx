@@ -293,7 +293,7 @@ const DetailOrder = (props) => {
                 }
                 
                 {
-                    order !== null ? (
+                    (order !== null && loading=== false)  ? (
                         <Card>
                             <div className="p-9 h-full" >
                                 <div className={classes.root}>
@@ -324,19 +324,20 @@ const DetailOrder = (props) => {
                                             </Typography>
                                                 </li>
                                                 <ListItem>
-                                                    <Grid container spacing={6} alignItems="center">
+                                                    <Grid container  alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
                                                                 Name : {order.r_name}
                                                             </Typography>
                                                             <br />
-                                                            <Typography gutterBottom variant="text-32" className="capitalize">
-                                                                Country : {order.r_country}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
                                                                 Number : {order.r_phone}
+                                                            </Typography>
+                                                            
+                                                        </Grid>
+                                                        <Grid item lg={6} md={6} sm={12} xs={12}>
+                                                            <Typography gutterBottom variant="text-32" className="capitalize">
+                                                                Country : {order.r_country}
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="capitalize">
@@ -357,23 +358,12 @@ const DetailOrder = (props) => {
         </Typography>
                                                 </li>
                                                 <ListItem>
-                                                    <Grid container spacing={6} alignItems="center">
+                                                    <Grid container  alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
                                                                 From : {order.name_agence_sender} / {order.numKuadi}
                                                             </Typography>
                                                             <br />
-
-                                                            <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
-                                                                Price : {order.price ? order.price : "?"}
-                                                            </Typography>
-                                                            <br />
-                                                            {order.who_add_paid && props.user.role === "OWNER" ? (<Typography gutterBottom variant="text-32" className="capitalize font-semibold">
-                                                                Who confirmed the payement : {order.who_add_paid}
-                                                            </Typography>) : ""}
-
-                                                        </Grid>
-                                                        <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="capitalize font-semibold">
                                                                 Content : {order.content}
                                                             </Typography>
@@ -381,6 +371,17 @@ const DetailOrder = (props) => {
                                                             <Typography gutterBottom variant="text-32" className="font-semibold uppercase">
                                                                 Weight : {order.weight}
                                                             </Typography>
+                                                            
+
+                                                        </Grid>
+                                                        <Grid item lg={6} md={6} sm={12} xs={12}>
+                                                        <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
+                                                                Price : {order.price ? order.price : "?"}
+                                                            </Typography>
+                                                            <br />
+                                                            {order.who_add_paid && props.user.role === "OWNER" ? (<Typography gutterBottom variant="text-32" className="capitalize font-semibold">
+                                                                Who confirmed the payement : {order.who_add_paid}
+                                                            </Typography>) : ""}
                                                             <br />
                                                             {
                                                                 order.paid === true && (
@@ -413,7 +414,7 @@ const DetailOrder = (props) => {
                                                 </li>
                                                 <ListItem>
 
-                                                    <Grid container spacing={6} alignItems="center">
+                                                    <Grid container  alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                         {props.user.role ? (<Typography gutterBottom variant="text-32" className="font-bold capitalize">
                                                                 Customer : {order.user.names}
@@ -500,9 +501,7 @@ const DetailOrder = (props) => {
           step1.length > 0 && (
               <TimelineItem>
       <TimelineOppositeContent>
-          <Typography variant="body2" color="textSecondary">
-          {step1[0].createdAt}
-          </Typography>
+          
         </TimelineOppositeContent>
         <TimelineSeparator>
           <TimelineDot >
@@ -514,6 +513,9 @@ const DetailOrder = (props) => {
             <Typography variant="h6" component="h1" className="capitalize">
             {step1[0].status.name}
             </Typography>
+            <Typography variant="body2" color="textSecondary">
+          {moment(Number(step1[0].createdAt)).format("YYYY-MM-DD HH:mm")}
+          </Typography>
           </Paper>
         </TimelineContent>
       </TimelineItem>
