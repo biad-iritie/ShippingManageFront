@@ -79,8 +79,8 @@ query info_company {
     }}`;
 // FOR SIGN UP
 export const SIGN_UP = gql`
-    mutation signup($names: String!, $email: String!, $password: String!, $phone: String!,$role:String,
-        $id_company: Int,$name_company:String , $phone_company1: String,$phone_company2: String,$email_company: String,$address: String) {
+    mutation signup($names: String, $email: String, $password: String, $phone: String,$role:String,
+        $id_company: Int!,$name_company:String! , $phone_company1: String!,$phone_company2: String!,$email_company: String!,$address: String!) {
         signup(
             names: $names
             email: $email
