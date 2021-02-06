@@ -123,7 +123,7 @@ mutation login($email: String!, $password: String!) {
 }}`;
 // FOR UPDATE THE USER'S information
 export const UPDATE = gql`
-mutation update($names:String, $email:String, $phone:String){
+mutation update($names:String!, $email:String!, $phone:String!){
     update(
         names:$names,
         email:$email,
