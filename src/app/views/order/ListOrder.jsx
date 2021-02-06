@@ -163,7 +163,7 @@ const ListOrder = (props) => {
                 filter: true,
                 sort: false,
                 display: 'excluded',
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
             }
         },
         {
@@ -173,7 +173,7 @@ const ListOrder = (props) => {
                 filter: true,
                 sort: false,
                 display: 'excluded',
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
             }
         },
         {
@@ -182,6 +182,7 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: true,
+                setCellProps: () => ({ style: { whiteSpace: 'nowrap', justify: 'center' } }),
                 customBodyRender: (value, tableMeta) => {
                     //alert(value)
                     return (
@@ -214,7 +215,7 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                setCellProps: () => ({ style: { justify: 'center', with: '175px' } })
             }
         },
         {
@@ -287,7 +288,7 @@ const ListOrder = (props) => {
                 filter: true,
                 sort: false,
                 display: 'excluded',
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
             }
         },
         {
@@ -297,7 +298,7 @@ const ListOrder = (props) => {
                 filter: true,
                 sort: false,
                 display: 'excluded',
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
             }
         },
         {
@@ -355,11 +356,12 @@ const ListOrder = (props) => {
                     return {
                         style: {
                             //width: '120px',
+                            whiteSpace: 'nowrap',
                             justify: 'center'
                         }
                     };
                 },
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //console.log(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST")
                     return (
@@ -414,6 +416,7 @@ const ListOrder = (props) => {
                     return {
                         style: {
                             //width: '50px'
+                            whiteSpace: 'nowrap',
                             justify: 'center'
                         }
                     };

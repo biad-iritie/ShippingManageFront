@@ -15,7 +15,7 @@ query count_package($role:String!,$current_statut:String!){
 
 
 export const ADD_ORDER = gql`
-mutation add_order($company:ID,$status:String!,$name_agence_sender: String,$numKuadi:String,
+mutation add_order($company:ID!,$status:String!,$name_agence_sender: String,$numKuadi:String,
 $content:String!,$current_statut:String!,$weight:String!,$r_name:String!,$r_phone:String!,
 $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
  add_order(company:$company,
@@ -46,9 +46,9 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
 }`;
 
 export const UPDATE_ORDER = gql`
-mutation update_order($id:ID!,$company:ID!,$name_agence_sender: String!,$numKuadi:String!,
-$content:String!,$weight:String,$r_name:String!,$r_phone:String!,
-$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!,){
+mutation update_order($id:ID!,$company:ID!,$name_agence_sender: String,$numKuadi:String,
+$content:String!,$weight:String!,$r_name:String!,$r_phone:String!,
+$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
   update_order(id:$id,company:$company,
     name_agence_sender:$name_agence_sender,
     numKuadi:$numKuadi,

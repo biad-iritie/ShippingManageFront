@@ -73,15 +73,15 @@ const TableCard = (props) => {
             {
               props.orders.length > 0 ? (
                 props.orders.map((order, index) => (
-                  <TableRow key={index} align="center">
+                  <TableRow key={index} align="center" onClick={() => {
+                    history.push("/order/detail_order", [{
+                      order: {
+                        id: order.id
+                      },
+                    }])
+                  }}>
                     <TableCell className="px-0 capitalize" colSpan={4} >
-                      <div className="flex items-center" onClick={() => {
-                        history.push("/order/detail_order", [{
-                          order: {
-                            id: order.id
-                          },
-                        }])
-                      }}>
+                      <div className="flex items-center" >
                         <p className="m-0 ml-8">{order.code}</p>
                       </div>
                     </TableCell>
