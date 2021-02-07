@@ -32,13 +32,15 @@ import TimelineDot from '@material-ui/lab/TimelineDot';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import Paper from '@material-ui/core/Paper';
 
-import { ORDER_DETAIL } from '../../../graphql/Order';
+import Confirmation from '../components/Confirmation';
+import { ORDER_DETAIL,UPDATE_ORDER } from '../../../graphql/Order';
 import ShowInfo from '../components/message';
-import { useQuery } from '@apollo/client';
+import { useQuery,useMutation } from '@apollo/client';
 import { loading, success } from "../../redux/actions/LoginActions";
 import Loading from '../Loading';
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { manageMsg, checkError } from "../../../utils";
+import { updateOrder } from 'app/redux/actions/OrderActions';
 
 const styles = theme => ({
     wrapper: {
@@ -88,11 +90,12 @@ const DetailOrder = (props) => {
     var moment = require('moment'); 
     const classes = useStyles();
     const [expanded, setExpanded] = useState("panel1");
-    const [variant, setVariant] = useState('error')
-    const [info, setInfo] = useState(null)
-    const [show, setShow] = useState(false)
-    const [order, setOrder] = useState(null)
-    const user = props.user
+    const [variant, setVariant] = useState('error');
+    const [info, setInfo] = useState(null);
+    const [show, setShow] = useState(false);
+    const [order, setOrder] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
+    const user = props.user;
 
     //const [prevStatus, setPrevStatus] = useState(null)
     //const [firstIndexStatut, setFirstIndexStatut] = useState(true)
@@ -127,9 +130,88 @@ const DetailOrder = (props) => {
     const handleChangePanel = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const [update_order, { data: dataOrder1, loading: loadingUpdate_order, error: errorOrder1 }] = useMutation(UPDATE_ORDER)
 
+    const submitMarkPaid=()=>{
+        //alert("submitMarkPaid")
+        setShow(false);
+        update_order({
+            //errorPolicy: 'all',
+            variables: {
+                id: parseInt(order.id),
+                company: Number(order.company.id),
+                name_agence_sender: order.name_agence_sender.toUpperCase(),
+                numKuadi: order.numKuadi.toUpperCase(),
+                content: order.content.toUpperCase(),
+                weight: order.weight,
+                r_name: order.r_name.toUpperCase(),
+                r_phone: order.r_phone,
+                r_city: order.r_city,
+                r_country: order.r_country,
+                shipMethod: order.shipMethod,
+                typeService: order.typeService,
+                paid:true,
+                who_add_paidId:user.id,
+                who_add_paid:user.names
+            }
+        })
+            .then(res => {
+                //alert("ok")
+                if (res.data.update_order.id) {
+                    /* setOrder({
+                        'user.names' : user.names,
+                        paid: true
+                    }) */
+                    
+                    props.loading()
+                    refetch()
+                    .then(data => {
+                        //console.log("success");
+                        
+                        if (data.data.order_detail.length>0) {
+                            setOrder(data.data.order_detail[0]);
+                            props.success()
+                        }else{
+                            setOrder(null);
+                        }
+                    })
+                    .catch(error => {
+                        
+                        setVariant("error");
+                        let msg = checkError(error)
+                        setInfo(manageMsg(msg));
+                        setOpenModal(false);
+                        setShow(true);
+                        props.success()
+                    }) 
+                    //props.updateOrder([res.data.update_order])
+                    
+                    setInfo(manageMsg("MARK_AS_PAID"));
+                    setVariant('success');
+
+                    //history.goBack();
+                } else {
+                    setVariant("error");
+                    let msg = checkError(error)
+                    setInfo(manageMsg(msg));
+                    setShow(true);
+                }
+                setOpenModal(false);
+                setShow(true);
+            })
+            .catch(error => {
+                //alert("error")
+                console.log(error);
+                setVariant("error");
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
+                setOpenModal(false);
+                setShow(true);
+                //props.success();
+            })
+    }
     //console.log(props.location.state[0].order.id);
-    const {loading, error, data } = useQuery(ORDER_DETAIL, {
+    const {refetch,loading, error, data } = useQuery(ORDER_DETAIL, {
         errorPolicy: 'all',
         variables: {
             id: props.location.state[0].order.id,
@@ -164,6 +246,9 @@ const DetailOrder = (props) => {
         }
     });
 
+    const handleClose = () => {
+        setOpenModal(false);
+    }
     useEffect(() => {
         //console.log(step3);
         loading === false &&
@@ -252,7 +337,7 @@ const DetailOrder = (props) => {
                       {order[0].status.name}
                     </Typography>
                    {
-                        order.map((detail) => (<div>
+                        order.map((detail) => (<div key={detail.id}>
                                 <Typography variant="body2" color="textSecondary">
                     {
                         moment(Number(detail.createdAt)).format("YYYY-MM-DD HH:mm")
@@ -279,6 +364,13 @@ const DetailOrder = (props) => {
                 show={show}
                 info={info}
                 variant={variant} />
+                <Confirmation open={openModal}
+                handleClose={handleClose}
+                loading={loadingUpdate_order}
+                funcAction={submitMarkPaid}
+                title={manageMsg('MARK_PAID')}
+                //message={manageMsg('MARK_PAID')}
+                 />
             <Loading open={loading} />
             <div className="mb-sm-30">
                 {
@@ -309,7 +401,21 @@ const DetailOrder = (props) => {
                                         >
                                             <Typography className={classes.heading}>Package information</Typography>
                                             <Typography variant="h6" className="font-bold">
-                                                {order.code}</Typography>
+                                                {order.code}
+                                            </Typography>
+                                            <Typography className="font-bold pl-10">
+                                                <small className={`border-radius-4 ${order.paid === true ? 'bg-green': 'bg-secondary'} text-black px-2 py-2px`}
+                                                onClick={()=>{
+                                                    setOpenModal(true)
+                                                }} >
+                                                {order.paid === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
+                                                </small>
+                                            </Typography>
+                                                {order.paid && props.user.role === "OWNER" ? (
+                                            <Typography gutterBottom variant="text-32" className="capitalize font-light pl-2">
+                                                Confirmed by: {order.who_add_paid}
+                                            </Typography>) : ""}
+                                                
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <List className={classes.root}>
@@ -379,16 +485,8 @@ const DetailOrder = (props) => {
                                                                 Price : {order.price ? order.price : "?"}
                                                             </Typography>
                                                             <br />
-                                                            {order.who_add_paid && props.user.role === "OWNER" ? (<Typography gutterBottom variant="text-32" className="capitalize font-semibold">
-                                                                Who confirmed the payement : {order.who_add_paid}
-                                                            </Typography>) : ""}
-                                                            <br />
-                                                            {
-                                                                order.paid === true && (
-                                                                    <Chip size="medium" color="secondary"
-                                                                        label="Paid" />
-                                                                )
-                                                            }
+                                                            
+                                                            
                                                             {
                                                                 order.complete === true && (
                                                                     <Chip size="medium"
@@ -549,10 +647,11 @@ const mapStateToProps = state => ({
     loading: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
     user: state.user,
-    setLayoutSettings : PropTypes.func.isRequired
+    setLayoutSettings : PropTypes.func.isRequired,
+    updateOrder: PropTypes.func.isRequired
 });
 
 export default withStyles(styles, { withTheme: true })(
-    withRouter(connect(mapStateToProps, { setLayoutSettings,success, loading })(DetailOrder))
+    withRouter(connect(mapStateToProps, { setLayoutSettings,success,updateOrder, loading })(DetailOrder))
 )
 

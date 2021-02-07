@@ -48,13 +48,13 @@ export default function Confirmation(props) {
                         Disagree
           </Button>
                     <Button onClick={props.funcAction} color="primary" disabled={props.loading}>
-                        Agree
-                        {props.loading && (
+
+                        {props.loading ? (
                             <CircularProgress
                                 size={24}
                             //className={classes.buttonProgress}
                             />
-                        )}
+                        ) : "Agree"}
 
 
                     </Button>

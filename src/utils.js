@@ -120,7 +120,18 @@ export function manageMsg(info) {
     case "PUT_I_P":
       return "Put more informations about the position of the package"
       break;
-
+    case "PAID":
+      return "PAID"
+      break;
+    case "NOT_PAID":
+      return "NOT PAID"
+      break;
+    case "MARK_PAID":
+      return "You are going to mark this package as paid"
+      break;
+    case "MARK_AS_PAID":
+      return "Mark as PAID"
+      break;
     default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
   }

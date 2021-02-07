@@ -93,6 +93,13 @@ const ListOrder = (props) => {
 
         }
     });
+    const goToSeeDetails = (id) => {
+        props.history.push("/order/detail_order", [{
+            order: {
+                id: id
+            },
+        }])
+    }
 
     const [add_price, { data: dataPrice, loading: loadingPrice, error: errorPrice }] = useMutation(ADD_PRICE, {
         errorPolicy: 'all',
@@ -157,16 +164,6 @@ const ListOrder = (props) => {
             }
         },
         {
-            name: "paid",
-            label: "Paid",
-            options: {
-                filter: true,
-                sort: false,
-                display: 'excluded',
-                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
-            }
-        },
-        {
             name: "current_statut",
             label: "Statut",
             options: {
@@ -182,21 +179,45 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: true,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap', justify: 'center' } }),
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap', justify: 'center' } }),
                 customBodyRender: (value, tableMeta) => {
                     //alert(value)
                     return (
-                        <div onClick={() => {
-                            //console.log(value);
-                            props.history.push("/order/detail_order", [{
-                                order: {
-                                    id: tableMeta.rowData[0]
-                                },
-                            }])
-                        }}>
+                        <div style={{ whiteSpace: 'normal' }}
+                            onClick={() => {
+                                //console.log(value);
+                                goToSeeDetails(tableMeta.rowData[0])
+                                /* props.history.push("/order/detail_order", [{
+                                    order: {
+                                        id: tableMeta.rowData[0]
+                                    },
+                                }]) */
+                            }}>
                             {value}
                         </div >
                     );
+                }
+            }
+        },
+        {
+            name: "paid",
+            label: "Paid",
+            options: {
+                filter: true,
+                sort: false,
+                //display: 'excluded',
+                customBodyRender: (value, tableMeta) => {
+                    //console.log(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST")
+                    return (
+                        <div onClick={() => {
+                            goToSeeDetails(tableMeta.rowData[0])
+
+                        }}>
+                            <small className={`border-radius-4 ${value === true ? 'bg-green' : 'bg-secondary'} text-black px-2 py-2px`} >
+                                {value === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
+                            </small>
+                        </div>
+                    )
                 }
             }
         },
@@ -206,7 +227,16 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                customBodyRender: (value, tableMeta) => {
+                    return (
+                        <div onClick={() => {
+                            goToSeeDetails(tableMeta.rowData[0])
+
+                        }}>
+                            {value}
+                        </div >
+                    );
+                }
             }
         },
         {
@@ -215,7 +245,20 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { justify: 'center', with: '175px' } })
+                setCellHeaderProps: () => ({
+                    style: { width: '127px' }
+                }),
+                //setCellProps: () => ({ style: { width: '200px' } }),
+                customBodyRender: (value, tableMeta) => {
+                    return (
+                        <div style={{ whiteSpace: 'normal' }} onClick={() => {
+                            goToSeeDetails(tableMeta.rowData[0])
+
+                        }}>
+                            {value}
+                        </div >
+                    );
+                }
             }
         },
         {
@@ -224,7 +267,18 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+
+                customBodyRender: (value, tableMeta) => {
+                    return (
+                        <div style={{ whiteSpace: 'normal' }}
+                            onClick={() => {
+                                goToSeeDetails(tableMeta.rowData[0])
+
+                            }}>
+                            {value}
+                        </div >
+                    );
+                }
             },
         },
         {
@@ -233,15 +287,10 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
-                setCellHeaderProps: value => {
-                    return {
-                        style: {
-                            //width: '150px'
-                            justify: 'center'
-                        }
-                    };
-                },
+                display: 'excluded',
+                setCellHeaderProps: () => ({
+                    //style: { width: '100px', align: 'center' }
+                }),
             },
         },
         {
@@ -250,11 +299,13 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
+                setCellHeaderProps: () => ({
+                    style: { width: '100px' }
+                }),
                 customBodyRender: (value, tableMeta) => {
 
                     return (
-                        <div
+                        <div style={{ whiteSpace: 'normal' }}
                             onClick={() => {
                                 setShow(false);
                                 console.log(value);
@@ -352,20 +403,14 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellHeaderProps: value => {
-                    return {
-                        style: {
-                            //width: '120px',
-                            whiteSpace: 'nowrap',
-                            justify: 'center'
-                        }
-                    };
-                },
+                setCellHeaderProps: () => ({
+                    style: { width: '100px' }
+                }),
                 //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //console.log(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST")
                     return (
-                        <div
+                        <div style={{ whiteSpace: 'normal' }}
                             onClick={() => {
                                 //console.log(tableMeta.rowData);
                                 //tableMeta.rowData[2] !== "SIGNED" && addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
@@ -373,7 +418,7 @@ const ListOrder = (props) => {
                                 setShow(false);
                                 //console.log(value);
                                 if (props.user.role !== "GUEST") {
-                                    addStatut(tableMeta.rowData[0], tableMeta.rowData[3], tableMeta.rowData[2])
+                                    addStatut(tableMeta.rowData[0], tableMeta.rowData[2], tableMeta.rowData[1])
                                 } else {
 
                                     setVariant("warning");
@@ -389,12 +434,12 @@ const ListOrder = (props) => {
                                     </IconButton>
                                     ) :
                                     ( */
-                                <small className={`border-radius-4 ${tableMeta.rowData[2] === "STAND BY" ? "bg-primary" :
-                                    tableMeta.rowData[2] === "RECEIVED" ? "bg-secondary" :
-                                        tableMeta.rowData[2] === "IN TRANSIT" ? "bg-light-primary" :
-                                            tableMeta.rowData[2] === "ARRIVED" ? "bg-secondary" :
-                                                tableMeta.rowData[2] === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
-                                    {tableMeta.rowData[2]}
+                                <small className={`border-radius-4 ${tableMeta.rowData[1] === "STAND BY" ? "bg-primary" :
+                                    tableMeta.rowData[1] === "RECEIVED" ? "bg-secondary" :
+                                        tableMeta.rowData[1] === "IN TRANSIT" ? "bg-light-primary" :
+                                            tableMeta.rowData[1] === "ARRIVED" ? "bg-secondary" :
+                                                tableMeta.rowData[1] === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
+                                    {tableMeta.rowData[1]}
                                 </small>
 
                                 //)
@@ -412,15 +457,12 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellHeaderProps: value => {
-                    return {
-                        style: {
-                            //width: '50px'
-                            whiteSpace: 'nowrap',
-                            justify: 'center'
-                        }
-                    };
-                },
+                setCellHeaderProps: () => ({
+                    style: { width: '50px', justify: 'center' }
+                }),
+                setCellProps: () => ({
+                    style: { width: '50px', justify: 'center' }
+                }),
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //console.log('customBodyRender');
                     //console.dir(tableMeta.rowData);
@@ -467,14 +509,10 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
-                /* setCellHeaderProps: value => {
-                    return {
-                        style: {
-                            width: '50px'
-                        }
-                    };
-                }, */
+                setCellHeaderProps: () => ({
+                    style: { width: '50px' }
+                }),
+
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //alert(["SIGNED", "READY FOR PICKUP", "ARRIVED", "IN TRANSIT"].includes("IN TRANSIT"))
                     //console.log(tableMeta.rowData[2])
@@ -504,9 +542,9 @@ const ListOrder = (props) => {
             name: 'id',
             direction: 'desc'
         },
-        responsive: "simple",
+        //responsive: "simple",
         //selectableRows: 'single',
-        rowsPerPage: 10,
+        rowsPerPage: 20,
         selectableRows: false,
         responsive: 'standard',
         fixedHeader: true,

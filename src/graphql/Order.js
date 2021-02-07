@@ -48,7 +48,8 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
 export const UPDATE_ORDER = gql`
 mutation update_order($id:ID!,$company:ID!,$name_agence_sender: String,$numKuadi:String,
 $content:String!,$weight:String!,$r_name:String!,$r_phone:String!,
-$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
+$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!,
+$paid:Boolean,$who_add_paidId:ID,$who_add_paid:String){
   update_order(id:$id,company:$company,
     name_agence_sender:$name_agence_sender,
     numKuadi:$numKuadi,
@@ -59,7 +60,10 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
     r_city:$r_city,
     r_country:$r_country,
     shipMethod:$shipMethod,
-    typeService:$typeService)
+    typeService:$typeService,
+    paid:$paid,
+    who_add_paidId:$who_add_paidId,
+    who_add_paid:$who_add_paid)
   {
     code
     id
@@ -71,6 +75,7 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
     content
     shipMethod
     typeService
+    who_add_paid
   }
 
 }`;
@@ -134,19 +139,22 @@ query order_list($role: String!,$skip:Int,$take:Int){
     weight
     shipMethod
     typeService
+    who_add_paid
   }
 }`;
 
 export const ORDER_DETAIL = gql`
 query order_detail($id: ID,$code:String){
     order_detail(id:$id,code:$code){
-        code, id, price, current_statut,name_agence_sender,r_country,who_add_paid
-    r_name, r_city, r_phone, content, numKuadi, weight, paid, who_add_paid
+        code, id, price, current_statut,
+        name_agence_sender,r_country,who_add_paid
+    r_name, r_city, r_phone, content, numKuadi, 
+    weight, paid, who_add_paid,shipMethod,typeService
     user{
       names, phone
     }
     company{
-      name, phone1, phone2
+      name, phone1, phone2,id
     }
     detailStatuts{
       id,createdAt, description
