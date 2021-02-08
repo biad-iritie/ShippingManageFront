@@ -100,6 +100,7 @@ const SignIn = (props) => {
         setShow(false);
       })
       .catch((error) => {
+        console.log(error);
         setVariant("error");
         //console.log(error);
         let msg = checkError(error)
