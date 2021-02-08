@@ -35,7 +35,7 @@ export function checkError(error) {
 }
 //MANAGE MESSAGES
 export function manageMsg(info) {
-  //console.log(info);
+  console.log(info);
   switch (info) {
     case "Not authenticated":
     case "jwt expired":
@@ -43,7 +43,6 @@ export function manageMsg(info) {
       //console.log(info);
       window.location.reload()
       break;
-
     case "ERROR IN SERVER":
       return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
