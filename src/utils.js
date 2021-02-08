@@ -43,7 +43,7 @@ export function manageMsg(info) {
       //console.log(info);
       window.location.reload()
       break;
-    case "TypeError: Failed to fetch":
+
     case "ERROR IN SERVER":
       return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
