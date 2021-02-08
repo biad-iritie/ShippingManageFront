@@ -177,7 +177,7 @@ const CompSignUp = (props) => {
     //let { username, email, password } = this.state;
     return (
 
-        <div className="signup flex justify-center full-screen">
+        <div className="signup flex justify-center h-full-screen">
             <ShowInfo
                 show={show}
                 info={info}

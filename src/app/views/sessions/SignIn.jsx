@@ -100,7 +100,6 @@ const SignIn = (props) => {
         setShow(false);
       })
       .catch((error) => {
-        console.log(error);
         setVariant("error");
         //console.log(error);
         let msg = checkError(error)
@@ -112,7 +111,7 @@ const SignIn = (props) => {
   //let { email, password } = this.state;
   const { classes } = props;
   return (
-    <div className="signup flex justify-center full-screen">
+    <div className="signup flex justify-center h-full-screen">
       <ShowInfo
         show={show}
         info={info}

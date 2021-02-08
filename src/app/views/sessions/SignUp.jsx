@@ -126,6 +126,7 @@ const SignUp = (props) => {
     const HandleFormSubmit = event => {
         //alert("ok")
         event.preventDefault();
+
         //ShowInfo("success", "Validation testing")
         setShow(false);
         props.loading();
@@ -177,7 +178,7 @@ const SignUp = (props) => {
 
     //let { names, email, phone, password, repassword } = this.state;
     return (
-        <div className="signup flex justify-center full-screen">
+        <div className="signup flex justify-center h-full-screen">
             <ShowInfo
                 show={show}
                 info={info}
