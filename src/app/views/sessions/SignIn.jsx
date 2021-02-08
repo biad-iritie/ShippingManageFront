@@ -112,7 +112,7 @@ const SignIn = (props) => {
   //let { email, password } = this.state;
   const { classes } = props;
   return (
-    <div className="signup flex justify-center h-full-screen">
+    <div className="signup flex justify-center full-screen">
       <ShowInfo
         show={show}
         info={info}

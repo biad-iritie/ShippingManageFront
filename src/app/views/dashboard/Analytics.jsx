@@ -296,7 +296,7 @@ const Dashboard1 = (props) => {
   }, [loading,]);
 
   return (
-    <Fragment>
+    <Fragment className="flex justify-center full-screen">
       <ShowInfo
         show={show}
         info={info}

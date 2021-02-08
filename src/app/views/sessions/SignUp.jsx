@@ -177,7 +177,7 @@ const SignUp = (props) => {
 
     //let { names, email, phone, password, repassword } = this.state;
     return (
-        <div className="signup flex justify-center w-full h-full-screen">
+        <div className="signup flex justify-center full-screen">
             <ShowInfo
                 show={show}
                 info={info}
