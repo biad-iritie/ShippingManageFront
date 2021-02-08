@@ -132,7 +132,7 @@ export function manageMsg(info) {
     case "MARK_AS_PAID":
       return "Mark as PAID"
       break;
-    default: return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
+    default: return "Please check your connection , THANKS."
       break;
   }
 }
