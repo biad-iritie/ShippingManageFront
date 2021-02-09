@@ -90,7 +90,7 @@ const Layout1Topbar = (props) => {
               </IconButton>
 
 
-              <MatxMenu
+              {/* <MatxMenu
                 menuButton={
                   <IconButton>
                     <Icon>public</Icon>
@@ -107,7 +107,7 @@ const Layout1Topbar = (props) => {
                 </MenuItem>
 
 
-              </MatxMenu>
+              </MatxMenu> */}
               {/* <IconButton>
                   <Icon>star_outline</Icon>
                 </IconButton> */}

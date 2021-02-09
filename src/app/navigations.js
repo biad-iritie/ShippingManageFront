@@ -13,11 +13,11 @@ export const navigations = [
         path: "/company/info",
         iconText: "I"
       }, */
-      {
+      /* {
         name: "Rate",
         path: "/company/rate",
         iconText: "R"
-      },
+      }, */
       {
         name: "Employees",
         path: "/company/employees",

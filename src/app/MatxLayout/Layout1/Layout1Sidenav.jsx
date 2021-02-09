@@ -177,7 +177,8 @@ class Layout1Sidenav extends Component {
             {!this.state.hidden && (
               <Fragment>
                 {this.renderLogoSwitch()}
-                {user.id && <Sidenav>{this.renderUser()}</Sidenav>}
+                <Sidenav>{this.renderUser()}</Sidenav>
+                {/* {user.id && <Sidenav>{this.renderUser()}</Sidenav>} */}
 
               </Fragment>
             )}
