@@ -65,7 +65,8 @@ const ListOrder = (props) => {
         variables: {
             id: id,
             status: packageStatut,
-            description: descriptionStatut
+            description: descriptionStatut,
+            who_confirmed_signed: props.user.names
         },
         onCompleted: (data) => {
             setOpenModalInput(false)
@@ -245,9 +246,9 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellHeaderProps: () => ({
+                /* setCellHeaderProps: () => ({
                     style: { width: '127px' }
-                }),
+                }), */
                 //setCellProps: () => ({ style: { width: '200px' } }),
                 customBodyRender: (value, tableMeta) => {
                     return (
@@ -299,9 +300,9 @@ const ListOrder = (props) => {
             options: {
                 filter: true,
                 sort: false,
-                setCellHeaderProps: () => ({
+                /* setCellHeaderProps: () => ({
                     style: { width: '100px' }
-                }),
+                }), */
                 customBodyRender: (value, tableMeta) => {
 
                     return (
@@ -403,9 +404,9 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellHeaderProps: () => ({
+                /* setCellHeaderProps: () => ({
                     style: { width: '100px' }
-                }),
+                }), */
                 //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //console.log(tableMeta.rowData[2] === "SIGNED" || props.user.role === "GUEST")
@@ -457,12 +458,12 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellHeaderProps: () => ({
+                /* setCellHeaderProps: () => ({
                     style: { width: '50px', justify: 'center' }
                 }),
                 setCellProps: () => ({
                     style: { width: '50px', justify: 'center' }
-                }),
+                }), */
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //console.log('customBodyRender');
                     //console.dir(tableMeta.rowData);
@@ -509,9 +510,9 @@ const ListOrder = (props) => {
                 filter: false,
                 sort: false,
                 empty: true,
-                setCellHeaderProps: () => ({
+                /* setCellHeaderProps: () => ({
                     style: { width: '50px' }
-                }),
+                }), */
 
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //alert(["SIGNED", "READY FOR PICKUP", "ARRIVED", "IN TRANSIT"].includes("IN TRANSIT"))

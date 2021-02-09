@@ -21,6 +21,7 @@ import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
 //import { SUB_NEW_PACK } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
 //import { addCompany } from "../../redux/actions/CompanyAction";
+import { manageMsg, checkError } from "../../../utils";
 import history from "history.js";
 
 const Dashboard1 = (props) => {
@@ -55,23 +56,10 @@ const Dashboard1 = (props) => {
 
     },
     onError: () => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
-
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
     }
   });
 
@@ -85,25 +73,11 @@ const Dashboard1 = (props) => {
     onCompleted: (data) => {
       set_nb_standBy(data.count_package)
     },
-    onError: () => {
-      //console.log("onError");
-      //console.log(error);
+    onError: (error) => {
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-
-        );
-      //setInfo(error);
-
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
     }
   });
   const { refetch: check2 } = useQuery(COUNT_PACKAGE, {
@@ -116,22 +90,10 @@ const Dashboard1 = (props) => {
       set_nb_received(data.count_package)
     },
     onError: (error) => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
 
     }
   });
@@ -145,22 +107,10 @@ const Dashboard1 = (props) => {
       set_nb_inTransit(data.count_package)
     },
     onError: () => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
 
     }
   });
@@ -174,23 +124,10 @@ const Dashboard1 = (props) => {
       set_nb_arrived(data.count_package)
     },
     onError: (error) => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
-
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
     }
   });
   const { refetch: check5 } = useQuery(COUNT_PACKAGE, {
@@ -203,23 +140,10 @@ const Dashboard1 = (props) => {
       set_nb_pickUp(data.count_package)
     },
     onError: () => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
-
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
     }
   });
   const { refetch: check6 } = useQuery(COUNT_PACKAGE, {
@@ -232,23 +156,10 @@ const Dashboard1 = (props) => {
       set_nb_signed(data.count_package)
     },
     onError: () => {
-      //console.log("onError");
-      //console.log(error);
       setVariant("error");
-      if (error.networkError) {
-        setInfo("Please try after this action");
-      }
-      if (error.graphQLErrors)
-        error.graphQLErrors.map(({ message, locations, path }) => {
-          if (message === "Not authenticated" || message === "jwt expired") {
-            window.location.reload()
-          } else {
-            setInfo(message)
-          }
-        }
-        );
-      //setInfo(error);
-
+      let msg = checkError(error)
+      setInfo(manageMsg(msg));
+      setShow(true);
     }
   });
 
@@ -273,30 +184,82 @@ const Dashboard1 = (props) => {
             props.success();
           })
           .catch(error => {
-            //console.log("onError");
-            console.log(error);
             setVariant("error");
-            if (error.networkError) {
-              setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-              error.graphQLErrors.map(({ message, locations, path }) => {
-                if (message === "Not authenticated" || message === "jwt expired") {
-                  window.location.reload()
-                } else {
-                  setInfo(message)
-                }
-              }
-              );
-            //setShow(true)
-            //setInfo(error);
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
           })
-
+        check1()
+          .then(res => {
+            set_nb_standBy(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
+        check2()
+          .then(res => {
+            set_nb_received(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
+        check3()
+          .then(res => {
+            set_nb_inTransit(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
+        check4()
+          .then(res => {
+            set_nb_arrived(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
+        check5()
+          .then(res => {
+            set_nb_pickUp(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
+        check6()
+          .then(res => {
+            set_nb_signed(res.data.count_package)
+            props.success();
+          })
+          .catch(error => {
+            setVariant("error");
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+          })
       })();
   }, [loading,]);
 
   return (
-    <Fragment className="flex justify-center h-full-screen">
+    <Fragment >
       <ShowInfo
         show={show}
         info={info}

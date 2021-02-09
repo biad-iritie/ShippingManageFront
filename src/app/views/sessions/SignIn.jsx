@@ -42,7 +42,7 @@ const SignIn = (props) => {
     agreement: ""
   }; */
   const [password, setPassword] = useState();
-  const [email, setEmail] = useState("biad@bs.com");
+  const [email, setEmail] = useState();
   const [variant, setVariant] = useState('error');
   const [info, setInfo] = useState(null);
   const [show, setShow] = useState(false);

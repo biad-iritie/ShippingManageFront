@@ -357,8 +357,9 @@ const DetailOrder = (props) => {
         }
         
     }
-    
+    //console.log(["OWNER","ADMIN_MEMBER"].includes(user.role));
     return (
+        
         <div className="m-sm-30">
             <ShowInfo
                 show={show}
@@ -411,7 +412,7 @@ const DetailOrder = (props) => {
                                                 {order.paid === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
                                                 </small>
                                             </Typography>
-                                                {order.paid && props.user.role === "OWNER" ? (
+                                                {order.paid && ["OWNER","ADMIN_MEMBER"].includes(user.role)  ? (
                                             <Typography gutterBottom variant="text-32" className="capitalize font-light pl-2">
                                                 Confirmed by: {order.who_add_paid}
                                             </Typography>) : ""}
@@ -488,10 +489,16 @@ const DetailOrder = (props) => {
                                                             
                                                             
                                                             {
-                                                                order.complete === true && (
-                                                                    <Chip size="medium"
+                                                                order.current_statut === "SIGNED" && (
+                                                                        <div >
+                                                                            <Chip size="medium"
                                                                         className="bg-green"
                                                                         label="Received and Signed" />
+                                                                        <small className="capitalize font-light pl-2">
+                                                                        {`Via ${order.who_confirmed_signed}`}
+                                                                        </small>
+                                                                        </div>
+                                                                            
                                                                 )
                                                             }
 

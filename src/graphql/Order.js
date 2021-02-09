@@ -81,8 +81,10 @@ $paid:Boolean,$who_add_paidId:ID,$who_add_paid:String){
 }`;
 
 export const ADD_POSITION = gql`
-mutation add_position($id:ID!,$status:String!,$description:String){
-  add_position(id:$id,status:$status,description:$description)
+mutation add_position($id:ID!,$status:String!,$description:String,$who_confirmed_signed:String){
+  add_position(id:$id,status:$status,
+  description:$description,
+  who_confirmed_signed:$who_confirmed_signed)
   {
     code
     id
@@ -164,6 +166,8 @@ query order_detail($id: ID,$code:String){
         color
       }
     }
+    who_confirmed_signed
+    who_confirmed_signedId
   }
 }`;
 
