@@ -309,8 +309,8 @@ const ListOrder = (props) => {
                         <div style={{ whiteSpace: 'normal' }}
                             onClick={() => {
                                 setShow(false);
-                                console.log(value);
-                                if (props.user.role !== "GUEST") {
+                                //console.log(tableMeta.rowData);
+                                if (props.user.role !== "GUEST" && tableMeta.rowData[1] !== "SIGNED") {
                                     addPrice(tableMeta.rowData[0], tableMeta.rowData[3])
                                 } /* else if (props.user.role !== "OWNER" && value !== null) {
                                     addPrice(tableMeta.rowData[0], tableMeta.rowData[3])
