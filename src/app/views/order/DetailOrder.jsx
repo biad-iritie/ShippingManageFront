@@ -407,7 +407,7 @@ const DetailOrder = (props) => {
                                             <Typography className="font-bold pl-10">
                                                 <small className={`border-radius-4 ${order.paid === true ? 'bg-green': 'bg-secondary'} text-black px-2 py-2px`}
                                                 onClick={()=>{
-                                                    setOpenModal(true)
+                                                    user.role !== "GUEST" && setOpenModal(true)
                                                 }} >
                                                 {order.paid === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
                                                 </small>
