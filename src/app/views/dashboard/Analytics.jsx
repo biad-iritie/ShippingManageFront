@@ -22,7 +22,7 @@ import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
 //import { addCompany } from "../../redux/actions/CompanyAction";
 import { manageMsg, checkError } from "../../../utils";
-import history from "history.js";
+//import history from "history.js";
 
 const Dashboard1 = (props) => {
   //state = {};
@@ -180,10 +180,21 @@ const Dashboard1 = (props) => {
         //alert("OK")
         await refetch()
           .then(res => {
-            props.refetchOrder(res.data.order_list)
-            props.success();
+            //console.log(res);
+            if (res.data) {
+              props.refetchOrder(res.data.order_list)
+              props.success();
+            } else {
+              setVariant("error");
+              let msg = checkError(res.errors)
+              setInfo(manageMsg(msg));
+              setShow(true);
+              props.success();
+            }
+
           })
           .catch(error => {
+            //console.log(error);
             setVariant("error");
             let msg = checkError(error)
             setInfo(manageMsg(msg));
@@ -191,8 +202,10 @@ const Dashboard1 = (props) => {
           })
         check1()
           .then(res => {
-            set_nb_standBy(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_standBy(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");
@@ -202,8 +215,10 @@ const Dashboard1 = (props) => {
           })
         check2()
           .then(res => {
-            set_nb_received(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_received(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");
@@ -213,8 +228,10 @@ const Dashboard1 = (props) => {
           })
         check3()
           .then(res => {
-            set_nb_inTransit(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_inTransit(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");
@@ -224,8 +241,10 @@ const Dashboard1 = (props) => {
           })
         check4()
           .then(res => {
-            set_nb_arrived(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_arrived(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");
@@ -235,8 +254,10 @@ const Dashboard1 = (props) => {
           })
         check5()
           .then(res => {
-            set_nb_pickUp(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_pickUp(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");
@@ -246,8 +267,10 @@ const Dashboard1 = (props) => {
           })
         check6()
           .then(res => {
-            set_nb_signed(res.data.count_package)
-            props.success();
+            if (res.data) {
+              set_nb_signed(res.data.count_package)
+              props.success();
+            }
           })
           .catch(error => {
             setVariant("error");

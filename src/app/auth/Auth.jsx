@@ -20,7 +20,7 @@ const checkJwtAuth = (setUserData, data, addCompany) => {
   //let user = await jwtAuthService.loginWithToken();
   /* console.log("checkJwtAuth");
   console.log(data != undefined); */
-
+  //console.log("checkJwtAuth");
   if (data !== undefined) {
     //console.log(data.verifyToken.__typename);
     //delete data.verifyToken.__typename

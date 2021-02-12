@@ -28,6 +28,9 @@ export function checkError(error) {
       //console.log(message);
     }
     );
+  } else {
+    msg = error[0].message
+    console.log(msg);
   }
   //console.log(error.graphQLErrors);
   //console.log(error);
@@ -41,7 +44,8 @@ export function manageMsg(info) {
     case "jwt expired":
     case "TokenExpiredError: jwt expired":
       //console.log(info);
-      window.location.reload()
+      //window.location.reload()
+      return "Oups your session is expired, please you should re-connect your account. THANKS"
       break;
     case "ERROR IN SERVER":
       return "Technical error, please contact us to resolve this problem ASAP . Thanks for your understanding"
@@ -86,6 +90,9 @@ export function manageMsg(info) {
     case "NOT_ALLOW":
       return "Sorry you can\'t apply this request"
       break;
+    case "NOT_ALLOW_COMPANY_MODIFY_COMPANY":
+      return "Sorry you can\'t apply this request now, wait to receive the goods"
+      break
     case "ROLE_ADDED":
       return "Role added"
       break;
@@ -131,7 +138,8 @@ export function manageMsg(info) {
     case "MARK_AS_PAID":
       return "Mark as PAID"
       break;
-    default: return "Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding"
+    default:
+      return "Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding"
       break;
   }
 }

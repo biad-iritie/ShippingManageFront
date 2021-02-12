@@ -111,27 +111,23 @@ const Employees = (props) => {
                 //alert("OK")
                 await refetch()
                     .then(res => {
-                        const result = res.data.list_employees.map(res => res.user)
-                        props.refetchEmployee(result)
+                        if (res.data) {
+                            const result = res.data.list_employees.map(res => res.user)
+                            props.refetchEmployee(result)
+                        } else {
+                            setVariant("error");
+                            let msg = checkError(res.errors)
+                            setInfo(manageMsg(msg));
+                            setShow(true);
+                        }
                         props.success();
                     })
                     .catch(error => {
-                        console.log("onError");
-                        console.log(error);
                         setVariant("error");
-                        if (error.networkError) {
-                            setInfo("Please try after this action");
-                        }
-                        if (error.graphQLErrors)
-                            error.graphQLErrors.map(({ message, locations, path }) => {
-                                if (message === "Not authenticated" || message === "jwt expired") {
-                                    window.location.reload()
-                                } else {
-                                    setInfo(message)
-                                }
-                            }
-                            );
-                        //setInfo(error);
+                        let msg = checkError(error)
+                        setInfo(manageMsg(msg));
+                        setShow(true);
+                        props.success();
                     })
 
             })();

@@ -496,7 +496,7 @@ const ListOrder = (props) => {
                                     }])
                                 } else {
                                     setVariant("warning");
-                                    setInfo(manageMsg("NOT_ALLOW_CONTACT_COMPANY"));
+                                    setInfo(manageMsg(props.user.role === "GUEST" ? "NOT_ALLOW_CONTACT_COMPANY" : "NOT_ALLOW_COMPANY_MODIFY_COMPANY"));
                                     setShow(true);
                                 }
 
@@ -692,8 +692,16 @@ const ListOrder = (props) => {
                 //alert("OK")
                 await refetch()
                     .then(res => {
-                        props.refetchOrder(res.data.order_list)
-                        props.success();
+                        if (res.data) {
+                            props.refetchOrder(res.data.order_list)
+                        }
+                        else {
+                            setVariant("error");
+                            let msg = checkError(res.errors)
+                            setInfo(manageMsg(msg));
+                            setShow(true);
+                        }
+
                     })
                     .catch(error => {
                         //console.log("onError");
@@ -753,20 +761,24 @@ const ListOrder = (props) => {
                                     props.loading();
                                     await refetch()
                                         .then(res => {
-                                            props.refetchOrder(res.data.order_list)
-                                            props.success();
+                                            if (res.data) {
+                                                props.refetchOrder(res.data.order_list)
+                                                props.success();
+                                            } else {
+                                                setVariant("error");
+                                                let msg = checkError(res.data.errors)
+                                                setInfo(manageMsg(msg));
+                                                setShow(true);
+                                                props.success();
+                                            }
+
                                         })
                                         .catch(error => {
-                                            console.log("onError");
-                                            console.log(error);
                                             setVariant("error");
-                                            if (error.networkError) {
-                                                setInfo("Please try after this action");
-                                            }
-                                            if (error.graphQLErrors)
-                                                error.graphQLErrors.map(({ message, locations, path }) =>
-                                                    setInfo(message)
-                                                );
+                                            let msg = checkError(error)
+                                            setInfo(manageMsg(msg));
+                                            setShow(true);
+                                            props.success();
                                             //setInfo(error);
                                         })
                                 }}
