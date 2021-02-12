@@ -102,6 +102,14 @@ const NewOrder = (props) => {
     const [typeService, setTypeService] = useState(
         props.history.location.state[0].action === "add" ? "" : props.history.location.state[0].order.typeService
     );
+    const [sender_name, setSender_name] = useState(
+        props.history.location.state[0].action === "add" ? user.role === "GUEST" ? user.names : ""
+            : props.history.location.state[0].order.sender_name
+    );
+    const [sender_phone, setSender_phone] = useState(
+        props.history.location.state[0].action === "add" ? user.role === "GUEST" ? user.phone : ""
+            : props.history.location.state[0].order.sender_phone
+    );
     const [variant, setVariant] = useState('error')
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
@@ -153,7 +161,7 @@ const NewOrder = (props) => {
             if (active) {
                 setOptions((countries).map(country => country.name));
             }
-            console.log(options);
+            //console.log(options);
         },
         /* onError: (error) => {
 
@@ -171,6 +179,7 @@ const NewOrder = (props) => {
     };
     const next = event => {
         //alert("ok");
+        event.preventDefault();
         setShow(false);
         props.loading();
         check_company()
@@ -181,13 +190,14 @@ const NewOrder = (props) => {
                     setId_company(res.data.check_company)
                 } else {
                     setVariant("error");
-                    setInfo(res.errors[0].message);
+                    setInfo(manageMsg(res.errors[0].message));
                     setShow(true)
                 }
                 props.success();
                 //console.log(response)
             })
             .catch(error => {
+                //console.log(error);
                 setVariant("error");
                 let msg = checkError(error);
                 setInfo(manageMsg(msg));
@@ -232,6 +242,12 @@ const NewOrder = (props) => {
             case "r_city":
                 setR_city(event.target.value)
                 break;
+            case "sender_name":
+                setSender_name(event.target.value)
+                break;
+            case "sender_phone":
+                setSender_phone(event.target.value)
+                break;
         }
         /* this.setState({
             [event.target.name]: event.target.value
@@ -265,6 +281,9 @@ const NewOrder = (props) => {
                         r_country: r_country,
                         shipMethod: shipMethod,
                         typeService: typeService,
+                        sender_name: sender_name,
+                        sender_phone: sender_phone,
+                        createdAt: new Date()
                     }
                 })
                     .then(res => {
@@ -314,6 +333,8 @@ const NewOrder = (props) => {
                         r_country: r_country,
                         shipMethod: shipMethod,
                         typeService: typeService,
+                        sender_name: sender_name,
+                        sender_phone: sender_phone
                     }
                 })
                     .then(res => {
@@ -389,7 +410,7 @@ const NewOrder = (props) => {
                 setOptions([]);
             }
         }, [open]); */
-    //console.log(typeService);
+    //console.log(format(new Date().getTime(), "MM/dd/yyyy hh:mma"));
     return (
         <div className="m-sm-30">
             <ShowInfo
@@ -425,6 +446,36 @@ const NewOrder = (props) => {
                                 <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={next}>
                                     <Grid container spacing={6}>
                                         <Grid item lg={6} md={6} sm={12} xs={12}>
+
+                                            {
+                                                user.role !== "GUEST" && (
+                                                    <div>
+                                                        <TextValidator
+                                                            className="mb-6 w-full"
+                                                            variant="outlined"
+                                                            label="Sender name"
+                                                            onChange={handleChange}
+                                                            type="text"
+                                                            name="sender_name"
+                                                            value={sender_name}
+
+                                                            validators={["required"]}
+                                                            errorMessages={["this field is required"]}
+                                                        />
+                                                        <TextValidator
+                                                            className="mb-6 w-full"
+                                                            variant="outlined"
+                                                            label="Sender phone"
+                                                            onChange={handleChange}
+                                                            type="text"
+                                                            name="sender_phone"
+                                                            value={sender_phone}
+                                                            validators={["required"]}
+                                                            errorMessages={["this field is required"]}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
@@ -447,6 +498,9 @@ const NewOrder = (props) => {
                                                 //validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
+
+                                        </Grid>
+                                        <Grid item lg={6} md={6} sm={12} xs={12}>
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
@@ -458,17 +512,15 @@ const NewOrder = (props) => {
                                                 validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
-                                        </Grid>
-                                        <Grid item lg={6} md={6} sm={12} xs={12}>
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package weight eg:10KG"
+                                                label="Package weight eg:10KG *"
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="weight"
                                                 value={weight}
-                                                //validators={["required"]}
+                                                validators={["required"]}
                                                 errorMessages={["this field is required"]}
                                             />
                                             <TextValidator

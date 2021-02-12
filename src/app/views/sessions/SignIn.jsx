@@ -83,7 +83,9 @@ const SignIn = (props) => {
     props.loading();
     login({
       variables: {
-        email: emailEncrypted, password: passwordEncrypted
+        email: emailEncrypted,
+        password: passwordEncrypted,
+        last_login: new Date()
       }
     })
       .then((res) => {

@@ -17,7 +17,7 @@ import ShowInfo from '../components/message';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { useMutation, useQuery } from '@apollo/client';
 import { ORDER_LIST, DELETE_ORDER, ADD_POSITION, ADD_PRICE } from '../../../graphql/Order';
-import { refetchOrder, updateOrder } from '../../redux/actions/OrderActions';
+import { refetchOrder, updateOrder, deleteOrder } from '../../redux/actions/OrderActions';
 import { manageMsg, checkError } from "../../../utils";
 
 const ListOrder = (props) => {
@@ -468,19 +468,16 @@ const ListOrder = (props) => {
                     //console.log('customBodyRender');
                     //console.dir(tableMeta.rowData);
                     return (
-                        <IconButton disabled={tableMeta.rowData[2] === "SIGNED" && true}
+                        <IconButton
                             onClick={() => {
-                                if (tableMeta.rowData[2] !== "STAND BY" && props.user.role === "GUEST") {
-                                    setVariant("warning");
-                                    setInfo(manageMsg("NOT_ALLOW_CONTACT_COMPANY"));
-                                    setShow(true);
-                                } else {
+                                if (((props.user.role === "GUEST" && tableMeta.rowData[1] === "STAND BY") ||
+                                    (["OWNER", "ADMIN_MEMBER"].includes(props.user.role) && tableMeta.rowData[1] === "RECEIVED"))) {
                                     props.history.push("/order/add_order", [{
                                         acion: "update",
                                         order: {
                                             id: tableMeta.rowData[0],
-                                            current_statut: tableMeta.rowData[2],
-                                            code: tableMeta.rowData[3],
+                                            current_statut: tableMeta.rowData[1],
+                                            code: tableMeta.rowData[2],
                                             r_city: tableMeta.rowData[4],
                                             r_phone: tableMeta.rowData[5],
                                             r_name: tableMeta.rowData[6],
@@ -492,9 +489,15 @@ const ListOrder = (props) => {
                                             r_country: tableMeta.rowData[13],
                                             shipMethod: tableMeta.rowData[14],
                                             typeService: tableMeta.rowData[15],
+                                            sender_name: tableMeta.rowData[19],
+                                            sender_phone: tableMeta.rowData[20],
                                         },
                                         action: "update"
                                     }])
+                                } else {
+                                    setVariant("warning");
+                                    setInfo(manageMsg("NOT_ALLOW_CONTACT_COMPANY"));
+                                    setShow(true);
                                 }
 
                             }}>
@@ -518,16 +521,13 @@ const ListOrder = (props) => {
                     //alert(["SIGNED", "READY FOR PICKUP", "ARRIVED", "IN TRANSIT"].includes("IN TRANSIT"))
                     //console.log(tableMeta.rowData[2])
                     return (
-                        <IconButton disabled={() => {
-                            if ((props.user.role === "GUEST" && tableMeta.rowData[2] !== "STAND BY") ||
-                                (props.user.role !== "GUEST" && (["SIGNED", "READY FOR PICKUP", "ARRIVED", "IN TRANSIT"].includes(tableMeta.rowData[2])))
-                            ) {
-                                return true;
-                            };
-                            return false;
-                        }}
+                        <IconButton
                             onClick={() => {
-                                askConfirmation(tableMeta.rowData[0])
+                                if (((props.user.role === "GUEST" && tableMeta.rowData[1] === "STAND BY") ||
+                                    (["OWNER", "ADMIN_MEMBER"].includes(props.user.role) && tableMeta.rowData[1] === "RECEIVED"))) {
+                                    askConfirmation(tableMeta.rowData[0])
+                                }
+
                             }}>
                             <Icon color="error">delete</Icon>
                         </IconButton >
@@ -535,7 +535,25 @@ const ListOrder = (props) => {
                 }
             }
         },
-
+        {
+            name: "sender_name",
+            label: "sender_name",
+            options: {
+                filter: false,
+                sort: false,
+                display: 'excluded',
+            }
+        },
+        {
+            name: "sender_phone",
+            label: "sender_phone",
+            options: {
+                filter: true,
+                sort: false,
+                display: 'excluded',
+                //setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+            }
+        },
     ];
     const options = {
         //filterType: 'dropdown',
@@ -573,7 +591,7 @@ const ListOrder = (props) => {
             }
         })
             .then(data => {
-                if (data.data.delete_rate.id) {
+                if (data.data.delete_order.id) {
 
                     setInfo(manageMsg("PACKAGE_DELETED"));
                     setVariant('success');
@@ -581,7 +599,7 @@ const ListOrder = (props) => {
                     setInfo("Error, Try after !");
                     setVariant('error');
                 }
-                props.deleteRate(data.data.delete_rate.id)
+                props.deleteOrder(data.data.delete_order.id)
                 setShow(true);
                 props.success();
             })
@@ -803,6 +821,7 @@ const mapStateToProps = state => ({
     //addOrder: PropTypes.func.isRequired,
     refetchOrder: PropTypes.func.isRequired,
     updateOrder: PropTypes.func.isRequired,
+    deleteOrder: PropTypes.func.isRequired,
     order: state.order
 });
-export default connect(mapStateToProps, { success, loading, refetchOrder, updateOrder })(ListOrder);
+export default connect(mapStateToProps, { success, loading, deleteOrder, refetchOrder, updateOrder })(ListOrder);

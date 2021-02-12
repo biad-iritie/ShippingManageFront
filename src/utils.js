@@ -102,7 +102,7 @@ export function manageMsg(info) {
       return "Oups ! sorry this company is not available, please choose another company. THANKS"
       break;
     case "COMPANY_NOT_EXIST":
-      return "This company does'nt exist, please verify again the email"
+      return "This company does'nt exist, please verify again the email of the company"
       break;
     case "ORDER_CREATED":
       return "Order created, tracking number: "

@@ -220,7 +220,7 @@ const DetailOrder = (props) => {
             numKuadi: props.location.state[0].order.numKuadi */
         },
         onCompleted: (data) => {
-            //console.log(data);
+            console.log(data);
             if (data.order_detail.length>0) {
                 setOrder(data.order_detail[0]);
                 step1 = [];
@@ -416,6 +416,14 @@ const DetailOrder = (props) => {
                                             <Typography gutterBottom variant="text-32" className="capitalize font-light pl-2">
                                                 Confirmed by: {order.who_add_paid}
                                             </Typography>) : ""}
+
+                                            {
+                                                user.role !== "GUEST" && (
+                                                    <Typography className="capitalize font-light pl-10">
+                                                        Created by: {order.user.names}
+                                                    </Typography>
+                                                )
+                                            }
                                                 
                                         </AccordionSummary>
                                         <AccordionDetails>
@@ -486,7 +494,7 @@ const DetailOrder = (props) => {
                                                                 Price : {order.price ? order.price : "?"}
                                                             </Typography>
                                                             <br />
-                                                            
+                                                        
                                                             
                                                             {
                                                                 order.current_statut === "SIGNED" && (
@@ -522,13 +530,13 @@ const DetailOrder = (props) => {
                                                     <Grid container  alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                         {props.user.role ? (<Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                Customer : {order.user.names}
+                                                                Customer : {order.sender_name }
                                                             </Typography>) : ""}
                                                             
                                                             
                                                             <br />
                                                             {props.user.role ? (<Typography gutterBottom variant="text-32" className="capitalize">
-                                                                Customer's number : {order.user.phone}
+                                                                Customer's number : {order.sender_phone}
                                                             </Typography>) : ""}
                                                             
                                                         </Grid>

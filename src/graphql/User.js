@@ -103,10 +103,12 @@ export const SIGN_UP = gql`
         }}`;
 // FOR LOGIN
 export const LOGIN = gql`
-mutation login($email: String!, $password: String!) {
+mutation login($email: String!, $password: String!,
+                $last_login:String!) {
     login(
         email: $email
         password: $password
+        last_login:$last_login
     ) {
         token
         user {

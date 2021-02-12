@@ -15,9 +15,13 @@ query count_package($role:String!,$current_statut:String!){
 
 
 export const ADD_ORDER = gql`
-mutation add_order($company:ID!,$status:String!,$name_agence_sender: String,$numKuadi:String,
-$content:String!,$current_statut:String!,$weight:String!,$r_name:String!,$r_phone:String!,
-$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
+mutation add_order($company:ID!,$status:String!,
+                  $name_agence_sender: String,$numKuadi:String,
+                  $content:String!,$current_statut:String!,
+                  $weight:String!,$r_name:String!,$r_phone:String!,
+                  $r_city:String!,$r_country:String!, $shipMethod:String!,
+                  $typeService:String!,$sender_name: String!,
+                  $sender_phone: String!,$createdAt:String!){
  add_order(company:$company,
     status:$status,
     name_agence_sender:$name_agence_sender,
@@ -29,7 +33,10 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
     r_phone:$r_phone,
     r_city:$r_city,
     r_country:$r_country,
-    shipMethod:$shipMethod,typeService:$typeService)
+    shipMethod:$shipMethod,typeService:$typeService
+    sender_name: $sender_name,
+    sender_phone: $sender_phone,
+    createdAt:$createdAt)
   {
     code
     id
@@ -41,15 +48,23 @@ $r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!){
     content
     shipMethod
     typeService
+    sender_name
+    sender_phone
   }
 
 }`;
 
 export const UPDATE_ORDER = gql`
-mutation update_order($id:ID!,$company:ID!,$name_agence_sender: String,$numKuadi:String,
-$content:String!,$weight:String!,$r_name:String!,$r_phone:String!,
-$r_city:String!,$r_country:String!, $shipMethod:String!,$typeService:String!,
-$paid:Boolean,$who_add_paidId:ID,$who_add_paid:String){
+mutation update_order($id:ID!,$company:ID!,
+                    $name_agence_sender: String,$numKuadi:String,
+                    $content:String!,$weight:String!,
+                    $r_name:String!,$r_phone:String!,
+                    $r_city:String!,$r_country:String!, 
+                    $shipMethod:String!,$typeService:String!,
+                    $paid:Boolean,$who_add_paidId:ID,
+                    $who_add_paid:String,
+                    $sender_name: String!,
+                  $sender_phone: String!){
   update_order(id:$id,company:$company,
     name_agence_sender:$name_agence_sender,
     numKuadi:$numKuadi,
@@ -63,7 +78,9 @@ $paid:Boolean,$who_add_paidId:ID,$who_add_paid:String){
     typeService:$typeService,
     paid:$paid,
     who_add_paidId:$who_add_paidId,
-    who_add_paid:$who_add_paid)
+    who_add_paid:$who_add_paid,
+    sender_name: $sender_name,
+    sender_phone: $sender_phone)
   {
     code
     id
@@ -142,6 +159,8 @@ query order_list($role: String!,$skip:Int,$take:Int){
     shipMethod
     typeService
     who_add_paid
+    sender_name
+    sender_phone
   }
 }`;
 
@@ -168,6 +187,8 @@ query order_detail($id: ID,$code:String){
     }
     who_confirmed_signed
     who_confirmed_signedId
+    sender_name,
+    sender_phone
   }
 }`;
 
