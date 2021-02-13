@@ -203,8 +203,8 @@ const SignIn = (props) => {
                     Forgot password?
                     </Button> */}
                   <Button
-                    className="capitalize"
-                    style={{ marginLeft: "165px" }}
+                    className="capitalize ml-2"
+
                     variant="contained"
                     disabled={props.login.loading}
                     color="primary"
@@ -216,7 +216,7 @@ const SignIn = (props) => {
                   >
                     <Icon>business</Icon>
                     <span className="pl-2 capitalize">
-                      Company
+                      Sign up for Company
                                     </span>
 
                   </Button>

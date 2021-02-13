@@ -300,6 +300,8 @@ const NewOrder = (props) => {
                             setR_name("");
                             setR_phone("");
                             setR_city("");
+                            setSender_name("");
+                            setSender_phone("");
                             props.addOrder([res.data.add_order])
                             setShow(true);
 
@@ -453,7 +455,7 @@ const NewOrder = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Sender name"
+                                                            label="Sender name *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="sender_name"
@@ -465,7 +467,7 @@ const NewOrder = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Sender phone"
+                                                            label="Sender phone *"
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="sender_phone"

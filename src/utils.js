@@ -30,7 +30,7 @@ export function checkError(error) {
     );
   } else {
     msg = error[0].message
-    console.log(msg);
+    //console.log(msg);
   }
   //console.log(error.graphQLErrors);
   //console.log(error);
@@ -133,7 +133,7 @@ export function manageMsg(info) {
       return "NOT PAID"
       break;
     case "MARK_PAID":
-      return "You are going to mark this package as paid"
+      return "You are going to mark this package as PAID"
       break;
     case "MARK_AS_PAID":
       return "Mark as PAID"

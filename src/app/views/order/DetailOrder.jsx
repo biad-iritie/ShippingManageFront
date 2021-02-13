@@ -152,7 +152,9 @@ const DetailOrder = (props) => {
                 typeService: order.typeService,
                 paid:true,
                 who_add_paidId:user.id,
-                who_add_paid:user.names
+                who_add_paid:user.names,
+                sender_phone:order.sender_phone,
+                sender_name:order.sender_name
             }
         })
             .then(res => {
@@ -501,7 +503,7 @@ const DetailOrder = (props) => {
                                                                         <div >
                                                                             <Chip size="medium"
                                                                         className="bg-green"
-                                                                        label="Received and Signed" />
+                                                                        label="Signed" />
                                                                         <small className="capitalize font-light pl-2">
                                                                         {`Via ${order.who_confirmed_signed}`}
                                                                         </small>

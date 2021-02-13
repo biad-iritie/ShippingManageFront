@@ -470,6 +470,7 @@ const ListOrder = (props) => {
                     return (
                         <IconButton
                             onClick={() => {
+                                //console.log(["OWNER", "ADMIN_MEMBER"].includes(props.user.role) && tableMeta.rowData[1] === "RECEIVED");
                                 if (((props.user.role === "GUEST" && tableMeta.rowData[1] === "STAND BY") ||
                                     (["OWNER", "ADMIN_MEMBER"].includes(props.user.role) && tableMeta.rowData[1] === "RECEIVED"))) {
                                     props.history.push("/order/add_order", [{
@@ -495,9 +496,12 @@ const ListOrder = (props) => {
                                         action: "update"
                                     }])
                                 } else {
-                                    setVariant("warning");
-                                    setInfo(manageMsg(props.user.role === "GUEST" ? "NOT_ALLOW_CONTACT_COMPANY" : "NOT_ALLOW_COMPANY_MODIFY_COMPANY"));
-                                    setShow(true);
+                                    if (tableMeta.rowData[1] !== "SIGNED") {
+                                        setVariant("warning");
+                                        setInfo(manageMsg(props.user.role === "GUEST" ? "NOT_ALLOW_CONTACT_COMPANY" : "NOT_ALLOW_COMPANY_MODIFY_COMPANY"));
+                                        setShow(true);
+                                    }
+
                                 }
 
                             }}>
