@@ -22,12 +22,12 @@ const companyRoutes = [
         auth: authRoles.admin
     },
     {
-        path: "/company/employees",
+        path: "/company/team",
         component: Employees,
         auth: authRoles.admin
     },
     {
-        path: "/company/cu_employees",
+        path: "/company/cu_member",
         component: CU_Employees,
         auth: authRoles.guest
     }

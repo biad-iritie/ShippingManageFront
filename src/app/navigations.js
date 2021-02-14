@@ -19,8 +19,8 @@ export const navigations = [
         iconText: "R"
       }, */
       {
-        name: "Employees",
-        path: "/company/employees",
+        name: "Team",
+        path: "/company/team",
         iconText: "E"
       },
       {

@@ -240,8 +240,8 @@ const CU_Employees = (props) => {
             <div className="mb-sm-30">
                 <Breadcrumb
                     routeSegments={[
-                        { name: "Employees", path: "/company/employees" },
-                        { name: "Add or Edit Employee" }
+                        { name: "Team", path: "/company/team" },
+                        { name: "Add or Edit Member" }
                     ]}
                 />
             </div>

@@ -358,7 +358,7 @@ const Employees = (props) => {
                         <Breadcrumb
                             routeSegments={[
                                 { name: "Dashboard", path: "/dashboard/analytics" },
-                                { name: "Employees" }
+                                { name: "Team" }
                             ]}
                         />
                     </Grid>
@@ -393,7 +393,7 @@ const Employees = (props) => {
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                                props.history.push("/company/cu_employees", [{
+                                props.history.push("/company/cu_member", [{
                                     action: "add"
                                 }])
                             }}
@@ -408,7 +408,7 @@ const Employees = (props) => {
             <div className="w-full overflow-auto">
                 <MUIDataTable
                     title={<Typography variant="h6">
-                        Employees list
+                        Members list
                     {loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
                     }
