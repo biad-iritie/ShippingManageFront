@@ -9,6 +9,7 @@ import {
     Switch,
     FormGroup
 } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
@@ -19,7 +20,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { INFO_COMPANY, UPDATE_COMPANY } from '../../../graphql/User';
 import { Breadcrumb } from "matx";
 import { addCompany } from "../../redux/actions/CompanyAction";
-
+import { manageMsg, checkError } from "../../../utils";
 const useStyles = makeStyles(theme => ({
     root: {
         width: "100%"
@@ -43,7 +44,7 @@ const Info = (props) => {
         agreement: ""
     }; */
 
-
+    var moment = require('moment');
     //GET COMPANY INFO
     const [info_company, { loading, error, data }] = useLazyQuery(INFO_COMPANY, {
         errorPolicy: 'all',
@@ -58,17 +59,11 @@ const Info = (props) => {
             setIs_active(data.info_company.is_active)
         },
         onError: () => {
-            console.log("onError");
-            console.log(error);
             setVariant("error");
-            if (error.networkError) {
-                setInfo("Please try after this action");
-            }
-            if (error.graphQLErrors)
-                error.graphQLErrors.map(({ message, locations, path }) =>
-                    setInfo(message)
-                );
-            //setInfo(error);
+            let msg = checkError(error)
+            setInfo(manageMsg(msg));
+            setShow(true);
+            props.success();
 
         }
     })
@@ -157,31 +152,27 @@ const Info = (props) => {
 
                 //console.log(res);
                 if (res.data.update_company) {
+                    setInfo(manageMsg("PROFILE_UPDATED"));
                     setInfo("Modification done !");
+                    props.addCompany(res.data.update_company)
+                    setVariant('success')
                 } else {
-                    setInfo("Error, Try after !");
+                    setVariant("error");
+                    let msg = checkError(res.errors)
+                    setInfo(manageMsg(msg));
+                    setShow(true);
                 }
-                props.addCompany(res.data.update_company)
-                setVariant('success')
+
                 setShow(true);
                 props.success();
 
             })
             .catch((error) => {
-                //console.log("onError");
-                //console.log(error);
                 setVariant("error");
-                //setInfo("You can't modify now , try it later .");
-                if (error.networkError) {
-                    setInfo("Please try after this action");
-                }
-                if (error.graphQLErrors)
-                    error.graphQLErrors.map(({ message, locations, path }) =>
-                        setInfo(message)
-                    );
-
+                let msg = checkError(error)
+                setInfo(manageMsg(msg));
                 setShow(true);
-                props.error()
+                props.success();
             });
     };
     useEffect(() => {
@@ -214,6 +205,11 @@ const Info = (props) => {
                         { name: "Company" }
                     ]}
                 />
+                <Typography className="mt-5 font-bold">Remaining Subscription Date:
+                <small className="border-radius-4 bg-secondary text-black px-2 py-2px">
+                        {moment(Number(props.company.limit_subscribe)).fromNow(true)}
+                    </small>
+                </Typography>
             </div>
             <Card>
                 <div className="p-9 h-full">

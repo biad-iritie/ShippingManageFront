@@ -76,6 +76,7 @@ query info_company {
         phone2
         email
         is_active
+        limit_subscribe
     }}`;
 // FOR SIGN UP
 export const SIGN_UP = gql`
