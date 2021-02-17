@@ -1,0 +1,22 @@
+{
+    "app.hello": "Hello",
+    "app.value": "The code is {code}",
+    "app.code": "Edit <code>{fileName}</code> and save to reload",
+    "input.email.label": "Email",
+    "input.email.notValid": "Email is not valid",
+    "input.password.label": "Password",
+    "input.required": "This field is required",
+    "button.login": "Sign in to Enter Dashboard",
+    "button.loginSimple": "Sign in",
+    "button.signUpCompany": "Sign up for Company",
+    "button.signUp": "Sign Up",
+    "or": "Or",
+    "error.login": "Invalid email or password",
+    "error.accountClosed": "Account closed, contact your Manager",
+    "error.default": "Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding",
+    "input.names.label": "Full name",
+    "input.phone.label": "Phone with code eg: +86.........",
+    "input.phone.notValid": "The number is not valid",
+    "input.rePassword.label": "Rewrite Password",
+    "input.rePassword.mismatch": "Password mismatch"
+}

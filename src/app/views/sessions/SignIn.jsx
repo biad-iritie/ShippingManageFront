@@ -11,6 +11,7 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
+import { FormattedMessage } from 'react-intl';
 
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { addCompany } from "../../redux/actions/CompanyAction"
@@ -104,8 +105,29 @@ const SignIn = (props) => {
       .catch((error) => {
         setVariant("error");
         //console.log(error);
-        let msg = checkError(error)
-        setInfo(manageMsg(msg));
+        let msg = checkError(error);
+        switch (msg) {
+          case "USER_NOT_FIND":
+          case "LOGIN_FAILLED":
+            setInfo(<FormattedMessage
+              id="error.login"
+              defaultMessage="Invalid email or password"
+            />)
+            break;
+          case "ACCOUNT_CLOSED":
+            setInfo(<FormattedMessage
+              id="error.accountClosed"
+              defaultMessage="Account closed, contact your Manager"
+            />)
+            break;
+          default:
+            setInfo(<FormattedMessage
+              id="error.default"
+              defaultMessage="Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding"
+            />)
+            break;
+        }
+        //setInfo(manageMsg(msg));
         setShow(true);
         props.success();
       })
@@ -118,7 +140,37 @@ const SignIn = (props) => {
         show={show}
         info={info}
         variant={variant} />
-      <div className="p-8">
+      <div>
+        {/* <div className="bg-white">
+          <h1>
+            <FormattedMessage
+              id="app.hello"
+              defaultMessage="Try it"
+            />
+            <br />
+            <FormattedMessage
+              id="app.value"
+              defaultMessage="Try it"
+              values={{ code: "T-130" }}
+            />
+            <br />
+            <FormattedMessage
+              id="app.code"
+              defaultMessage="Try it"
+              values={{ fileName: "src/App", code: (word) => <code>{word}</code> }}
+            />
+            <br />
+            <FormattedDate
+              value={new Date}
+              hour="numeric"
+              minute="numeric"
+              year="numeric"
+              month="long"
+              day="numeric"
+              weekday="long"
+            />
+          </h1>
+        </div> */}
         <Card className="signup-card position-relative y-center">
           <Grid container>
             <Grid item lg={5} md={5} sm={5} xs={12}>
@@ -132,27 +184,49 @@ const SignIn = (props) => {
                   <TextValidator
                     className="mb-6 w-full"
                     variant="outlined"
-                    label="Email"
+                    label={
+                      <FormattedMessage
+                        id="input.email.label"
+                        defaultMessage="Email"
+                      />
+                    }
                     onChange={handleChange}
                     type="email"
                     name="email"
                     value={email}
                     validators={["required", "isEmail"]}
                     errorMessages={[
-                      "this field is required",
-                      "email is not valid"
+                      <FormattedMessage
+                        id="input.required"
+                        defaultMessage="This field is required"
+                      />,
+                      <FormattedMessage
+                        id="input.email.notValid"
+                        defaultMessage="Email is not valid"
+                      />
+
                     ]}
                   />
                   <TextValidator
                     className="mb-3 w-full"
-                    label="Password"
+                    label={
+                      <FormattedMessage
+                        id="input.password.label"
+                        defaultMessage="Password"
+                      />
+                    }
                     variant="outlined"
                     onChange={handleChange}
                     name="password"
                     type="password"
                     value={password}
                     validators={["required"]}
-                    errorMessages={["this field is required"]}
+                    errorMessages={[
+                      <FormattedMessage
+                        id="input.required"
+                        defaultMessage="This field is required"
+                      />
+                    ]}
                   />
                   {/* <FormControlLabel
                     className="mb-3"
@@ -171,7 +245,12 @@ const SignIn = (props) => {
                         disabled={props.login.loading}
                         type="submit"
                       >
-                        <span className="pl-2 capitalize">Sign in to Enter Dashboard</span>
+                        <span className="pl-2 capitalize">
+                          <FormattedMessage
+                            id="button.login"
+                            defaultMessage="Sign in to Enter Dashboard"
+                          />
+                        </span>
                         {props.login.loading && (
                           <CircularProgress
                             size={24}
@@ -182,7 +261,12 @@ const SignIn = (props) => {
                       </Button>
 
                     </div>
-                    <span className="mr-2 ml-5">or</span>
+                    <span className="mr-2 ml-5">
+                      <FormattedMessage
+                        id="or"
+                        defaultMessage="Or"
+                      />
+                    </span>
                     <Button
                       className="capitalize"
                       disabled={props.login.loading}
@@ -190,8 +274,11 @@ const SignIn = (props) => {
                         props.history.push("/session/signup")
                       }
                     >
-                      Sign up
-                      </Button>
+                      <FormattedMessage
+                        id="button.signUp"
+                        defaultMessage="Sign up"
+                      />
+                    </Button>
                   </div>
                   {/* <Button
                     className="text-primary"
@@ -204,7 +291,6 @@ const SignIn = (props) => {
                     </Button> */}
                   <Button
                     className="capitalize ml-2"
-
                     variant="contained"
                     disabled={props.login.loading}
                     color="primary"
@@ -216,9 +302,11 @@ const SignIn = (props) => {
                   >
                     <Icon>business</Icon>
                     <span className="pl-2 capitalize">
-                      Sign up for Company
-                                    </span>
-
+                      <FormattedMessage
+                        id="button.signUpCompany"
+                        defaultMessage="Sign up for Company"
+                      />
+                    </span>
                   </Button>
                 </ValidatorForm>
               </div>

@@ -19,6 +19,14 @@ const plugins = [
     },
     "icons"
   ],
+  [
+    "formatjs",
+    {
+      "idInterpolationPattern": "[sha512:contenthash:base64:6]",
+      "ast": true
+    }
+  ]
+
 
 ];
 

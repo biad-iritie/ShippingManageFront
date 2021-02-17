@@ -1,0 +1,22 @@
+{
+    "app.hello": "Bonjour",
+    "app.value": "Le code est {code}",
+    "app.code": "Modifie <code>src/App</code> et enregistre pour recharger",
+    "input.email.label": "Email",
+    "input.email.notValid": "Email n'est pas valide",
+    "input.password.label": "Mot de passe",
+    "input.required": "Champ obligatoire",
+    "button.login": "Connectez-vous au tableau de bord",
+    "button.loginSimple": "Connexion",
+    "button.signUpCompany": "Inscription pour entreprise",
+    "button.signUp": "Inscription",
+    "or": "Ou",
+    "error.login": "Email ou mot de passe incorrect",
+    "error.accountClosed": "Compte fermé, contacte ton manager",
+    "error.default": "Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding",
+    "input.names.label": "Nom Complet",
+    "input.phone.label": "Telephone avec code exple: +86.........",
+    "input.phone.notValid": "Le numero n'est pas valide",
+    "input.rePassword.label": "Re-écris le mot de passe",
+    "input.rePassword.mismatch": "Les mots de passent ne correspondent pas"
+}

@@ -1,4 +1,6 @@
 import { differenceInSeconds } from "date-fns";
+import { FormattedMessage, FormattedDate } from 'react-intl';
+
 var crypto = require('crypto');
 
 // For the encryption
@@ -70,7 +72,7 @@ export function manageMsg(info) {
       return "Invalid email or password "
       break;
     case "USER_NOT_FIND":
-      return "Invalid email or password "
+      return "Invalid email or password"
       break;
     case "ACCOUNT_CLOSED":
       return "Account closed, contact your Manager"

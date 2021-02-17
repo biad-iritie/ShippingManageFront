@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Icon, IconButton, Hidden } from "@material-ui/core";
-import { classList } from "Utils";
+import { classList } from "utils";
 
 const TopbarMenu = props => {
   let { offsetTop } = props;

@@ -9,6 +9,8 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import { FormattedMessage } from 'react-intl';
+
 import { loginWithEmailAndPassword, loading, success } from "../../redux/actions/LoginActions";
 import { connect } from "react-redux";
 import { useMutation, useQuery } from '@apollo/client';
@@ -217,19 +219,32 @@ const SignUp = (props) => {
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Full name"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.names.label"
+                                                defaultMessage="Full name"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="names"
                                         value={names}
-
                                         validators={["required"]}
-                                        errorMessages={["this field is required"]}
+                                        errorMessages={[
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />]}
                                     />
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Email"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.email.label"
+                                                defaultMessage="Email"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="email"
                                         name="email"
@@ -237,45 +252,85 @@ const SignUp = (props) => {
 
                                         validators={["required", "isEmail"]}
                                         errorMessages={[
-                                            "this field is required",
-                                            "email is not valid"
-                                        ]}
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.email.notValid"
+                                                defaultMessage="Email is not valid"
+                                            />]}
                                     />
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Phone with code eg: +86........."
+                                        label={
+                                            <FormattedMessage
+                                                id="input.phone.label"
+                                                defaultMessage="Phone with code eg: +86........."
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="phone"
                                         value={phone}
                                         validators={["required", 'matchRegexp:[^+][0-9]$']}
                                         errorMessages={[
-                                            "this field is required",
-                                            "The number is not valid"
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.phone.notValid"
+                                                defaultMessage="The number is not valid"
+                                            />
+
                                         ]}
                                     />
                                     <TextValidator
                                         className="mb-4 w-full"
-                                        label="Password"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.password.label"
+                                                defaultMessage="Password"
+                                            />
+                                        }
                                         variant="outlined"
                                         onChange={handleChange}
                                         name="password"
                                         type="password"
                                         value={password}
                                         validators={["required"]}
-                                        errorMessages={['this field is required']}
+                                        errorMessages={[
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />
+                                        ]}
                                     />
                                     <TextValidator
                                         className="mb-4 w-full"
-                                        label="Rewrite Password"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.rePassword.label"
+                                                defaultMessage="Rewrite Password"
+                                            />
+                                        }
                                         variant="outlined"
                                         onChange={handleChange}
                                         name="repassword"
                                         type="password"
                                         value={repassword}
                                         validators={['isPasswordMatch', 'required']}
-                                        errorMessages={['password mismatch', 'this field is required']}
+                                        errorMessages={[
+                                            <FormattedMessage
+                                                id="input.rePassword.mismatch"
+                                                defaultMessage="Password mismatch"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />]}
                                     />
                                     {/* <FormControlLabel
                                         className="mb-4"
@@ -293,7 +348,10 @@ const SignUp = (props) => {
                                                 type="submit"
                                                 disabled={props.login.loading}
                                             >
-                                                Sign up
+                                                <FormattedMessage
+                                                    id="button.signUp"
+                                                    defaultMessage="Sign Up"
+                                                />
                                                 {props.login.loading && (
                                                     <CircularProgress
                                                         size={24}
@@ -313,7 +371,11 @@ const SignUp = (props) => {
                                                 props.history.push("/session/signin")
                                             }
                                         >
-                                            Sign in
+                                            <FormattedMessage
+                                                id="button.loginSimple"
+                                                defaultMessage="Sign in"
+                                            />
+
                                         </Button>
                                     </div>
                                 </ValidatorForm>

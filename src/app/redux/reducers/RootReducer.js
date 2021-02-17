@@ -10,7 +10,7 @@ import CompanyReducer from "./CompanyReducer";
 import RateReducer from "./RateReducer";
 import OrderReducer from "./OrderReducer";
 import EmployeesReducer from './EmployeesReducer'
-
+import LanguageReducer from './LanguageReducer'
 const RootReducer = combineReducers({
   order: OrderReducer,
   rate: RateReducer,
@@ -23,6 +23,7 @@ const RootReducer = combineReducers({
   ecommerce: EcommerceReducer,
   navigations: NavigationReducer,
   employees: EmployeesReducer,
+  language: LanguageReducer
 });
 
 export default RootReducer;

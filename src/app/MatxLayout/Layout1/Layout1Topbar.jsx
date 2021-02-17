@@ -10,6 +10,7 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen, classList } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
+import { setLanguage } from "../../redux/actions/LanguageAction";
 //import ShoppingCart from "../SharedCompoents/ShoppingCart";
 
 const styles = theme => ({
@@ -63,8 +64,12 @@ const Layout1Topbar = (props) => {
 
   const handleSignOut = () => {
     props.logoutUser();
+    //alert('handleSignOut')
   };
-
+  const changeLanguage = (local) => {
+    props.setLanguage(local);
+    alert('ok')
+  };
   /* render() { */
   let { classes, fixed } = props;
 
@@ -90,24 +95,25 @@ const Layout1Topbar = (props) => {
               </IconButton>
 
 
-              {/* <MatxMenu
+              <MatxMenu
                 menuButton={
                   <IconButton>
                     <Icon>public</Icon>
                   </IconButton>
-                }
-              >
+                }>
                 <MenuItem>
-                  <Link className={classes.menuItem} to="/">
-                    <span className="pl-4"> FR </span>
-                  </Link>
+                  <span className="pl-4"
+                    onClick={() => { props.setLanguage('fr') }}
+                  >
+                    Français
+                  </span>
                 </MenuItem>
                 <MenuItem>
-                  <span className="pl-4"> ENG </span>
+                  <span className="pl-4"
+                    onClick={() => { props.setLanguage('en-GB') }}
+                  > English </span>
                 </MenuItem>
-
-
-              </MatxMenu> */}
+              </MatxMenu>
               {/* <IconButton>
                   <Icon>star_outline</Icon>
                 </IconButton> */}
@@ -187,18 +193,21 @@ const Layout1Topbar = (props) => {
 Layout1Topbar.propTypes = {
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  settings: PropTypes.object.isRequired
+  settings: PropTypes.object.isRequired,
+  setLanguage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  setLanguage: PropTypes.func.isRequired,
   settings: state.layout.settings,
   user: state.user,
+  language: state.language
 });
 
 export default withStyles(styles, { withTheme: true })(
   withRouter(
-    connect(mapStateToProps, { setLayoutSettings, logoutUser })(Layout1Topbar)
+    connect(mapStateToProps, { setLayoutSettings, logoutUser, setLanguage })(Layout1Topbar)
   )
 );
