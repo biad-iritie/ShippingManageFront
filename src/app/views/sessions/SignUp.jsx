@@ -222,7 +222,7 @@ const SignUp = (props) => {
                                         label={
                                             <FormattedMessage
                                                 id="input.names.label"
-                                                defaultMessage="Full name"
+                                                defaultMessage="Full name *"
                                             />
                                         }
                                         onChange={handleChange}
@@ -242,7 +242,7 @@ const SignUp = (props) => {
                                         label={
                                             <FormattedMessage
                                                 id="input.email.label"
-                                                defaultMessage="Email"
+                                                defaultMessage="Email *"
                                             />
                                         }
                                         onChange={handleChange}
@@ -267,7 +267,7 @@ const SignUp = (props) => {
                                         label={
                                             <FormattedMessage
                                                 id="input.phone.label"
-                                                defaultMessage="Phone with code eg: +86........."
+                                                defaultMessage="Phone with code eg: +86......... *"
                                             />
                                         }
                                         onChange={handleChange}
@@ -292,7 +292,7 @@ const SignUp = (props) => {
                                         label={
                                             <FormattedMessage
                                                 id="input.password.label"
-                                                defaultMessage="Password"
+                                                defaultMessage="Password *"
                                             />
                                         }
                                         variant="outlined"

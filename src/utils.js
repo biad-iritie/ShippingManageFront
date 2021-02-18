@@ -1,5 +1,4 @@
 import { differenceInSeconds } from "date-fns";
-import { FormattedMessage, FormattedDate } from 'react-intl';
 
 var crypto = require('crypto');
 
