@@ -89,6 +89,7 @@ const Layout1Topbar = (props) => {
             }
 
 
+            {/* <div className="hide-on-mobile"> */}
             <div>
               <IconButton>
                 <Icon>help</Icon>

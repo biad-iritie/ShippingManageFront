@@ -15,7 +15,8 @@ import {
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-
+import { FormattedMessage } from 'react-intl';
+import ReturnServeur from '../components/ReturnServeur';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -41,7 +42,7 @@ function InputModal(props) {
             //onClose={handleClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">{props.title}</DialogTitle>
+            <DialogTitle id="form-dialog-title" className="center">{props.title}</DialogTitle>
 
             <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={props.onSubmit}>
                 <DialogContent>
@@ -78,9 +79,15 @@ function InputModal(props) {
                                             value={option}
                                             key={option}
                                             control={<Radio />}
-                                            label={option}
+                                            label={
+                                                <ReturnServeur info={option} />}
                                             validators={["required"]}
-                                            errorMessages={["this field is required"]}
+                                            errorMessages={[
+                                                <FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />
+                                            ]}
                                         />
                                     ))}
                                 </RadioGroup>
@@ -90,11 +97,21 @@ function InputModal(props) {
                                     name="descriptionStatut"
                                     value={props.descriptionStatut}
                                     onChange={props.handleChange}
-                                    label="Description of package's position"
+                                    label={
+                                        <FormattedMessage
+                                            id="input.moreInfo"
+                                            defaultMessage="More information"
+                                        />
+                                    }
                                     //type="text"
                                     fullWidth
                                     //validators={["required"]}
-                                    errorMessages={["this field is required"]}
+                                    errorMessages={[
+                                        <FormattedMessage
+                                            id="input.required"
+                                            defaultMessage="This field is required"
+                                        />
+                                    ]}
 
                                 />
                             </div>
@@ -117,9 +134,20 @@ function InputModal(props) {
                                             key={option}
                                             control={<Radio />}
                                             label={option === "STAFF_MEMBER" ?
-                                                "STAFF" : "ADMIN"}
+                                                <FormattedMessage
+                                                    id="formControl.label.staff"
+                                                    defaultMessage="Staff"
+                                                /> : <FormattedMessage
+                                                    id="formControl.label.admin"
+                                                    defaultMessage="Admin"
+                                                />}
                                             validators={["required"]}
-                                            errorMessages={["this field is required"]}
+                                            errorMessages={[
+                                                <FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />
+                                            ]}
                                         />
                                     ))}
                                 </RadioGroup>
@@ -134,11 +162,21 @@ function InputModal(props) {
                                 name="price"
                                 value={props.price}
                                 onChange={props.handleChange}
-                                label="eg : 100 RMB / 9000 XOF"
+                                label={
+                                    <FormattedMessage
+                                        id="input.price"
+                                        defaultMessage="eg : 100 RMB / 9000 XOF"
+                                    />
+                                }
                                 //type="text"
                                 fullWidth
                                 validators={["required"]}
-                                errorMessages={["this field is required"]}
+                                errorMessages={[
+                                    <FormattedMessage
+                                        id="input.required"
+                                        defaultMessage="This field is required"
+                                    />
+                                ]}
 
                             />)
                     }
@@ -146,8 +184,11 @@ function InputModal(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined" color="secondary" disabled={props.loading} onClick={props.handleClose}>
-                        Cancel
-          </Button>
+                        <FormattedMessage
+                            id="button.cancel"
+                            defaultMessage="Cancel"
+                        />
+                    </Button>
                     <Button type="submit" color="primary" disabled={props.loading}>
 
                         {props.loading ? (
@@ -155,7 +196,10 @@ function InputModal(props) {
                                 size={24}
                             //className={classes.buttonProgress}
                             />
-                        ) : 'Submit'}
+                        ) : <FormattedMessage
+                                id="button.submit"
+                                defaultMessage="Submit"
+                            />}
                     </Button>
                 </DialogActions>
             </ValidatorForm>

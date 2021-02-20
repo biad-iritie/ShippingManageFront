@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Card,
     Grid,
-    
+
 } from "@material-ui/core";
 //import DoneIcon from '@material-ui/icons/Done';
 import Chip from '@material-ui/core/Chip';
@@ -31,16 +31,18 @@ import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import Paper from '@material-ui/core/Paper';
+import { FormattedMessage, FormattedDate } from 'react-intl';
 
 import Confirmation from '../components/Confirmation';
-import { ORDER_DETAIL,UPDATE_ORDER } from '../../../graphql/Order';
+import { ORDER_DETAIL, UPDATE_ORDER } from '../../../graphql/Order';
 import ShowInfo from '../components/message';
-import { useQuery,useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { loading, success } from "../../redux/actions/LoginActions";
 import Loading from '../Loading';
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
 import { updateOrder } from 'app/redux/actions/OrderActions';
+import ReturnServeur from "../components/ReturnServeur";
 
 const styles = theme => ({
     wrapper: {
@@ -71,11 +73,11 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
         padding: '6px 16px',
-        
-      },
-      secondaryTail: {
+
+    },
+    secondaryTail: {
         backgroundColor: theme.palette.secondary.main,
-      },
+    },
 
 }));
 var step1 = [];
@@ -87,7 +89,7 @@ var step6 = [];
 
 const DetailOrder = (props) => {
     //console.log(props.location.state.order.id);
-    var moment = require('moment'); 
+    var moment = require('moment');
     const classes = useStyles();
     const [expanded, setExpanded] = useState("panel1");
     const [variant, setVariant] = useState('error');
@@ -99,32 +101,32 @@ const DetailOrder = (props) => {
 
     //const [prevStatus, setPrevStatus] = useState(null)
     //const [firstIndexStatut, setFirstIndexStatut] = useState(true)
-//console.log(user);
+    //console.log(user);
 
-  const updateSidebarMode = () => {
-    let { settings, setLayoutSettings } = props;
+    const updateSidebarMode = () => {
+        let { settings, setLayoutSettings } = props;
 
-    setLayoutSettings({
-      ...settings,
-      layout1Settings: {
-        topbar: {
-          show: true
-        },
-        leftSidebar: {
-          show: false,
-          mode: "close"
-        }
-      },
-      layout2Settings: {
-        mode: "full",
-        topbar: {
-          show: false
-        },
-        navbar: { show: false }
-      },
-    });
-  };
-    if(!user.id){
+        setLayoutSettings({
+            ...settings,
+            layout1Settings: {
+                topbar: {
+                    show: true
+                },
+                leftSidebar: {
+                    show: false,
+                    mode: "close"
+                }
+            },
+            layout2Settings: {
+                mode: "full",
+                topbar: {
+                    show: false
+                },
+                navbar: { show: false }
+            },
+        });
+    };
+    if (!user.id) {
         //updateSidebarMode()
     }
     const handleChangePanel = panel => (event, isExpanded) => {
@@ -132,7 +134,7 @@ const DetailOrder = (props) => {
     };
     const [update_order, { data: dataOrder1, loading: loadingUpdate_order, error: errorOrder1 }] = useMutation(UPDATE_ORDER)
 
-    const submitMarkPaid=()=>{
+    const submitMarkPaid = () => {
         //alert("submitMarkPaid")
         setShow(false);
         update_order({
@@ -150,11 +152,11 @@ const DetailOrder = (props) => {
                 r_country: order.r_country,
                 shipMethod: order.shipMethod,
                 typeService: order.typeService,
-                paid:true,
-                who_add_paidId:user.id,
-                who_add_paid:user.names,
-                sender_phone:order.sender_phone,
-                sender_name:order.sender_name
+                paid: true,
+                who_add_paidId: user.id,
+                who_add_paid: user.names,
+                sender_phone: order.sender_phone,
+                sender_name: order.sender_name
             }
         })
             .then(res => {
@@ -164,38 +166,42 @@ const DetailOrder = (props) => {
                         'user.names' : user.names,
                         paid: true
                     }) */
-                    
+
                     props.loading()
                     refetch()
-                    .then(data => {
-                        //console.log("success");
-                        
-                        if (data.data.order_detail.length>0) {
-                            setOrder(data.data.order_detail[0]);
+                        .then(data => {
+                            //console.log("success");
+
+                            if (data.data.order_detail.length > 0) {
+                                setOrder(data.data.order_detail[0]);
+                                props.success()
+                            } else {
+                                setOrder(null);
+                            }
+                        })
+                        .catch(error => {
+
+                            setVariant("error");
+                            let msg = checkError(error)
+                            setInfo(<ReturnServeur info={msg} />);
+                            setOpenModal(false);
+                            setShow(true);
                             props.success()
-                        }else{
-                            setOrder(null);
-                        }
-                    })
-                    .catch(error => {
-                        
-                        setVariant("error");
-                        let msg = checkError(error)
-                        setInfo(manageMsg(msg));
-                        setOpenModal(false);
-                        setShow(true);
-                        props.success()
-                    }) 
+                        })
                     //props.updateOrder([res.data.update_order])
-                    
-                    setInfo(manageMsg("MARK_AS_PAID"));
+
+                    setInfo(
+                        <FormattedMessage
+                            id="info.MARK_AS_PAID"
+                            defaultMessage="Mark as PAID"
+                        />);
                     setVariant('success');
 
                     //history.goBack();
                 } else {
                     setVariant("error");
                     let msg = checkError(error)
-                    setInfo(manageMsg(msg));
+                    setInfo(<ReturnServeur info={msg} />);
                     setShow(true);
                 }
                 setOpenModal(false);
@@ -206,14 +212,14 @@ const DetailOrder = (props) => {
                 console.log(error);
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setOpenModal(false);
                 setShow(true);
                 //props.success();
             })
     }
     //console.log(props.location.state[0].order.id);
-    const {refetch,loading, error, data } = useQuery(ORDER_DETAIL, {
+    const { refetch, loading, error, data } = useQuery(ORDER_DETAIL, {
         errorPolicy: 'all',
         variables: {
             id: props.location.state[0].order.id,
@@ -223,7 +229,7 @@ const DetailOrder = (props) => {
         },
         onCompleted: (data) => {
             console.log(data);
-            if (data.order_detail.length>0) {
+            if (data.order_detail.length > 0) {
                 setOrder(data.order_detail[0]);
                 step1 = [];
                 step2 = [];
@@ -231,20 +237,20 @@ const DetailOrder = (props) => {
                 step4 = [];
                 step5 = [];
                 step6 = [];
-            data.order_detail[0].detailStatuts.map((detail) =>{
-                findStep(detail)
-            })
-            }else{
+                data.order_detail[0].detailStatuts.map((detail) => {
+                    findStep(detail)
+                })
+            } else {
                 setOrder(null);
             }
-            
+
         },
         onError: () => {
             setVariant("error");
-                let msg = checkError(error)
-                setInfo(manageMsg(msg));
-                setShow(true);
-                props.success();
+            let msg = checkError(error)
+            setInfo(<ReturnServeur info={msg} />);
+            setShow(true);
+            props.success();
         }
     });
 
@@ -322,73 +328,95 @@ const DetailOrder = (props) => {
                 break;
         }
     }
-    const Tracking = (order) =>{
-        
-        if (order.length >0) {
+    const Tracking = (order) => {
+
+        if (order.length > 0) {
             //console.log(order[0].status.color);
-            const result=(<TimelineItem>
+            const result = (<TimelineItem>
                 <TimelineSeparator>
-                    <TimelineDot className={order[0].status.color}> 
-                    <BeenhereIcon />
+                    <TimelineDot className={order[0].status.color}>
+                        <BeenhereIcon />
                     </TimelineDot>
                     <TimelineConnector className={order[0].status.color} />
                 </TimelineSeparator>
                 <TimelineContent>
-                  <Paper elevation={3} className={classes.paper}>
-                    <Typography variant="h6" component="h1" className="capitalize">
-                      {order[0].status.name}
-                    </Typography>
-                   {
-                        order.map((detail) => (<div key={detail.id}>
+                    <Paper elevation={3} className={classes.paper}>
+                        <Typography variant="h6" component="h1" className="capitalize">
+                            <ReturnServeur info={order[0].status.name} />
+                        </Typography>
+                        {
+                            order.map((detail) => (<div key={detail.id}>
                                 <Typography variant="body2" color="textSecondary">
-                    {
-                        moment(Number(detail.createdAt)).format("YYYY-MM-DD HH:mm")
-                    }
-                  </Typography>
-                    <Typography key={detail.id}>{detail.description}</Typography> 
-                            </div> 
+                                    {
+                                        //moment(Number(detail.createdAt)).format("YYYY-MM-DD HH:mm")
+                                        <FormattedDate
+                                            value={Number(detail.createdAt)}
+                                            hour="numeric"
+                                            minute="numeric"
+                                            year="numeric"
+                                            month="numeric"
+                                            day="numeric"
+                                        //weekday="long"
+                                        />
+                                    }
+                                </Typography>
+                                <Typography key={detail.id}>{detail.description}</Typography>
+                            </div>
                             ))
-                   }
-                    
-                    
-                  </Paper>
-                  
+                        }
+
+
+                    </Paper>
+
                 </TimelineContent>
-              </TimelineItem>)    
-          return result;
+            </TimelineItem>)
+            return result;
         }
-        
+
     }
     //console.log(["OWNER","ADMIN_MEMBER"].includes(user.role));
     return (
-        
+
         <div className="m-sm-30">
             <ShowInfo
                 show={show}
                 info={info}
                 variant={variant} />
-                <Confirmation open={openModal}
+            <Confirmation open={openModal}
                 handleClose={handleClose}
                 loading={loadingUpdate_order}
                 funcAction={submitMarkPaid}
-                title={manageMsg('MARK_PAID')}
-                //message={manageMsg('MARK_PAID')}
-                 />
+                title={<FormattedMessage
+                    id="info.MARK_PAID"
+                    defaultMessage="You are going to mark this package as PAID"
+                />}
+            //message={manageMsg('MARK_PAID')}
+            />
             <Loading open={loading} />
             <div className="mb-sm-30">
                 {
-                    user.id ? 
-                    <Breadcrumb
-                    routeSegments={[
-                        { name: "Package List", path: "/order/list_order" },
-                        { name: "Package Detail" }
-                    ]}
-                />
-                : ""
+                    user.id ?
+                        <Breadcrumb
+                            routeSegments={[
+                                {
+                                    name: <FormattedMessage
+                                        id="title.packageList"
+                                        defaultMessage="Package List"
+                                    />, path: "/order/list_order"
+                                },
+                                {
+                                    name: <FormattedMessage
+                                        id="title.packageDetail"
+                                        defaultMessage="Package Detail"
+                                    />
+                                }
+                            ]}
+                        />
+                        : ""
                 }
-                
+
                 {
-                    (order !== null && loading=== false)  ? (
+                    (order !== null && loading === false) ? (
                         <Card>
                             <div className="p-9 h-full" >
                                 <div className={classes.root}>
@@ -402,31 +430,57 @@ const DetailOrder = (props) => {
                                             aria-controls="panel1bh-content"
                                             id="panel1bh-header"
                                         >
-                                            <Typography className={classes.heading}>Package information</Typography>
+                                            <Typography className={classes.heading}>
+                                                <FormattedMessage
+                                                    id="title.packageInformation"
+                                                    defaultMessage="Package information"
+                                                />
+                                            </Typography>
                                             <Typography variant="h6" className="font-bold">
                                                 {order.code}
                                             </Typography>
                                             <Typography className="font-bold pl-10">
-                                                <small className={`border-radius-4 ${order.paid === true ? 'bg-green': 'bg-secondary'} text-black px-2 py-2px`}
-                                                onClick={()=>{
-                                                    (user.role !== "GUEST" && !order.paid) && setOpenModal(true)
-                                                }} >
-                                                {order.paid === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
+                                                <small className={`border-radius-4 ${order.paid === true ? 'bg-green' : 'bg-secondary'} text-black px-2 py-2px`}
+                                                    onClick={() => {
+                                                        (user.role !== "GUEST" && !order.paid) && setOpenModal(true)
+                                                    }} >
+                                                    {order.paid === true ?
+                                                        <FormattedMessage
+                                                            id="info.PAID"
+                                                            defaultMessage="PAID"
+                                                        /> :
+                                                        <FormattedMessage
+                                                            id="info.NOT_PAID"
+                                                            defaultMessage="NOT PAID"
+                                                        />}
                                                 </small>
                                             </Typography>
-                                                {order.paid && ["OWNER","ADMIN_MEMBER"].includes(user.role)  ? (
-                                            <Typography gutterBottom variant="text-32" className="capitalize font-light pl-2">
-                                                Confirmed by: {order.who_add_paid}
-                                            </Typography>) : ""}
+                                            {order.paid && ["OWNER", "ADMIN_MEMBER"].includes(user.role) ? (
+                                                <Typography gutterBottom variant="text-32" className="capitalize font-light pl-2">
+                                                    <FormattedMessage
+                                                        id="title.confirmedBy"
+                                                        defaultMessage="Confirmed by: "
+                                                        values={{
+                                                            code: order.who_add_paid
+                                                        }}
+                                                    />
+
+                                                </Typography>) : ""}
 
                                             {
                                                 user.role !== "GUEST" && (
                                                     <Typography className="capitalize font-light pl-10">
-                                                        Created by: {order.user.names}
+                                                        <FormattedMessage
+                                                            id="title.createdBy"
+                                                            defaultMessage="Created by: "
+                                                            values={{
+                                                                name: order.user.names
+                                                            }}
+                                                        />
                                                     </Typography>
                                                 )
                                             }
-                                                
+
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <List className={classes.root}>
@@ -437,28 +491,43 @@ const DetailOrder = (props) => {
                                                         display="block"
                                                         variant="caption"
                                                     >
-                                                        Receiver
-                                            </Typography>
+                                                        <FormattedMessage
+                                                            id="title.receiver"
+                                                            defaultMessage="Receiver"
+                                                        />
+                                                    </Typography>
                                                 </li>
                                                 <ListItem>
-                                                    <Grid container  alignItems="center">
+                                                    <Grid container alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                Name : {order.r_name}
+                                                                <FormattedMessage
+                                                                    id="title.name"
+                                                                    defaultMessage="Name "
+                                                                /> : {order.r_name}
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                Number : {order.r_phone}
+                                                                <FormattedMessage
+                                                                    id="title.number"
+                                                                    defaultMessage="Number"
+                                                                /> : {order.r_phone}
                                                             </Typography>
-                                                            
+
                                                         </Grid>
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="capitalize">
-                                                                Country : {order.r_country}
+                                                                <FormattedMessage
+                                                                    id="title.country"
+                                                                    defaultMessage="Country"
+                                                                /> : {order.r_country}
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="capitalize">
-                                                                City : {order.r_city}
+                                                                <FormattedMessage
+                                                                    id="title.city"
+                                                                    defaultMessage="City"
+                                                                /> : {order.r_city}
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
@@ -471,44 +540,59 @@ const DetailOrder = (props) => {
                                                         display="block"
                                                         variant="caption"
                                                     >
-                                                        Package
-        </Typography>
+                                                        <FormattedMessage
+                                                            id="title.package"
+                                                            defaultMessage="Package"
+                                                        />
+                                                    </Typography>
                                                 </li>
                                                 <ListItem>
-                                                    <Grid container  alignItems="center">
+                                                    <Grid container alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
-                                                                From : {order.name_agence_sender} / {order.numKuadi}
+                                                                <FormattedMessage
+                                                                    id="title.from"
+                                                                    defaultMessage="From"
+                                                                /> : {order.name_agence_sender} / {order.numKuadi}
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="capitalize font-semibold">
-                                                                Content : {order.content}
+                                                                <FormattedMessage
+                                                                    id="title.content"
+                                                                    defaultMessage="Content"
+                                                                /> : {order.content}
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="font-semibold uppercase">
-                                                                Weight : {order.weight}
+                                                                <FormattedMessage
+                                                                    id="title.weight"
+                                                                    defaultMessage="Weight"
+                                                                /> : {order.weight}
                                                             </Typography>
-                                                            
+
 
                                                         </Grid>
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                        <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
-                                                                Price : {order.price ? order.price : "?"}
+                                                            <Typography gutterBottom variant="text-32" className="uppercase font-semibold">
+                                                                <FormattedMessage
+                                                                    id="title.price"
+                                                                    defaultMessage="Price"
+                                                                /> : {order.price ? order.price : "?"}
                                                             </Typography>
                                                             <br />
-                                                        
-                                                            
+
+
                                                             {
                                                                 order.current_statut === "SIGNED" && (
-                                                                        <div >
-                                                                            <Chip size="medium"
-                                                                        className="bg-green"
-                                                                        label="Signed" />
+                                                                    <div >
+                                                                        <Chip size="medium"
+                                                                            className="bg-green"
+                                                                            label="Signed" />
                                                                         <small className="capitalize font-light pl-2">
-                                                                        {`Via ${order.who_confirmed_signed}`}
+                                                                            {`Via ${order.who_confirmed_signed}`}
                                                                         </small>
-                                                                        </div>
-                                                                            
+                                                                    </div>
+
                                                                 )
                                                             }
 
@@ -524,31 +608,56 @@ const DetailOrder = (props) => {
                                                         display="block"
                                                         variant="caption"
                                                     >
-                                                        Concerns
-        </Typography>
+                                                        <FormattedMessage
+                                                            id="title.concerns"
+                                                            defaultMessage="Concerns"
+                                                        />
+                                                    </Typography>
                                                 </li>
                                                 <ListItem>
 
-                                                    <Grid container  alignItems="center">
+                                                    <Grid container alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                        {props.user.role ? (<Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                Customer : {order.sender_name }
+                                                            {props.user.role ? (<Typography gutterBottom variant="text-32" className="font-bold capitalize">
+                                                                <FormattedMessage
+                                                                    id="title.customerName"
+                                                                    defaultMessage="Concerns"
+                                                                    values={{
+                                                                        name: order.sender_name
+                                                                    }}
+                                                                />
                                                             </Typography>) : ""}
-                                                            
-                                                            
+
+
                                                             <br />
                                                             {props.user.role ? (<Typography gutterBottom variant="text-32" className="capitalize">
-                                                                Customer's number : {order.sender_phone}
+                                                                <FormattedMessage
+                                                                    id="title.customerNumber"
+                                                                    defaultMessage="Customer's number"
+                                                                    values={{
+                                                                        number: order.sender_phone
+                                                                    }}
+                                                                />
                                                             </Typography>) : ""}
-                                                            
+
                                                         </Grid>
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                Company : {order.company.name}
+                                                                <FormattedMessage
+                                                                    id="title.companyName"
+                                                                    defaultMessage="Company "
+                                                                    values={{
+                                                                        name: order.company.name
+                                                                    }}
+                                                                />
                                                             </Typography>
                                                             <br />
                                                             <Typography gutterBottom variant="text-32" className="capitalize">
-                                                                Company's number : {order.company.phone1}{order.company.phone2 && (" / " + order.company.phone2)}
+                                                                <FormattedMessage
+                                                                    id="title.companyNumber"
+                                                                    defaultMessage="Company's number "
+
+                                                                />{order.company.phone1}{order.company.phone2 && (" / " + order.company.phone2)}
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
@@ -565,14 +674,20 @@ const DetailOrder = (props) => {
                                             aria-controls="panel1bh-content"
                                             id="panel1bh-header"
                                         >
-                                            <Typography className={classes.heading}>Tracking</Typography>
+                                            <Typography className={classes.heading}><FormattedMessage
+                                                id="title.tracking"
+                                                defaultMessage="Tracking"
+                                            /></Typography>
                                             <Typography className={classes.secondaryHeading}>
-                                            Tracking information
+                                                <FormattedMessage
+                                                    id="title.trackingInfo"
+                                                    defaultMessage="Tracking information"
+                                                />
                                             </Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                        <Timeline align="alternate">
-                                        {/* <TimelineItem>
+                                            <Timeline align="alternate">
+                                                {/* <TimelineItem>
 
 <TimelineOppositeContent>
     
@@ -606,53 +721,68 @@ const DetailOrder = (props) => {
     
   </TimelineContent>
 </TimelineItem> */}
-{Tracking(step6)}
-{Tracking(step5)}
-{Tracking(step4)}
-{Tracking(step3)}
-{Tracking(step2)}
-    
-      {
-          step1.length > 0 && (
-              <TimelineItem>
-      <TimelineOppositeContent>
-          
-        </TimelineOppositeContent>
-        <TimelineSeparator>
-          <TimelineDot >
-            <BeenhereIcon />
-          </TimelineDot>
-        </TimelineSeparator>
-        <TimelineContent>
-          <Paper elevation={3} className={classes.paper}>
-            <Typography variant="h6" component="h1" className="capitalize">
-            {step1[0].status.name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-          {moment(Number(step1[0].createdAt)).format("YYYY-MM-DD HH:mm")}
-          </Typography>
-          </Paper>
-        </TimelineContent>
-      </TimelineItem>
-          )
-      }
-      
-      </Timeline>
-                                </AccordionDetails>
+                                                {Tracking(step6)}
+                                                {Tracking(step5)}
+                                                {Tracking(step4)}
+                                                {Tracking(step3)}
+                                                {Tracking(step2)}
+
+                                                {
+                                                    step1.length > 0 && (
+                                                        <TimelineItem>
+                                                            <TimelineOppositeContent>
+
+                                                            </TimelineOppositeContent>
+                                                            <TimelineSeparator>
+                                                                <TimelineDot >
+                                                                    <BeenhereIcon />
+                                                                </TimelineDot>
+                                                            </TimelineSeparator>
+                                                            <TimelineContent>
+                                                                <Paper elevation={3} className={classes.paper}>
+                                                                    <Typography variant="h6" component="h1" className="capitalize">
+                                                                        <ReturnServeur info={step1[0].status.name} />
+                                                                    </Typography>
+                                                                    <Typography variant="body2" color="textSecondary">
+                                                                        <FormattedDate
+                                                                            value={Number(step1[0].createdAt)}
+                                                                            hour="numeric"
+                                                                            minute="numeric"
+                                                                            year="numeric"
+                                                                            month="numeric"
+                                                                            day="numeric"
+                                                                        //weekday="long"
+                                                                        />
+                                                                        {
+                                                                            //moment(Number(step1[0].createdAt)).format("YYYY-MM-DD HH:mm")
+                                                                        }
+                                                                    </Typography>
+                                                                </Paper>
+                                                            </TimelineContent>
+                                                        </TimelineItem>
+                                                    )
+                                                }
+
+                                            </Timeline>
+                                        </AccordionDetails>
                                     </Accordion>
-                                
+
                                 </div>
                             </div>
                         </Card>
-                    ):(
-                        <Card>
-                            <div className="p-9 h-full" >
-                                <div className={classes.root}>
-                                This Package does'nt exist
+                    ) : (
+                            <Card>
+                                <div className="p-9 h-full" >
+                                    <div className={classes.root}>
+                                        <FormattedMessage
+                                            id="info.packageNotExist"
+                                            defaultMessage="This Package does'nt exist"
+                                        />
+
+                                    </div>
                                 </div>
-                            </div>
-                        </Card>
-                    )
+                            </Card>
+                        )
                 }
             </div>
         </div>
@@ -664,11 +794,11 @@ const mapStateToProps = state => ({
     loading: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
     user: state.user,
-    setLayoutSettings : PropTypes.func.isRequired,
+    setLayoutSettings: PropTypes.func.isRequired,
     updateOrder: PropTypes.func.isRequired
 });
 
 export default withStyles(styles, { withTheme: true })(
-    withRouter(connect(mapStateToProps, { setLayoutSettings,success,updateOrder, loading })(DetailOrder))
+    withRouter(connect(mapStateToProps, { setLayoutSettings, success, updateOrder, loading })(DetailOrder))
 )
 

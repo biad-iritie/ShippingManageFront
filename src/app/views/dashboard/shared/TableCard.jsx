@@ -10,7 +10,8 @@ import {
   TableBody
 } from "@material-ui/core";
 import history from "history.js";
-
+import { FormattedMessage } from 'react-intl';
+import ReturnServeur from '../../components/ReturnServeur';
 const TableCard = (props) => {
   /* const productList = [
     {
@@ -44,10 +45,17 @@ const TableCard = (props) => {
       available: 5
     }
   ]; */
+
   //console.log(props.orders);
   return (
     <Card elevation={3} className="pt-5 mb-6">
-      <div className="card-title px-6 mb-3">Last 15 packages</div>
+      <div className="card-title px-6 mb-3">
+        <FormattedMessage
+          id="title.last15Packages"
+          defaultMessage="Last 15 packages"
+        />
+
+      </div>
       <div className="overflow-auto">
         <Table className="product-table">
           <TableHead>
@@ -56,16 +64,25 @@ const TableCard = (props) => {
                 Code
               </TableCell>
               <TableCell className="px-10 capitalize" colSpan={4}>
-                City
+                <FormattedMessage
+                  id="title.city"
+                  defaultMessage="City"
+                />
               </TableCell>
               <TableCell className="px-10 capitalize" colSpan={4}>
-                Content
+                <FormattedMessage
+                  id="title.content"
+                  defaultMessage="Content"
+                />
               </TableCell>
               <TableCell className="px-10 capitalize" colSpan={4}>
                 Status
               </TableCell>
               <TableCell className="px-10 capitalize" colSpan={4}>
-                Price
+                <FormattedMessage
+                  id="title.price"
+                  defaultMessage="Price"
+                />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -101,7 +118,8 @@ const TableCard = (props) => {
                           order.current_statut === "IN TRANSIT" ? "bg-light-primary" :
                             order.current_statut === "ARRIVED" ? "bg-secondary" :
                               order.current_statut === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
-                        {order.current_statut}
+
+                        <ReturnServeur info={order.current_statut} />
                       </small>
                       {/* {order.current_statut === "STAND BY" ? (
                         <small className="border-radius-4 bg-gray text-black px-2 py-2px ">
@@ -154,7 +172,10 @@ const TableCard = (props) => {
                 ))
               ) : (
                   <small className="border-radius-4 px-2 py-2px ">
-                    No package yet !
+                    <FormattedMessage
+                      id="title.noPackageYet"
+                      defaultMessage="No package yet !"
+                    />
                   </small>
                 )
 

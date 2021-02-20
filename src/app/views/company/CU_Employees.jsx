@@ -9,6 +9,7 @@ import {
     CircularProgress,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { FormattedMessage } from 'react-intl';
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -22,8 +23,9 @@ import { connect } from "react-redux";
 import { useMutation, useQuery } from '@apollo/client';
 import { ADD_EMPLOYEE, GET_PUBLIC_KEY } from '../../../graphql/User';
 import { addEmployee, } from '../../redux/actions/EmployeesActions'
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
 import { encryptData } from '../../../utils';
+import ReturnServeur from "../components/ReturnServeur";
 const useStyles = makeStyles(theme => ({
     root: {
         width: "100%"
@@ -102,7 +104,7 @@ const CU_Employees = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
         }
@@ -128,7 +130,13 @@ const CU_Employees = (props) => {
                 .then(res => {
                     //if (res.data.add_employee.id) {
 
-                    setInfo(manageMsg("EMPLOYEE_CREATED"));
+                    setInfo(
+                        <FormattedMessage
+                            id="result.EMPLOYEE_CREATED"
+                            defaultMessage="New member created"
+                        />
+
+                    );
                     setNames("")
                     setPhone("")
                     setEmail("")
@@ -158,7 +166,7 @@ const CU_Employees = (props) => {
                 .catch(error => {
                     setVariant("error");
                     let msg = checkError(error)
-                    setInfo(manageMsg(msg));
+                    setInfo(<ReturnServeur info={msg} />);
                     setShow(true);
                     props.success();
                 });
@@ -240,8 +248,19 @@ const CU_Employees = (props) => {
             <div className="mb-sm-30">
                 <Breadcrumb
                     routeSegments={[
-                        { name: "Team", path: "/company/team" },
-                        { name: "Add or Edit Member" }
+                        {
+                            name:
+                                <FormattedMessage
+                                    id="title.team"
+                                    defaultMessage="Team"
+                                />, path: "/company/team"
+                        },
+                        {
+                            name: <FormattedMessage
+                                id="title.addEditMembre"
+                                defaultMessage="Add or Edit Member"
+                            />
+                        }
                     ]}
                 />
             </div>
@@ -254,25 +273,47 @@ const CU_Employees = (props) => {
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Full name"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.names.label"
+                                                defaultMessage="Full name *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="names"
                                         value={names}
                                         validators={["required"]}
-                                        errorMessages={["this field is required"]}
+                                        errorMessages={[<FormattedMessage
+                                            id="input.required"
+                                            defaultMessage="This field is required"
+                                        />]}
                                     />
 
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Phone number"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.phone.label"
+                                                defaultMessage="Phone with code eg: +86......... *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="phone"
                                         value={phone}
                                         validators={["required"]}
-                                        errorMessages={["this field is required"]}
+                                        errorMessages={[
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.phone.notValid"
+                                                defaultMessage="The number is not valid"
+                                            />
+                                        ]}
                                     />
                                     <FormControl component="fieldset" className={classes.formControl}>
                                         <FormLabel component="legend">Role</FormLabel>
@@ -284,8 +325,21 @@ const CU_Employees = (props) => {
                                             value={role}
                                             onChange={handleChange}
                                         >
-                                            <FormControlLabel value="STAFF_MEMBER" control={<Radio />} label="Staff (Simple Agent)" />
-                                            <FormControlLabel value="ADMIN_MEMBER" control={<Radio />} label="Admin" />
+                                            <FormControlLabel value="STAFF_MEMBER" control={<Radio />} label={
+                                                <FormattedMessage
+                                                    id="formControl.label.staff"
+                                                    defaultMessage="Staff"
+                                                    values={{
+                                                        SP: "(Agent)"
+                                                    }}
+                                                />
+                                            } />
+                                            <FormControlLabel value="ADMIN_MEMBER" control={<Radio />} label={
+                                                <FormattedMessage
+                                                    id="formControl.label.admin"
+                                                    defaultMessage="Admin"
+                                                />
+                                            } />
 
                                         </RadioGroup>
                                     </FormControl>
@@ -295,16 +349,26 @@ const CU_Employees = (props) => {
 
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Email"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.email.label"
+                                                defaultMessage="Email *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="email"
                                         name="email"
                                         value={email}
                                         validators={["required", "isEmail"]}
                                         errorMessages={[
-                                            "this field is required",
-                                            "email is not valid"
-                                        ]}
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.email.notValid"
+                                                defaultMessage="Email is not valid"
+                                            />]}
                                     />
                                     {
                                         props.history.location.state[0].action === "add" ?
@@ -312,14 +376,22 @@ const CU_Employees = (props) => {
 
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Password"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.password.label"
+                                                        defaultMessage="Password"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="password"
                                                 name="password"
                                                 value={password}
                                                 validators={["required"]}
                                                 errorMessages={[
-                                                    "this field is required",
+                                                    <FormattedMessage
+                                                        id="input.required"
+                                                        defaultMessage="This field is required"
+                                                    />
                                                 ]}
                                             />
                                             : ""
@@ -367,7 +439,15 @@ const CU_Employees = (props) => {
                                     <Icon>send</Icon>
                                     <span className="pl-2 capitalize">
                                         {
-                                            props.history.location.state[0].action === "add" ? "Submit" : "Update"
+                                            props.history.location.state[0].action === "add" ?
+                                                <FormattedMessage
+                                                    id="button.submit"
+                                                    defaultMessage="Submit"
+                                                /> :
+                                                <FormattedMessage
+                                                    id="button.update"
+                                                    defaultMessage="Update"
+                                                />
                                         }
                                     </span>
                                     {props.login.loading && (

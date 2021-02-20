@@ -21,7 +21,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { SIGN_UP, GET_PUBLIC_KEY } from '../../../graphql/User';
 import { encryptData } from '../../../utils';
 import { manageMsg, checkError } from "../../../utils";
-
+import ReturnServeur from "../components/ReturnServeur";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -115,7 +115,7 @@ const CompSignUp = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
         }
@@ -153,30 +153,7 @@ const CompSignUp = (props) => {
             .catch((error) => {
                 setVariant("error");
                 let msg = checkError(error)
-                switch (msg) {
-                    case "USER_EXIST":
-                    case "Error: USER_EXIST":
-                        setInfo(<FormattedMessage
-                            id="error.userExist"
-                            defaultMessage="Sorry, a user use already this email"
-                        />)
-                        break;
-
-                    case "COMPANY_EXIST":
-                        setInfo(<FormattedMessage
-                            id="error.companyExist"
-                            defaultMessage="A company exist already with this informations"
-                        />)
-                        break;
-
-                    default:
-                        setInfo(<FormattedMessage
-                            id="error.default"
-                            defaultMessage="Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding"
-                        />)
-                        break;
-                }
-                //setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })
@@ -237,7 +214,7 @@ const CompSignUp = (props) => {
                                             </Typography>
                                             <Typography className={classes.secondaryHeading}>
                                                 <FormattedMessage
-                                                    id="title.Putinformation"
+                                                    id="title.putInformation"
                                                     defaultMessage="Put informations about you"
                                                 />
                                             </Typography>
@@ -419,9 +396,17 @@ const CompSignUp = (props) => {
                                             aria-controls="panel2bh-content"
                                             id="panel2bh-header"
                                         >
-                                            <Typography className={classes.heading}>Your company</Typography>
+                                            <Typography className={classes.heading}>
+                                                <FormattedMessage
+                                                    id="title.yourCompany"
+                                                    defaultMessage="Your company"
+                                                />
+                                            </Typography>
                                             <Typography className={classes.secondaryHeading}>
-                                                Put informations about your company
+                                                <FormattedMessage
+                                                    id="title.putInformationCompany"
+                                                    defaultMessage="Put informations about your company"
+                                                />
                                             </Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
@@ -431,39 +416,67 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Name *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.name"
+                                                                    defaultMessage="Name *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="name_company"
                                                             value={name_company}
                                                             validators={["required"]}
-                                                            errorMessages={["this field is required"]}
+                                                            errorMessages={[
+                                                                <FormattedMessage
+                                                                    id="input.required"
+                                                                    defaultMessage="This field is required"
+                                                                />
+                                                            ]}
                                                         />
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Phone with code eg: +86......... *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.phone.label"
+                                                                    defaultMessage="Phone with code eg: +86......... *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="phone_company1"
                                                             value={phone_company1}
                                                             validators={["required", 'matchRegexp:[^+][0-9]$']}
                                                             errorMessages={[
-                                                                "this field is required",
-                                                                "The number is not valid"
-                                                            ]}
+                                                                <FormattedMessage
+                                                                    id="input.required"
+                                                                    defaultMessage="This field is required"
+                                                                />,
+                                                                <FormattedMessage
+                                                                    id="input.phone.notValid"
+                                                                    defaultMessage="The number is not valid"
+                                                                />]}
                                                         />
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Phone with code eg: +86......... "
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.phone.label2"
+                                                                    defaultMessage="Phone with code eg: +86........."
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="phone_company2"
                                                             value={phone_company2}
                                                             validators={['matchRegexp:[^+][0-9]$']}
                                                             errorMessages={[
-                                                                "The number is not valid"
+                                                                <FormattedMessage
+                                                                    id="input.phone.notValid"
+                                                                    defaultMessage="The number is not valid"
+                                                                />
                                                             ]}
                                                         />
                                                     </Grid>
@@ -471,28 +484,46 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Email *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.email.label"
+                                                                    defaultMessage="Email *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="email"
                                                             name="email_company"
                                                             value={email_company}
                                                             validators={["required", "isEmail"]}
                                                             errorMessages={[
-                                                                "this field is required",
-                                                                "email is not valid"
-                                                            ]}
+                                                                <FormattedMessage
+                                                                    id="input.required"
+                                                                    defaultMessage="This field is required"
+                                                                />,
+                                                                <FormattedMessage
+                                                                    id="input.email.notValid"
+                                                                    defaultMessage="Email is not valid"
+                                                                />]}
                                                         />
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Address *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.address"
+                                                                    defaultMessage="Address *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="address"
                                                             value={address}
                                                             validators={["required"]}
                                                             errorMessages={[
-                                                                "this field is required"
+                                                                <FormattedMessage
+                                                                    id="input.required"
+                                                                    defaultMessage="This field is required"
+                                                                />
                                                             ]}
                                                         />
                                                     </Grid>
@@ -505,7 +536,10 @@ const CompSignUp = (props) => {
                                                         type="submit"
                                                         disabled={props.login.loading}
                                                     >
-                                                        Sign Up
+                                                        <FormattedMessage
+                                                            id="button.signUp"
+                                                            defaultMessage="Sign Up"
+                                                        />
                                                         {props.login.loading && (
                                                             <CircularProgress
                                                                 size={24}
@@ -515,7 +549,12 @@ const CompSignUp = (props) => {
                                                         )}
                                                     </Button>
 
-                                                    <span className="mx-2 ml-5">or</span>
+                                                    <span className="mx-2 ml-5">
+                                                        <FormattedMessage
+                                                            id="or"
+                                                            defaultMessage="Or"
+                                                        />
+                                                    </span>
                                                     <Button
                                                         className="capitalize"
                                                         disabled={props.login.loading}
@@ -523,7 +562,10 @@ const CompSignUp = (props) => {
                                                             props.history.push("/session/signin")
                                                         }
                                                     >
-                                                        Sign in
+                                                        <FormattedMessage
+                                                            id="button.loginSimple"
+                                                            defaultMessage="Sign in"
+                                                        />
                                                     </Button>
                                                 </div>
                                             </ValidatorForm>

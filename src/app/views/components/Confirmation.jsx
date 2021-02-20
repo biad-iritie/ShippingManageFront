@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
+import { FormattedMessage } from 'react-intl';
 import {
     CircularProgress,
 } from "@material-ui/core";
@@ -45,8 +46,11 @@ export default function Confirmation(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.handleClose} color="primary" disabled={props.loading}>
-                        Disagree
-          </Button>
+                        <FormattedMessage
+                            id="button.disagree"
+                            defaultMessage="Disagree"
+                        />
+                    </Button>
                     <Button onClick={props.funcAction} color="primary" disabled={props.loading}>
 
                         {props.loading ? (
@@ -54,7 +58,10 @@ export default function Confirmation(props) {
                                 size={24}
                             //className={classes.buttonProgress}
                             />
-                        ) : "Agree"}
+                        ) : <FormattedMessage
+                                id="button.agree"
+                                defaultMessage="Agree"
+                            />}
 
 
                     </Button>

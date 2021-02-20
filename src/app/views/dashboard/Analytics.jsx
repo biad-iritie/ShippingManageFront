@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
-
+import ReturnServeur from "../components/ReturnServeur";
 //import DoughnutChart from "../charts/echarts/Doughnut";
 
 //import ModifiedAreaChart from "./shared/ModifiedAreaChart";
@@ -21,7 +21,7 @@ import { ORDER_LIST, COUNT_PACKAGE } from '../../../graphql/Order';
 //import { SUB_NEW_PACK } from '../../../graphql/Order';
 import { refetchOrder } from '../../redux/actions/OrderActions';
 //import { addCompany } from "../../redux/actions/CompanyAction";
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
 //import history from "history.js";
 
 const Dashboard1 = (props) => {
@@ -58,7 +58,7 @@ const Dashboard1 = (props) => {
     onError: () => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
     }
   });
@@ -76,7 +76,7 @@ const Dashboard1 = (props) => {
     onError: (error) => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
     }
   });
@@ -92,7 +92,7 @@ const Dashboard1 = (props) => {
     onError: (error) => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
 
     }
@@ -109,7 +109,7 @@ const Dashboard1 = (props) => {
     onError: () => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
 
     }
@@ -126,7 +126,7 @@ const Dashboard1 = (props) => {
     onError: (error) => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
     }
   });
@@ -142,7 +142,7 @@ const Dashboard1 = (props) => {
     onError: () => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
     }
   });
@@ -158,7 +158,7 @@ const Dashboard1 = (props) => {
     onError: () => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
     }
   });
@@ -187,7 +187,7 @@ const Dashboard1 = (props) => {
             } else {
               setVariant("error");
               let msg = checkError(res.errors)
-              setInfo(manageMsg(msg));
+              setInfo(<ReturnServeur info={msg} />);
               setShow(true);
               props.success();
             }
@@ -197,7 +197,7 @@ const Dashboard1 = (props) => {
             //console.log(error);
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check1()
@@ -210,7 +210,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check2()
@@ -223,7 +223,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check3()
@@ -236,7 +236,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check4()
@@ -249,7 +249,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check5()
@@ -262,7 +262,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
         check6()
@@ -275,7 +275,7 @@ const Dashboard1 = (props) => {
           .catch(error => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
           })
       })();

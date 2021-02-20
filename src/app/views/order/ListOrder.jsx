@@ -18,7 +18,9 @@ import { loading, success } from "../../redux/actions/LoginActions";
 import { useMutation, useQuery } from '@apollo/client';
 import { ORDER_LIST, DELETE_ORDER, ADD_POSITION, ADD_PRICE } from '../../../graphql/Order';
 import { refetchOrder, updateOrder, deleteOrder } from '../../redux/actions/OrderActions';
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
+import { FormattedMessage } from 'react-intl';
+import ReturnServeur from "../components/ReturnServeur";
 
 const ListOrder = (props) => {
     const [variant, setVariant] = useState('error')
@@ -53,7 +55,7 @@ const ListOrder = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -75,7 +77,11 @@ const ListOrder = (props) => {
             if (data.add_position) {
                 props.updateOrder(data.add_position)
                 setVariant("success");
-                setInfo(manageMsg("POSITION_ADDED"));
+                setInfo(
+                    <FormattedMessage
+                        id="result.POSITION_ADDED"
+                        defaultMessage="Position updated"
+                    />);
                 setShow(true);
 
             }
@@ -88,7 +94,7 @@ const ListOrder = (props) => {
 
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -136,7 +142,11 @@ const ListOrder = (props) => {
                             );
                         //setInfo(error);
                     }) */
-                setInfo(manageMsg("PRICE_ADDED"));
+                setInfo(
+                    <FormattedMessage
+                        id="result.PRICE_ADDED"
+                        defaultMessage="Price added"
+                    />);
                 setShow(true);
             }
         },
@@ -146,7 +156,7 @@ const ListOrder = (props) => {
             setOpenModalInput(false)
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -202,7 +212,10 @@ const ListOrder = (props) => {
         },
         {
             name: "paid",
-            label: "Paid",
+            label: <FormattedMessage
+                id="title.paid"
+                defaultMessage="PAID"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -215,7 +228,13 @@ const ListOrder = (props) => {
 
                         }}>
                             <small className={`border-radius-4 ${value === true ? 'bg-green' : 'bg-secondary'} text-black px-2 py-2px`} >
-                                {value === true ? manageMsg('PAID') : manageMsg('NOT_PAID')}
+                                {value === true ? <FormattedMessage
+                                    id="info.PAID"
+                                    defaultMessage='PAID'
+                                /> : <FormattedMessage
+                                        id="info.NOT_PAID"
+                                        defaultMessage='NOT_PAID'
+                                    />}
                             </small>
                         </div>
                     )
@@ -224,7 +243,10 @@ const ListOrder = (props) => {
         },
         {
             name: "r_city",
-            label: "City",
+            label: <FormattedMessage
+                id="title.city"
+                defaultMessage="City"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -242,7 +264,10 @@ const ListOrder = (props) => {
         },
         {
             name: "r_phone",
-            label: "Phone",
+            label: <FormattedMessage
+                id="title.phone"
+                defaultMessage="Phone"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -254,7 +279,6 @@ const ListOrder = (props) => {
                     return (
                         <div style={{ whiteSpace: 'normal' }} onClick={() => {
                             goToSeeDetails(tableMeta.rowData[0])
-
                         }}>
                             {value}
                         </div >
@@ -264,7 +288,10 @@ const ListOrder = (props) => {
         },
         {
             name: "r_name",
-            label: "Receiver",
+            label: <FormattedMessage
+                id="title.receiver"
+                defaultMessage="Receiver"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -274,7 +301,6 @@ const ListOrder = (props) => {
                         <div style={{ whiteSpace: 'normal' }}
                             onClick={() => {
                                 goToSeeDetails(tableMeta.rowData[0])
-
                             }}>
                             {value}
                         </div >
@@ -284,7 +310,10 @@ const ListOrder = (props) => {
         },
         {
             name: "content",
-            label: "Content",
+            label: <FormattedMessage
+                id="title.content"
+                defaultMessage="Content"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -296,7 +325,10 @@ const ListOrder = (props) => {
         },
         {
             name: "price",
-            label: "Price",
+            label: <FormattedMessage
+                id="title.price"
+                defaultMessage="Price"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -317,7 +349,11 @@ const ListOrder = (props) => {
                                 }  */else {
 
                                     setVariant("warning");
-                                    setInfo(manageMsg("NOT_ALLOW"));
+                                    setInfo(
+                                        <FormattedMessage
+                                            id="error.NOT_ALLOW"
+                                            defaultMessage="Sorry you can't apply this request"
+                                        />);
                                     setShow(true);
                                     //alert("ok")
                                 }
@@ -335,7 +371,10 @@ const ListOrder = (props) => {
         },
         {
             name: "name_agence_sender",
-            label: "Agence Sender",
+            label: <FormattedMessage
+                id="title.agenceSender"
+                defaultMessage="Agence Sender"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -345,7 +384,10 @@ const ListOrder = (props) => {
         },
         {
             name: "numKuadi",
-            label: "Pck Code Sender",
+            label: <FormattedMessage
+                id="title.pckCodeSender"
+                defaultMessage="Pck Code Sender"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -355,7 +397,10 @@ const ListOrder = (props) => {
         },
         {
             name: "company",
-            label: "Company",
+            label: <FormattedMessage
+                id="title.company"
+                defaultMessage="Company"
+            />,
             options: {
                 filter: false,
                 sort: false,
@@ -364,7 +409,10 @@ const ListOrder = (props) => {
         },
         {
             name: "weight",
-            label: "weight",
+            label: <FormattedMessage
+                id="title.weight"
+                defaultMessage="Weight"
+            />,
             options: {
                 filter: false,
                 sort: false,
@@ -423,7 +471,11 @@ const ListOrder = (props) => {
                                 } else {
 
                                     setVariant("warning");
-                                    setInfo(manageMsg("NOT_ALLOW"));
+                                    setInfo(
+                                        <FormattedMessage
+                                            id="error.NOT_ALLOW"
+                                            defaultMessage="Sorry you can't apply this request"
+                                        />);
                                     setShow(true);
                                     //alert("ok")
                                 }
@@ -435,12 +487,13 @@ const ListOrder = (props) => {
                                     </IconButton>
                                     ) :
                                     ( */
+
                                 <small className={`border-radius-4 ${tableMeta.rowData[1] === "STAND BY" ? "bg-primary" :
                                     tableMeta.rowData[1] === "RECEIVED" ? "bg-secondary" :
                                         tableMeta.rowData[1] === "IN TRANSIT" ? "bg-light-primary" :
                                             tableMeta.rowData[1] === "ARRIVED" ? "bg-secondary" :
                                                 tableMeta.rowData[1] === "READY FOR PICKUP" ? "bg-light-green" : "bg-green"} text-black px-2 py-2px`}>
-                                    {tableMeta.rowData[1]}
+                                    <ReturnServeur info={tableMeta.rowData[1]} />
                                 </small>
 
                                 //)
@@ -454,6 +507,10 @@ const ListOrder = (props) => {
 
         {
             name: "Edit",
+            label: <FormattedMessage
+                id="title.edit"
+                defaultMessage="Edit"
+            />,
             options: {
                 filter: false,
                 sort: false,
@@ -498,7 +555,15 @@ const ListOrder = (props) => {
                                 } else {
                                     if (tableMeta.rowData[1] !== "SIGNED") {
                                         setVariant("warning");
-                                        setInfo(manageMsg(props.user.role === "GUEST" ? "NOT_ALLOW_CONTACT_COMPANY" : "NOT_ALLOW_COMPANY_MODIFY_COMPANY"));
+                                        setInfo(
+                                            props.user.role === "GUEST" ? <FormattedMessage
+                                                id="result.NOT_ALLOW_CONTACT_COMPANY"
+                                                defaultMessage="Sorry you can't apply this request"
+                                            /> : <FormattedMessage
+                                                    id="error.NOT_ALLOW_COMPANY_MODIFY_COMPANY"
+                                                    defaultMessage="Sorry you can't apply this request"
+                                                />
+                                        )
                                         setShow(true);
                                     }
 
@@ -513,6 +578,10 @@ const ListOrder = (props) => {
         },
         {
             name: "Delete",
+            label: <FormattedMessage
+                id="title.delete"
+                defaultMessage="Delete"
+            />,
             options: {
                 filter: false,
                 sort: false,
@@ -550,7 +619,10 @@ const ListOrder = (props) => {
         },
         {
             name: "sender_phone",
-            label: "sender_phone",
+            label: <FormattedMessage
+                id="title.customerPhone"
+                defaultMessage="Customer phone"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -597,7 +669,11 @@ const ListOrder = (props) => {
             .then(data => {
                 if (data.data.delete_order.id) {
 
-                    setInfo(manageMsg("PACKAGE_DELETED"));
+                    setInfo(
+                        <FormattedMessage
+                            id="result.PACKAGE_DELETED"
+                            defaultMessage="Package deleted"
+                        />);
                     setVariant('success');
                 } else {
                     setInfo("Error, Try after !");
@@ -610,7 +686,7 @@ const ListOrder = (props) => {
             .catch(error => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })
@@ -637,8 +713,17 @@ const ListOrder = (props) => {
         setSubmitInputModal("addStatut");
         setAction("addStatut");
         setPackageStatut(statut);
-        setTitleModal(manageMsg("TRACKING_I_P") + code);
-        setContentTextModal(manageMsg("PUT_I_P"));
+        setTitleModal(<FormattedMessage
+            id="info.TRACKING_I_P"
+            defaultMessage="Tracking information of package : "
+            values={{
+                code: code
+            }}
+        />);
+        setContentTextModal(<FormattedMessage
+            id="info.PUT_I_P"
+            defaultMessage="Put more informations about the position of the package"
+        />);
     };
     const handleChange = event => {
         //console.log(event);
@@ -702,7 +787,7 @@ const ListOrder = (props) => {
                         else {
                             setVariant("error");
                             let msg = checkError(res.errors)
-                            setInfo(manageMsg(msg));
+                            setInfo(<ReturnServeur info={msg} />);
                             setShow(true);
                         }
 
@@ -712,7 +797,7 @@ const ListOrder = (props) => {
                         //console.log(error);
                         setVariant("error");
                         let msg = checkError(error)
-                        setInfo(manageMsg(msg));
+                        setInfo(<ReturnServeur info={msg} />);
                         setShow(true);
                         props.success();
                     })
@@ -743,8 +828,18 @@ const ListOrder = (props) => {
                 handleClose={handleClose}
                 loading={props.login.loading}
                 funcAction={deleteOrder}
-                message="You won't see anymore this package on your table"
-                title="Are you sure to delete this package ?" />
+                message={
+                    <FormattedMessage
+                        id="message.questionDeletePackage"
+                        defaultMessage="You won't see anymore this package on your table"
+                    />
+                }
+                title={
+                    <FormattedMessage
+                        id="title.questionDeletePackage"
+                        defaultMessage="Are you sure to delete this package ?"
+                    />
+                } />
             <div className="mb-sm-30">
                 <div className="mb-sm-30">
                     <Grid container spacing={6}>
@@ -752,7 +847,12 @@ const ListOrder = (props) => {
                             <Breadcrumb
                                 routeSegments={[
                                     { name: "Dashboard", path: "/dashboard/analytics" },
-                                    { name: "Package List" }
+                                    {
+                                        name: <FormattedMessage
+                                            id="title.packageList"
+                                            defaultMessage="Package List"
+                                        />
+                                    }
                                 ]}
                             />
                         </Grid>
@@ -771,7 +871,7 @@ const ListOrder = (props) => {
                                             } else {
                                                 setVariant("error");
                                                 let msg = checkError(res.data.errors)
-                                                setInfo(manageMsg(msg));
+                                                setInfo(<ReturnServeur info={msg} />);
                                                 setShow(true);
                                                 props.success();
                                             }
@@ -780,7 +880,7 @@ const ListOrder = (props) => {
                                         .catch(error => {
                                             setVariant("error");
                                             let msg = checkError(error)
-                                            setInfo(manageMsg(msg));
+                                            setInfo(<ReturnServeur info={msg} />);
                                             setShow(true);
                                             props.success();
                                             //setInfo(error);
@@ -789,7 +889,11 @@ const ListOrder = (props) => {
                                 disabled={props.login.loading}
                             >
                                 <Icon>sync</Icon>
-                                <span className="pl-2 capitalize">Reload</span>
+                                <span className="pl-2 capitalize">
+                                    <FormattedMessage
+                                        id="title.reload"
+                                        defaultMessage="Reload"
+                                    /></span>
                             </Button>
                             <Button
                                 className="ml-25"
@@ -803,7 +907,11 @@ const ListOrder = (props) => {
                             //disabled={props.login.loading}
                             >
                                 <Icon>add</Icon>
-                                <span className="pl-2 capitalize">New</span>
+                                <span className="pl-2 capitalize">
+                                    <FormattedMessage
+                                        id="title.new"
+                                        defaultMessage="New"
+                                    /></span>
                             </Button>
                         </Grid>
 
@@ -812,11 +920,7 @@ const ListOrder = (props) => {
                 <div className="mb-sm-30">
                     <div className="w-full overflow-auto">
                         <MUIDataTable
-                            title={<Typography variant="h6">
-                                Package List
-                    {loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
-                            </Typography>
-                            }
+                            title={loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                             data={props.order}
                             columns={columns}
                             options={options}

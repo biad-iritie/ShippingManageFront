@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Card, Icon, IconButton, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
+import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   icon: {
@@ -20,8 +21,21 @@ const StatCards = (props) => {
           <div className="flex items-center">
             <Icon className={props.classes.icon}>hourglass_empty</Icon>
             <div className="ml-3">
-              <small className="text-muted">Stand By</small>
-              <h6 className="m-0 mt-1 text-primary font-medium">{props.step1} Package(s)</h6>
+              <small className="text-muted">
+                <FormattedMessage
+                  id="title.standBy"
+                  defaultMessage="Stand By"
+                />
+              </small>
+              <h6 className="m-0 mt-1 text-primary font-medium">
+                <FormattedMessage
+                  id="count.package"
+                  values={{
+                    number: props.step1,
+                    s: Number(props.step1) > 1 ? "s" : ""
+                  }}
+                />
+              </h6>
             </div>
           </div>
           {/* <Tooltip title="View Details" placement="top">
@@ -36,8 +50,21 @@ const StatCards = (props) => {
           <div className="flex items-center">
             <Icon className={props.classes.icon}>hourglass_full</Icon>
             <div className="ml-3">
-              <small className="text-muted">Received</small>
-              <h6 className="m-0 mt-1 text-primary font-medium">{props.step2} Package(s)</h6>
+              <small className="text-muted">
+                <FormattedMessage
+                  id="title.received"
+                  defaultMessage="Received"
+                />
+              </small>
+              <h6 className="m-0 mt-1 text-primary font-medium">
+                <FormattedMessage
+                  id="count.package"
+                  values={{
+                    number: props.step2,
+                    s: Number(props.step2) > 1 ? "s" : ""
+                  }}
+                />
+              </h6>
             </div>
           </div>
           {/* <Tooltip title="View Details" placement="top">
@@ -52,9 +79,20 @@ const StatCards = (props) => {
           <div className="flex items-center">
             <Icon className={props.classes.icon}>redo</Icon>
             <div className="ml-3">
-              <small className="text-muted">In Transit</small>
+              <small className="text-muted">
+                <FormattedMessage
+                  id="title.inTransit"
+                  defaultMessage="In Transit"
+                />
+              </small>
               <h6 className="m-0 mt-1 text-primary font-medium">
-                {props.step3} Package(s)
+                <FormattedMessage
+                  id="count.package"
+                  values={{
+                    number: props.step3,
+                    s: Number(props.step3) > 1 ? "s" : ""
+                  }}
+                />
               </h6>
             </div>
           </div>
@@ -70,8 +108,20 @@ const StatCards = (props) => {
           <div className="flex items-center">
             <Icon className={props.classes.icon}>shopping_cart</Icon>
             <div className="ml-3">
-              <small className="text-muted">Arrived</small>
-              <h6 className="m-0 mt-1 text-primary font-medium">{props.step4} Package(s)</h6>
+              <small className="text-muted">
+                <FormattedMessage
+                  id="title.arrived"
+                  defaultMessage="Arrived"
+                />
+              </small>
+              <h6 className="m-0 mt-1 text-primary font-medium">
+                <FormattedMessage
+                  id="count.package"
+                  values={{
+                    number: props.step4,
+                    s: Number(props.step4) > 1 ? "s" : ""
+                  }}
+                /></h6>
             </div>
           </div>
           {/* <Tooltip title="View Details" placement="top">

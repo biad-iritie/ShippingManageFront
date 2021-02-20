@@ -20,7 +20,7 @@ import { LOGIN, GET_PUBLIC_KEY } from '../../../graphql/User';
 import ShowInfo from '../components/message';
 import { encryptData } from '../../../utils';
 import { manageMsg, checkError } from "../../../utils";
-
+import ReturnServeur from "../components/ReturnServeur";
 
 const styles = theme => ({
   wrapper: {
@@ -67,7 +67,7 @@ const SignIn = (props) => {
     onError: () => {
       setVariant("error");
       let msg = checkError(error)
-      setInfo(manageMsg(msg));
+      setInfo(<ReturnServeur info={msg} />);
       setShow(true);
       props.success();
     }
@@ -106,28 +106,8 @@ const SignIn = (props) => {
         setVariant("error");
         //console.log(error);
         let msg = checkError(error);
-        switch (msg) {
-          case "USER_NOT_FIND":
-          case "LOGIN_FAILLED":
-            setInfo(<FormattedMessage
-              id="error.login"
-              defaultMessage="Invalid email or password"
-            />)
-            break;
-          case "ACCOUNT_CLOSED":
-            setInfo(<FormattedMessage
-              id="error.accountClosed"
-              defaultMessage="Account closed, contact your Manager"
-            />)
-            break;
-          default:
-            setInfo(<FormattedMessage
-              id="error.default"
-              defaultMessage="Be sure you have connection, if yes so please contact us to resolve this problem ASAP . Thanks for your understanding"
-            />)
-            break;
-        }
-        //setInfo(manageMsg(msg));
+        setInfo(<ReturnServeur info={msg} />)
+        //setInfo(<ReturnServeur info={msg} />);
         setShow(true);
         props.success();
       })

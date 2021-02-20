@@ -9,6 +9,7 @@ import {
     Switch,
     FormGroup
 } from "@material-ui/core";
+import ReturnServeur from "../components/ReturnServeur";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +21,9 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { INFO_COMPANY, UPDATE_COMPANY } from '../../../graphql/User';
 import { Breadcrumb } from "matx";
 import { addCompany } from "../../redux/actions/CompanyAction";
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
+import { FormattedMessage } from 'react-intl';
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: "100%"
@@ -61,7 +64,7 @@ const Info = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -152,14 +155,17 @@ const Info = (props) => {
 
                 //console.log(res);
                 if (res.data.update_company) {
-                    setInfo(manageMsg("PROFILE_UPDATED"));
-                    setInfo("Modification done !");
+                    setInfo(<FormattedMessage
+                        id="result.PROFILE_UPDATED"
+                        defaultMessage="Profile updated !"
+                    />);
+                    //setInfo("Modification done !");
                     props.addCompany(res.data.update_company)
                     setVariant('success')
                 } else {
                     setVariant("error");
                     let msg = checkError(res.errors)
-                    setInfo(manageMsg(msg));
+                    setInfo(<ReturnServeur info={msg} />);
                     setShow(true);
                 }
 
@@ -170,7 +176,7 @@ const Info = (props) => {
             .catch((error) => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             });
@@ -202,11 +208,20 @@ const Info = (props) => {
                 <Breadcrumb
                     routeSegments={[
                         { name: "Dashboard", path: "/" },
-                        { name: "Company" }
+                        {
+                            name: <FormattedMessage
+                                id="title.company"
+                                defaultMessage="Company"
+                            />
+                        }
                     ]}
                 />
-                <Typography className="mt-5 font-bold">Remaining Subscription Date:
-                <small className="border-radius-4 bg-secondary text-black px-2 py-2px">
+                <Typography className="mt-5 font-bold">
+                    <FormattedMessage
+                        id="title.remainingSubs"
+                        defaultMessage="Remaining Subscription Date:"
+                    />
+                    <small className="border-radius-4 bg-secondary text-black px-2 py-2px">
                         {moment(Number(props.company.limit_subscribe)).fromNow(true)}
                     </small>
                 </Typography>
@@ -222,19 +237,33 @@ const Info = (props) => {
                                         autoFocus={true}
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Name"
+                                        label={
+                                            <FormattedMessage
+                                                id="title.name"
+                                                defaultMessage="Name"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="name"
                                         value={name}
                                         defaultValue={props.company.name}
                                         validators={["required"]}
-                                        errorMessages={["this field is required"]}
+                                        errorMessages={[
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />]}
                                     />
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Phone with code eg: +86........."
+                                        label={
+                                            <FormattedMessage
+                                                id="input.phone.label"
+                                                defaultMessage="Phone with code eg: +86......... *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="phone1"
@@ -242,14 +271,24 @@ const Info = (props) => {
                                         defaultValue=" "
                                         validators={["required", 'matchRegexp:[^+][0-9]$']}
                                         errorMessages={[
-                                            "this field is required",
-                                            "The number is not valid"
-                                        ]}
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.phone.notValid"
+                                                defaultMessage="The number is not valid"
+                                            />]}
                                     />
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Phone with code eg: +86........."
+                                        label={
+                                            <FormattedMessage
+                                                id="input.phone.label2"
+                                                defaultMessage="Phone with code eg: +86........."
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="phone2"
@@ -257,7 +296,10 @@ const Info = (props) => {
                                         defaultValue=" "
                                         validators={['matchRegexp:[^+][0-9]$']}
                                         errorMessages={[
-                                            "The number is not valid"
+                                            <FormattedMessage
+                                                id="input.phone.notValid"
+                                                defaultMessage="The number is not valid"
+                                            />
                                         ]}
                                     />
                                 </Grid>
@@ -265,7 +307,12 @@ const Info = (props) => {
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Email"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.email.label"
+                                                defaultMessage="Email *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="email"
                                         name="email"
@@ -273,14 +320,25 @@ const Info = (props) => {
                                         defaultValue=" "
                                         validators={["required", "isEmail"]}
                                         errorMessages={[
-                                            "this field is required",
-                                            "email is not valid"
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />,
+                                            <FormattedMessage
+                                                id="input.email.notValid"
+                                                defaultMessage="Email is not valid"
+                                            />
                                         ]}
                                     />
                                     <TextValidator
                                         className="mb-6 w-full"
                                         variant="outlined"
-                                        label="Address"
+                                        label={
+                                            <FormattedMessage
+                                                id="input.address"
+                                                defaultMessage="Address *"
+                                            />
+                                        }
                                         onChange={handleChange}
                                         type="text"
                                         name="address"
@@ -288,7 +346,10 @@ const Info = (props) => {
                                         defaultValue=" "
                                         validators={["required"]}
                                         errorMessages={[
-                                            "this field is required"
+                                            <FormattedMessage
+                                                id="input.required"
+                                                defaultMessage="This field is required"
+                                            />
                                         ]}
                                     />
                                     <FormGroup row>
@@ -301,7 +362,12 @@ const Info = (props) => {
                                                     value={is_active}
                                                 />
                                             }
-                                            label="Available"
+                                            label={
+                                                <FormattedMessage
+                                                    id="label.available"
+                                                    defaultMessage="Available"
+                                                />
+                                            }
                                         />
                                     </FormGroup>
 
@@ -315,7 +381,11 @@ const Info = (props) => {
                                     disabled={props.login.loading}
                                 >
                                     <Icon>send</Icon>
-                                    <span className="pl-2 capitalize">Update</span>
+                                    <span className="pl-2 capitalize">
+                                        <FormattedMessage
+                                            id="button.update"
+                                            defaultMessage="Update"
+                                        /></span>
                                     {props.login.loading && (
                                         <CircularProgress
                                             size={24}

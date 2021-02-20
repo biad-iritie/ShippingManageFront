@@ -18,6 +18,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import history from "history.js";
+import { FormattedMessage } from 'react-intl';
 import { Autocomplete } from "@material-ui/lab";
 import { LIST_COUNTRY, CHECK_COMPANY } from '../../../graphql/User';
 import { ADD_ORDER, UPDATE_ORDER } from '../../../graphql/Order';
@@ -28,7 +29,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { addOrder, updateOrder } from '../../redux/actions/OrderActions';
 import ShippingWay from '../components/ShippingWay';
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
+import ReturnServeur from "../components/ReturnServeur";
 
 const styles = theme => ({
     wrapper: {
@@ -141,7 +143,7 @@ const NewOrder = (props) => {
             // console.log(error);
             setVariant("error");
             let msg = checkError(error);
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
         }
@@ -167,7 +169,7 @@ const NewOrder = (props) => {
 
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -190,7 +192,7 @@ const NewOrder = (props) => {
                     setId_company(res.data.check_company)
                 } else {
                     setVariant("error");
-                    setInfo(manageMsg(res.errors[0].message));
+                    setInfo(<ReturnServeur info={res.errors[0].message} />);
                     setShow(true)
                 }
                 props.success();
@@ -200,7 +202,7 @@ const NewOrder = (props) => {
                 //console.log(error);
                 setVariant("error");
                 let msg = checkError(error);
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })
@@ -258,7 +260,7 @@ const NewOrder = (props) => {
 
         event.preventDefault();
         if (!r_country || !shipMethod || !typeService) {
-            setInfo(manageMsg("INFO_NOT_ENOUGH"));
+            setInfo(<ReturnServeur info="INFO_NOT_ENOUGH" />);
             setVariant('warning');
             setShow(true);
             loadingOrder = false;
@@ -281,7 +283,7 @@ const NewOrder = (props) => {
                         r_country: r_country,
                         shipMethod: shipMethod,
                         typeService: typeService,
-                        sender_name: sender_name,
+                        sender_name: sender_name.toUpperCase(),
                         sender_phone: sender_phone,
                         createdAt: new Date()
                     }
@@ -290,7 +292,14 @@ const NewOrder = (props) => {
                         //alert("ok")
                         setVariant("success");
                         if (res.data.add_order) {
-                            setInfo(manageMsg("ORDER_CREATED") + res.data.add_order.code);
+                            setInfo(
+                                <FormattedMessage
+                                    id="result.ORDER_CREATED"
+                                    defaultMessage="Order created, tracking number: "
+                                    values={{
+                                        code: res.data.add_order.code
+                                    }}
+                                />)
                             setShow(true);
                             setExpanded("panel1");
                             setName_agence_sender("");
@@ -315,7 +324,7 @@ const NewOrder = (props) => {
                         } */
                         setVariant("error");
                         let msg = checkError(error)
-                        setInfo(manageMsg(msg));
+                        setInfo(<ReturnServeur info={msg} />);
                         setShow(true);
                         props.success();
                     })
@@ -335,19 +344,27 @@ const NewOrder = (props) => {
                         r_country: r_country,
                         shipMethod: shipMethod,
                         typeService: typeService,
-                        sender_name: sender_name,
+                        sender_name: sender_name.toUpperCase(),
                         sender_phone: sender_phone
                     }
                 })
                     .then(res => {
                         //alert("ok")
                         if (res.data.update_order.id) {
-                            setInfo("Update Success !");
+                            setInfo(
+                                <FormattedMessage
+                                    id="result.packagedUpdated"
+                                    defaultMessage="Package Updated"
+                                />);
                             setVariant('success');
                             props.updateOrder([res.data.update_order])
                             history.goBack();
                         } else {
-                            setInfo("Error, Try after !");
+                            setInfo(
+                                <FormattedMessage
+                                    id="error.default"
+                                    defaultMessage="Error, Try after !"
+                                />);
                             setVariant('error');
                         }
                         setShow(true);
@@ -356,7 +373,7 @@ const NewOrder = (props) => {
                         //alert("error")
                         setVariant("error");
                         let msg = checkError(error)
-                        setInfo(manageMsg(msg));
+                        setInfo(<ReturnServeur info={msg} />);
                         setShow(true);
                         props.success();
                     })
@@ -422,8 +439,18 @@ const NewOrder = (props) => {
             <div className="mb-sm-30">
                 <Breadcrumb
                     routeSegments={[
-                        { name: "Package List", path: "/order/list_order" },
-                        { name: "Package", path: "/order/add_order" },
+                        {
+                            name: <FormattedMessage
+                                id="title.packageList"
+                                defaultMessage="Package List"
+                            />, path: "/order/list_order"
+                        },
+                        {
+                            name: <FormattedMessage
+                                id="title.new"
+                                defaultMessage="New"
+                            />, path: "/order/add_order"
+                        },
                     ]}
                 />
             </div>
@@ -439,10 +466,18 @@ const NewOrder = (props) => {
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
                             >
-                                <Typography className={classes.heading}>Package information</Typography>
+                                <Typography className={classes.heading}>
+                                    <FormattedMessage
+                                        id="title.packageInformation"
+                                        defaultMessage="Package information"
+                                    />
+                                </Typography>
                                 <Typography className={classes.secondaryHeading}>
-                                    Fill in all blanks to get more information about your package
-                                            </Typography>
+                                    <FormattedMessage
+                                        id="title.fillFormNewOrder"
+                                        defaultMessage="Fill in all blanks to get more information about your package"
+                                    />
+                                </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={next}>
@@ -455,25 +490,40 @@ const NewOrder = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Sender name *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.senderName"
+                                                                    defaultMessage="Sender name *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="sender_name"
                                                             value={sender_name}
-
                                                             validators={["required"]}
-                                                            errorMessages={["this field is required"]}
+                                                            errorMessages={[<FormattedMessage
+                                                                id="input.required"
+                                                                defaultMessage="This field is required"
+                                                            />]}
                                                         />
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
-                                                            label="Sender phone *"
+                                                            label={
+                                                                <FormattedMessage
+                                                                    id="input.senderPhone"
+                                                                    defaultMessage="Sender phone *"
+                                                                />
+                                                            }
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="sender_phone"
                                                             value={sender_phone}
                                                             validators={["required"]}
-                                                            errorMessages={["this field is required"]}
+                                                            errorMessages={[<FormattedMessage
+                                                                id="input.required"
+                                                                defaultMessage="This field is required"
+                                                            />]}
                                                         />
                                                     </div>
                                                 )
@@ -481,24 +531,40 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Name of company who is delivering your package"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.nameCompanyDeliver"
+                                                        defaultMessage="Name of company who is delivering your package"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="name_agence_sender"
                                                 value={name_agence_sender}
                                                 //validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package number "
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.numKuadi"
+                                                        defaultMessage="Package number "
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="numKuadi"
                                                 value={numKuadi}
                                                 //validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
 
                                         </Grid>
@@ -506,24 +572,40 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package content *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.content"
+                                                        defaultMessage="Package content *"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="content"
                                                 value={content}
                                                 validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Package weight eg:10KG *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.weight"
+                                                        defaultMessage="Package weight eg:10KG *"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="weight"
                                                 value={weight}
                                                 validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
                                             <TextValidator
                                                 /* disabled={() => {
@@ -531,15 +613,26 @@ const NewOrder = (props) => {
                                                 }} */
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Email of the shipping company *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.email_company"
+                                                        defaultMessage="Email of the shipping company *"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="email_company"
                                                 value={email_company}
                                                 validators={["required", "isEmail"]}
                                                 errorMessages={[
-                                                    "this field is required",
-                                                    "email is not valid"
+                                                    <FormattedMessage
+                                                        id="input.required"
+                                                        defaultMessage="This field is required"
+                                                    />,
+                                                    <FormattedMessage
+                                                        id="input.email.notValid"
+                                                        defaultMessage="Email is not valid"
+                                                    />
                                                 ]}
                                             />
                                         </Grid>
@@ -553,7 +646,11 @@ const NewOrder = (props) => {
                                             type="submit"
                                         //disabled={props.login.loading}
                                         >
-                                            <span className="pl-2">Validate</span>
+                                            <span className="pl-2">
+                                                <FormattedMessage
+                                                    id="button.validate"
+                                                    defaultMessage="Validate"
+                                                /></span>
 
                                             {props.login.loading && (
                                                 <CircularProgress
@@ -578,10 +675,17 @@ const NewOrder = (props) => {
                                 aria-controls="panel2bh-content"
                                 id="panel2bh-header"
                             >
-                                <Typography className={classes.heading}>Receiver\Shipping informations</Typography>
+                                <Typography className={classes.heading}>
+                                    <FormattedMessage
+                                        id="title.receiver_info"
+                                        defaultMessage="Receiver\Shipping informations"
+                                    /></Typography>
                                 <Typography className={classes.secondaryHeading}>
-                                    Fill in all blanks to get more information about the recipient
-                                            </Typography>
+                                    <FormattedMessage
+                                        id="title.fillFormReceiver"
+                                        defaultMessage="Fill in all blanks to get more information about the recipient"
+                                    />
+                                </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <ValidatorForm style={{ 'width': '100%' }} ref={useRef("form")} onSubmit={handleSubmit}>
@@ -590,24 +694,39 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Name *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.name"
+                                                        defaultMessage="Name *"
+                                                    />}
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_name"
                                                 value={r_name}
                                                 validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="Phone with code eg: +86......... *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.phone.label"
+                                                        defaultMessage="Phone with code eg: +86......... *"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_phone"
                                                 value={r_phone}
                                                 validators={["required"]}
-                                                errorMessages={["this field is required"]}
+                                                errorMessages={[<FormattedMessage
+                                                    id="input.required"
+                                                    defaultMessage="This field is required"
+                                                />]}
                                             />
                                             <ShippingWay
                                                 shipMethod={shipMethod}
@@ -643,7 +762,12 @@ const NewOrder = (props) => {
                                                 renderInput={params => (
                                                     <TextField
                                                         {...params}
-                                                        label="Country of destination *"
+                                                        label={
+                                                            <FormattedMessage
+                                                                id="select.country"
+                                                                defaultMessage="Country of destination *"
+                                                            />
+                                                        }
                                                         fullWidth
                                                         variant="outlined"
                                                         InputProps={{
@@ -663,14 +787,22 @@ const NewOrder = (props) => {
                                             <TextValidator
                                                 className="mb-6 w-full"
                                                 variant="outlined"
-                                                label="City *"
+                                                label={
+                                                    <FormattedMessage
+                                                        id="input.city"
+                                                        defaultMessage="City *"
+                                                    />
+                                                }
                                                 onChange={handleChange}
                                                 type="text"
                                                 name="r_city"
                                                 value={r_city}
                                                 validators={["required"]}
                                                 errorMessages={[
-                                                    "this field is required",
+                                                    <FormattedMessage
+                                                        id="input.required"
+                                                        defaultMessage="This field is required"
+                                                    />,
                                                 ]}
                                             />
                                         </Grid>
@@ -686,7 +818,15 @@ const NewOrder = (props) => {
                                             <Icon>send</Icon>
                                             <span className="pl-2 capitalize">
                                                 {
-                                                    props.history.location.state[0].action === "add" ? "Submit" : "Update"
+                                                    props.history.location.state[0].action === "add" ?
+                                                        <FormattedMessage
+                                                            id="button.submit"
+                                                            defaultMessage="Submit"
+                                                        /> :
+                                                        <FormattedMessage
+                                                            id="button.update"
+                                                            defaultMessage="Update"
+                                                        />
                                                 }
                                             </span>
                                             {(loadingOrder || loadingOrder1) && (
@@ -702,16 +842,9 @@ const NewOrder = (props) => {
                                 </ValidatorForm>
                             </AccordionDetails>
                         </Accordion>
-
-
-
                     </div>
                 </div>
-
-
             </Card>
-
-
         </div>
     )
 }

@@ -10,6 +10,7 @@ import {
     CircularProgress,
     Typography
 } from "@material-ui/core";
+import ReturnServeur from "../components/ReturnServeur";
 import Divider from '@material-ui/core/Divider';
 import PropTypes from "prop-types";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
@@ -18,8 +19,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_PASSWORD, UPDATE, GET_PUBLIC_KEY } from '../../../graphql/User';
 import { connect } from "react-redux";
 import { updateUser } from '../../redux/actions/UserActions';
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
 import { encryptData } from '../../../utils';
+import { FormattedMessage } from 'react-intl';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -66,7 +68,7 @@ const Profile = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
         }
@@ -113,7 +115,10 @@ const Profile = (props) => {
         })
             .then((res) => {
                 props.updateUser(res.data.update)
-                setInfo(manageMsg("PROFILE_UPDATED"));
+                setInfo(<FormattedMessage
+                    id="result.PROFILE_UPDATED"
+                    defaultMessage='Profile updated !'
+                />);
                 setVariant('success');
                 setShow(true);
                 props.success();
@@ -121,7 +126,7 @@ const Profile = (props) => {
             .catch((error) => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })
@@ -147,14 +152,17 @@ const Profile = (props) => {
                     setVariant('error');
 
                 }
-                setInfo(manageMsg(res.data.update_password));
+                setInfo(<FormattedMessage
+                    id="result.PWD_SUCCESS"
+                    defaultMessage="Password updated !"
+                />);
                 setShow(true);
                 props.success();
             })
             .catch((error) => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })

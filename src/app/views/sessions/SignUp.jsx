@@ -20,7 +20,7 @@ import { SIGN_UP, GET_PUBLIC_KEY } from '../../../graphql/User';
 import ShowInfo from '../components/message';
 import { encryptData } from '../../../utils';
 import { manageMsg, checkError } from "../../../utils";
-
+import ReturnServeur from "../components/ReturnServeur";
 
 /* import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent"; */
@@ -94,7 +94,7 @@ const SignUp = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
         }
@@ -153,7 +153,8 @@ const SignUp = (props) => {
             .catch((error) => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
+
                 setShow(true);
                 props.success();
             })
@@ -362,7 +363,12 @@ const SignUp = (props) => {
                                             </Button>
 
                                         </div>
-                                        <span className="mx-2 ml-5">or</span>
+                                        <span className="mx-2 ml-5">
+                                            <FormattedMessage
+                                                id="or"
+                                                defaultMessage="Or"
+                                            />
+                                        </span>
 
                                         <Button
                                             className="capitalize"

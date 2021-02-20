@@ -10,6 +10,8 @@ import {
     LinearProgress,
     Typography
 } from "@material-ui/core";
+import { FormattedMessage, FormattedDate } from 'react-intl';
+import ReturnServeur from "../components/ReturnServeur";
 import { useMutation, useQuery } from '@apollo/client';
 import MUIDataTable from "mui-datatables";
 import Confirmation from '../components/Confirmation';
@@ -18,10 +20,10 @@ import ShowInfo from '../components/message';
 import { LIST_EMPLOYEES, DELETE_USER, UPDATE_EMPLOYEE_ROLE } from '../../../graphql/User';
 import { loading, success } from "../../redux/actions/LoginActions";
 import { deleteEmployee, refetchEmployee, updateEmployeeRole } from '../../redux/actions/EmployeesActions';
-import { manageMsg, checkError } from "../../../utils";
+import { checkError } from "../../../utils";
 
 const Employees = (props) => {
-    var moment = require('moment');
+    //var moment = require('moment');
     const [variant, setVariant] = useState()
     const [info, setInfo] = useState(null)
     const [show, setShow] = useState(false)
@@ -62,7 +64,11 @@ const Employees = (props) => {
         })
             .then(data => {
                 if (data.data.delete_user.id) {
-                    setInfo(manageMsg("EMPLOYEE_DELETED"));
+                    setInfo(
+                        <FormattedMessage
+                            id="result.EMPLOYEE_DELETED"
+                            defaultMessage="Employee deleted"
+                        />);
                     setVariant('success');
                 } /* else {
                     setInfo("Error, Try after !");
@@ -75,7 +81,7 @@ const Employees = (props) => {
             .catch(error => {
                 setVariant("error");
                 let msg = checkError(error)
-                setInfo(manageMsg(msg));
+                setInfo(<ReturnServeur info={msg} />);
                 setShow(true);
                 props.success();
             })
@@ -96,7 +102,7 @@ const Employees = (props) => {
         onError: () => {
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -117,7 +123,7 @@ const Employees = (props) => {
                         } else {
                             setVariant("error");
                             let msg = checkError(res.errors)
-                            setInfo(manageMsg(msg));
+                            setInfo(<ReturnServeur info={msg} />);
                             setShow(true);
                         }
                         props.success();
@@ -125,7 +131,7 @@ const Employees = (props) => {
                     .catch(error => {
                         setVariant("error");
                         let msg = checkError(error)
-                        setInfo(manageMsg(msg));
+                        setInfo(<ReturnServeur info={msg} />);
                         setShow(true);
                         props.success();
                     })
@@ -167,7 +173,11 @@ const Employees = (props) => {
             //console.log(dataPosition);
             setVariant("success");
             if (data.update_employee_role) {
-                setInfo(manageMsg("ROLE_ADDED"));
+                setInfo(
+                    <FormattedMessage
+                        id="result.ROLE_ADDED"
+                        defaultMessage="Role added"
+                    />);
                 props.updateEmployeeRole(data.update_employee_role)
                 setShow(true);
             }
@@ -180,7 +190,7 @@ const Employees = (props) => {
 
             setVariant("error");
             let msg = checkError(error)
-            setInfo(manageMsg(msg));
+            setInfo(<ReturnServeur info={msg} />);
             setShow(true);
             props.success();
 
@@ -211,7 +221,10 @@ const Employees = (props) => {
         },
         {
             name: "names",
-            label: "Names",
+            label: <FormattedMessage
+                id="title.name"
+                defaultMessage="Name"
+            />,
             options: {
                 filter: true,
                 sort: true,
@@ -231,7 +244,10 @@ const Employees = (props) => {
         },
         {
             name: "phone",
-            label: "Phone",
+            label: <FormattedMessage
+                id="title.phone"
+                defaultMessage="Phone"
+            />,
             options: {
                 filter: true,
                 sort: true,
@@ -244,7 +260,10 @@ const Employees = (props) => {
         },
         {
             name: "role",
-            label: "Role",
+            label: <FormattedMessage
+                id="title.role"
+                defaultMessage="Role"
+            />,
             options: {
                 filter: true,
                 sort: true,
@@ -258,7 +277,13 @@ const Employees = (props) => {
                             }}
                         >
                             {value === "STAFF_MEMBER" ?
-                                "STAFF" : "ADMIN"}
+                                <FormattedMessage
+                                    id="formControl.label.staff"
+                                    defaultMessage="Staff"
+                                /> : <FormattedMessage
+                                    id="formControl.label.admin"
+                                    defaultMessage="Admin"
+                                />}
                         </div>
 
                     )
@@ -268,7 +293,10 @@ const Employees = (props) => {
         },
         {
             name: "last_login",
-            label: "Last connection",
+            label: <FormattedMessage
+                id="title.lastConnection"
+                defaultMessage="Last connection"
+            />,
             options: {
                 filter: true,
                 sort: false,
@@ -276,7 +304,16 @@ const Employees = (props) => {
                     //console.log(value);
                     return (
                         value != null ?
-                            moment(Number(value)).format("YYYY-MM-DD HH:mm")
+                            //moment(Number(value)).format("YYYY-MM-DD HH:mm")
+                            <FormattedDate
+                                value={Number(value)}
+                                hour="numeric"
+                                minute="numeric"
+                                year="numeric"
+                                month="numeric"
+                                day="numeric"
+                            //weekday="long"
+                            />
                             : "???")
                 },
                 setCellHeaderProps: value => {
@@ -290,6 +327,10 @@ const Employees = (props) => {
         },
         {
             name: "Delete",
+            label: <FormattedMessage
+                id="title.delete"
+                defaultMessage="Delete"
+            />,
             options: {
                 filter: false,
                 sort: false,
@@ -349,8 +390,16 @@ const Employees = (props) => {
                 handleClose={handleClose}
                 loading={props.login.loading}
                 funcAction={deleteEmployee}
-                message="You won't see anymore this employee on your table"
-                title="Are you sure to delete?" />
+                message={
+                    <FormattedMessage
+                        id="confirmation.message.delete"
+                        defaultMessage="You won't see anymore this employee on your table"
+                    />}
+                title={
+                    <FormattedMessage
+                        id="confirmation.title.delete"
+                        defaultMessage="Are you sure to delete?"
+                    />} />
 
             <div className="mb-sm-30">
                 <Grid container spacing={6}>
@@ -358,7 +407,12 @@ const Employees = (props) => {
                         <Breadcrumb
                             routeSegments={[
                                 { name: "Dashboard", path: "/dashboard/analytics" },
-                                { name: "Team" }
+                                {
+                                    name: <FormattedMessage
+                                        id="title.team"
+                                        defaultMessage="Team"
+                                    />
+                                }
                             ]}
                         />
                     </Grid>
@@ -378,7 +432,7 @@ const Employees = (props) => {
                                     .catch(error => {
                                         setVariant("error");
                                         let msg = checkError(error)
-                                        setInfo(manageMsg(msg));
+                                        setInfo(<ReturnServeur info={msg} />);
                                         setShow(true);
                                         props.success();
                                     })
@@ -386,7 +440,12 @@ const Employees = (props) => {
                             disabled={props.login.loading}
                         >
                             <Icon>sync</Icon>
-                            <span className="pl-2 capitalize">Reload</span>
+                            <span className="pl-2 capitalize">
+                                <FormattedMessage
+                                    id="title.reload"
+                                    defaultMessage="Reload"
+                                />
+                            </span>
                         </Button>
                         <Button
                             className="ml-25"
@@ -400,7 +459,12 @@ const Employees = (props) => {
                             disabled={props.login.loading}
                         >
                             <Icon>add</Icon>
-                            <span className="pl-2 capitalize">New</span>
+                            <span className="pl-2 capitalize">
+                                <FormattedMessage
+                                    id="title.new"
+                                    defaultMessage="New"
+                                />
+                            </span>
                         </Button>
                     </Grid>
                 </Grid>
@@ -408,8 +472,12 @@ const Employees = (props) => {
             <div className="w-full overflow-auto">
                 <MUIDataTable
                     title={<Typography variant="h6">
-                        Members list
-                    {loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                        <FormattedMessage
+                            id="title.membersList"
+                            defaultMessage="Members list"
+                        />
+
+                        {loading && <LinearProgress color="secondary" size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
                     }
                     data={props.employees}
