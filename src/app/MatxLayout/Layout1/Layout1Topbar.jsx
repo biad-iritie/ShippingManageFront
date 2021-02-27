@@ -8,9 +8,10 @@ import { logoutUser } from "app/redux/actions/UserActions";
 import PropTypes from "prop-types";
 import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen, classList } from "utils";
-import NotificationBar from "../SharedCompoents/NotificationBar";
-import { Link } from "react-router-dom";
+//import NotificationBar from "../SharedCompoents/NotificationBar";
+//import { Link } from "react-router-dom";
 import { setLanguage } from "../../redux/actions/LanguageAction";
+import { FormattedMessage } from 'react-intl';
 //import ShoppingCart from "../SharedCompoents/ShoppingCart";
 
 const styles = theme => ({
@@ -137,18 +138,23 @@ const Layout1Topbar = (props) => {
                   </IconButton>
                 }
               >
-                <MenuItem>
+                {/* <MenuItem>
                   <Link className={classes.menuItem} to="/">
                     <Icon> home </Icon>
                     <span className="pl-4"> Home </span>
                   </Link>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={() => {
                   props.history.push("/session/profile")
                 }}>
 
                   <Icon> person </Icon>
-                  <span className="pl-4"> Profile </span>
+                  <span className="pl-4">
+                    <FormattedMessage
+                      id="title.profile"
+                      defaultMessage="Profile"
+                    />
+                  </span>
 
                 </MenuItem>
                 {/* <MenuItem className={classes.menuItem}>
@@ -160,7 +166,12 @@ const Layout1Topbar = (props) => {
                   className={classes.menuItem}
                 >
                   <Icon> exit_to_app </Icon>
-                  <span className="pl-4"> Logout </span>
+                  <span className="pl-4">
+                    <FormattedMessage
+                      id="title.logout"
+                      defaultMessage="Logout"
+                    />
+                  </span>
                 </MenuItem>
               </MatxMenu>
             }
@@ -178,9 +189,11 @@ const Layout1Topbar = (props) => {
               >
                 <Icon>perm_identity</Icon>
                 <span className="pl-2 capitalize">
-                  Login
-                                    </span>
-
+                  <FormattedMessage
+                    id="title.login"
+                    defaultMessage="Login"
+                  />
+                </span>
               </Button>
             }
           </div>

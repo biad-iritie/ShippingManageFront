@@ -187,6 +187,36 @@ const ReturnServeur = (props) => {
                     defaultMessage="Signed"
                 />)
                 break;
+            case "Dashboard":
+                return (<FormattedMessage
+                    id="Dashboard"
+                    defaultMessage="Dashboard"
+                />)
+                break;
+            case "Company":
+                return (<FormattedMessage
+                    id="Company"
+                    defaultMessage="Company"
+                />)
+                break;
+            case "Package":
+                return (<FormattedMessage
+                    id="Package"
+                    defaultMessage="Package"
+                />)
+                break;
+            case "Info":
+                return (<FormattedMessage
+                    id="Info"
+                    defaultMessage="Info"
+                />)
+                break;
+            case "Team":
+                return (<FormattedMessage
+                    id="Team"
+                    defaultMessage="Team"
+                />)
+                break;
             default:
                 return <FormattedMessage
                     id="error.default"

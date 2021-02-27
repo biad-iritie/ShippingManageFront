@@ -128,10 +128,18 @@
     "input.nameCompanyDeliver": "Nom de l'entreprise qui livre le colis",
     "input.numKuadi": "Code colis ",
     "input.content": "Contenu *",
-    "input.weight": "Weight eg:10KG *",
+    "input.weight": "Poids eg:10KG *",
     "input.email_company": "Email de votre entreprise de shipping *",
     "title.receiver_info": "Informations du bénéficiaire\\Envoi ",
     "title.fillFormReceiver": "Renseigner tous les champs pour avoir plus d'informations concernant le bénéficiaire",
     "select.country": "Pays de destination *",
-    "input.city": "Ville *"
+    "input.city": "Ville *",
+    "title.profile": "Profile",
+    "title.logout": "Deconnexion",
+    "title.login": "Connexion",
+    "Dashboard": "Tableau de bord",
+    "Company": "Entreprise",
+    "Info": "Info",
+    "Team": "Equipe",
+    "Package": "Colis"
 }

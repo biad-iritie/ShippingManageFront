@@ -133,5 +133,13 @@
     "title.receiver_info": "Receiver\\Shipping informations",
     "title.fillFormReceiver": "Fill in all blanks to get more information about the recipient",
     "select.country": "Country of destination *",
-    "input.city": "City *"
+    "input.city": "City *",
+    "title.profile": "Profile",
+    "title.logout": "Logout",
+    "title.login": "Login",
+    "Dashboard": "Dashboard",
+    "Company": "Company",
+    "Info": "Info",
+    "Team": "Team",
+    "Package": "Package"
 }

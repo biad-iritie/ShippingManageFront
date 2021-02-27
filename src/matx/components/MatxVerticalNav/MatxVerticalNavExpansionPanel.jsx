@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import TouchRipple from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router-dom";
 import { classList } from "utils";
+import ReturnServeur from "../../../app/views/components/ReturnServeur";
 
 const styles = theme => {
   return {
@@ -75,7 +76,10 @@ class MatxVerticalNavExpansionPanel extends Component {
           <div className="flex items-center">
             {(icon && <Icon className="align-middle item-icon">{icon}</Icon>)}
             {(iconText && <span className="item-icon icon-text">{iconText}</span>)}
-            <span className="align-middle item-text">{name}</span>
+            <span className="align-middle item-text">
+              <ReturnServeur info={name} />
+
+            </span>
           </div>
           {badge && (
             <div className={`badge bg-${badge.color}`}>{badge.value}</div>

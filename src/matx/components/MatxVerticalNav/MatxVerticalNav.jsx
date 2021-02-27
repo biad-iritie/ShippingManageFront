@@ -5,6 +5,7 @@ import TouchRipple from "@material-ui/core/ButtonBase";
 import MatxVerticalNavExpansionPanel from "./MatxVerticalNavExpansionPanel";
 import { withStyles } from "@material-ui/styles";
 import { useSelector } from "react-redux";
+import ReturnServeur from "../../../app/views/components/ReturnServeur";
 
 const styles = theme => ({
   expandIcon: {
@@ -19,7 +20,7 @@ const styles = theme => ({
 
 const MatxVerticalNav = props => {
   const navigations = useSelector(({ navigations }) => navigations);
-
+  //console.log(navigations);
   const renderLevels = data => {
     return data.map((item, index) => {
       if (item.children) {
@@ -74,7 +75,9 @@ const MatxVerticalNav = props => {
                   );
                 }
               })()}
-              <span className="align-middle item-text">{item.name}</span>
+              <span className="align-middle item-text">
+                <ReturnServeur info={item.name} />
+              </span>
               <div className="mx-auto"></div>
               {item.badge && (
                 <div className={`badge bg-${item.badge.color}`}>
