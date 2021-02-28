@@ -8,8 +8,8 @@ const redirectRoute = props => {
   const { pathname } = location;
 
   history.push({
-    pathname: "/session/signin",
-    //pathname: "/dashboard/analytics",
+    //pathname: "/session/signin",
+    pathname: "/dashboard/analytics",
     state: { redirectUrl: pathname }
   });
 };

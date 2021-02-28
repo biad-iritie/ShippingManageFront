@@ -34,6 +34,7 @@ const checkJwtAuth = (setUserData, data, addCompany) => {
     }); */
   }
   else {
+    //console.log(data);
     history.push({
       pathname: "/session/signin"
     });
