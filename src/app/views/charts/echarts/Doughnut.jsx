@@ -2,11 +2,18 @@ import React from "react";
 import ReactEcharts from "echarts-for-react";
 import { withStyles } from "@material-ui/styles";
 
-const DoughnutChart = ({ height, color = [], theme }) => {
+const DoughnutChart = ({
+  nb_standBy,
+  nb_received,
+  nb_inTransit,
+  nb_arrived,
+  nb_pickUp,
+  nb_signed,
+  height, color = [], theme }) => {
   const option = {
     legend: {
       show: true,
-      itemGap: 20,
+      itemGap: 10,
       icon: "circle",
       bottom: 0,
       textStyle: {
@@ -78,14 +85,30 @@ const DoughnutChart = ({ height, color = [], theme }) => {
         },
         data: [
           {
-            value: 1,
-            name: "In transit"
+            value: nb_standBy,
+            name: "Stand By"
           },
           {
-            value: 1,
+            value: nb_received,
+            //value: 2,
+            name: "Received"
+          },
+          {
+            value: nb_inTransit,
+            //value: 1,
+            name: "In Transit"
+          },
+          {
+            value: nb_arrived,
+            //value: 3,
+            name: "Arrived"
+          },
+          {
+            value: nb_pickUp,
+            //value: 5,
             name: "Pick Up"
           },
-          { value: 1, name: "Signed" }
+          { value: nb_signed, name: "Signed" }
         ],
         itemStyle: {
           emphasis: {

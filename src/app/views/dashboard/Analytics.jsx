@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Card } from "@material-ui/core";
 import ReturnServeur from "../components/ReturnServeur";
-//import DoughnutChart from "../charts/echarts/Doughnut";
+import DoughnutChart from "../charts/echarts/Doughnut";
 
 //import ModifiedAreaChart from "./shared/ModifiedAreaChart";
 import StatCards from "./shared/StatCards";
@@ -343,18 +343,30 @@ const Dashboard1 = (props) => {
           </Grid>
 
           <Grid item lg={4} md={4} sm={12} xs={12}>
-            {/* <Card className="px-6 py-4 mb-6">
+            <Card className="px-6 py-4 mb-6">
               <div className="card-title">Traffic Shipping</div>
-              <div className="card-subtitle">Last 3 Months</div>
+              {/* <div className="card-subtitle">Last 3 Months</div> */}
               <DoughnutChart
+                nb_standBy={nb_standBy}
+                nb_received={nb_received}
+                nb_inTransit={nb_inTransit}
+                nb_arrived={nb_arrived}
+                nb_pickUp={nb_pickUp}
+                nb_signed={nb_signed}
                 height="300px"
                 color={[
-                  theme.palette.primary.dark,
-                  theme.palette.primary.main,
-                  theme.palette.primary.light
+                  //theme.palette.primary.dark,
+                  "#7467ef",
+                  //theme.palette.primary.main,
+                  "#f9a352",
+                  //theme.palette.primary.light
+                  "#bdbdbd",
+                  "#f9a352",
+                  "rgba(8, 173, 108, 0.5)",
+                  "#08ad6c"
                 ]}
               />
-            </Card> */}
+            </Card>
 
             {/* <UpgradeCard /> */}
 
