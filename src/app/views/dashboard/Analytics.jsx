@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Grid, Card } from "@material-ui/core";
 import ReturnServeur from "../components/ReturnServeur";
 import DoughnutChart from "../charts/echarts/Doughnut";
+import { FormattedMessage } from 'react-intl';
 
 //import ModifiedAreaChart from "./shared/ModifiedAreaChart";
 import StatCards from "./shared/StatCards";
@@ -347,6 +348,10 @@ const Dashboard1 = (props) => {
               <div className="card-title">Traffic Shipping</div>
               {/* <div className="card-subtitle">Last 3 Months</div> */}
               <DoughnutChart
+                title={<FormattedMessage
+                  id="title.chart1"
+                  defaultMessage="Traffic Shipping"
+                />}
                 nb_standBy={nb_standBy}
                 nb_received={nb_received}
                 nb_inTransit={nb_inTransit}

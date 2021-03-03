@@ -1,7 +1,7 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 import { withStyles } from "@material-ui/styles";
-
+import { FormattedMessage } from 'react-intl';
 const DoughnutChart = ({
   nb_standBy,
   nb_received,
