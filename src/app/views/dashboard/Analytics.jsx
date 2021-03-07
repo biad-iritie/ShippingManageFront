@@ -363,7 +363,7 @@ const Dashboard1 = (props) => {
                   //theme.palette.primary.dark,
                   "#7467ef",
                   //theme.palette.primary.main,
-                  "#f9a352",
+                  "#ffb671",
                   //theme.palette.primary.light
                   "#bdbdbd",
                   "#f9a352",

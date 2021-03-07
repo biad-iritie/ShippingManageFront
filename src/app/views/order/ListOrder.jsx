@@ -466,7 +466,7 @@ const ListOrder = (props) => {
 
                                 setShow(false);
                                 //console.log(value);
-                                if (props.user.role !== "GUEST") {
+                                if (props.user.role !== "GUEST" && tableMeta.rowData[1] !== "SIGNED") {
                                     addStatut(tableMeta.rowData[0], tableMeta.rowData[2], tableMeta.rowData[1])
                                 } else {
 

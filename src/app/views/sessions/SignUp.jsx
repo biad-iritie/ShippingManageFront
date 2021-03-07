@@ -205,9 +205,13 @@ const SignUp = (props) => {
                 <Card className="signup-card position-relative y-center">
                     <Grid container>
                         <Grid item lg={5} md={5} sm={5} xs={12}>
-                            <div className="p-8 flex justify-center bg-light-gray items-center h-full">
-                                <img
+                            <div className="p-8 flex justify-center items-center h-full">
+                                {/* <img
                                     src="/assets/images/illustrations/posting_photo.svg"
+                                    alt=""
+                                /> */}
+                                <img
+                                    src="/assets/images/illustrations/UserConnexion.png"
                                     alt=""
                                 />
                             </div>
