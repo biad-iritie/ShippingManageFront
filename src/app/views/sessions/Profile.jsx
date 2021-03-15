@@ -110,7 +110,7 @@ const Profile = (props) => {
             variables: {
                 names: names,
                 phone: phone,
-                email: email
+                email: encryptData(email, public_key.toString())
             }
         })
             .then((res) => {
