@@ -25,7 +25,7 @@ const Footer = ({ theme, settings }) => {
               </Button>
             </a> */}
             <span className="m-auto"></span>
-            <p className="m-5">
+            {/* <p className="m-5">
               Developed by Boli Iritie 
               
               <TwitterIcon onClick={() => {
@@ -38,7 +38,7 @@ const Footer = ({ theme, settings }) => {
 
               </LinkedInIcon>
               
-            </p>
+            </p> */}
           </div>
         </Toolbar>
       </AppBar>
