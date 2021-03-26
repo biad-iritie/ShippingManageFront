@@ -141,5 +141,6 @@
     "Company": "Entreprise",
     "Info": "Info",
     "Team": "Equipe",
-    "Package": "Colis"
+    "Package": "Colis",
+    "info.serviceType": "Type Service *"
 }

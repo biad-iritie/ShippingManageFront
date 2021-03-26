@@ -7,7 +7,7 @@ import {
     Button,
     Grid,
     LinearProgress,
-    Typography
+    //Typography
 } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { Breadcrumb } from "matx";
@@ -592,7 +592,7 @@ const ListOrder = (props) => {
 
                 customBodyRender: (value, tableMeta, updateValue) => {
                     //alert(["SIGNED", "READY FOR PICKUP", "ARRIVED", "IN TRANSIT"].includes("IN TRANSIT"))
-                    //console.log(tableMeta.rowData[2])
+                    //console.log(tableMeta.rowData)
                     return (
                         <IconButton
                             onClick={() => {
@@ -775,7 +775,6 @@ const ListOrder = (props) => {
         setOpenModalInput(false)
     }
     useEffect(() => {
-
         loading === false &&
             (async () => {
                 //alert("OK")

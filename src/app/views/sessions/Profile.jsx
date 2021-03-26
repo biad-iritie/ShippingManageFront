@@ -338,8 +338,6 @@ const Profile = (props) => {
                                                 className={classes.buttonProgress}
                                             />
                                         )}
-
-
                                     </Button>
 
 

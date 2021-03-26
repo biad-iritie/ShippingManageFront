@@ -149,9 +149,9 @@ query order_list($role: String!,$skip:Int,$take:Int){
     r_phone
     content
     name_agence_sender
-    numKuadi,
-    price,
-    r_country,
+    numKuadi
+    price
+    r_country
     company {
       email
     }
@@ -161,6 +161,9 @@ query order_list($role: String!,$skip:Int,$take:Int){
     who_add_paid
     sender_name
     sender_phone
+    user {
+      id
+    }
   }
 }`;
 

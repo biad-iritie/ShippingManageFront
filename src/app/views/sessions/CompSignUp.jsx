@@ -416,6 +416,7 @@ const CompSignUp = (props) => {
                                                         <TextValidator
                                                             className="mb-6 w-full"
                                                             variant="outlined"
+                                                            //multiline
                                                             label={
                                                                 <FormattedMessage
                                                                     id="input.name"
@@ -514,6 +515,7 @@ const CompSignUp = (props) => {
                                                                     defaultMessage="Address *"
                                                                 />
                                                             }
+                                                            //multiline
                                                             onChange={handleChange}
                                                             type="text"
                                                             name="address"

@@ -58,11 +58,14 @@ $phone1: String, $phone2: String, $email: String) {
         phone1: $phone1,
         phone2: $phone2,
         email: $email){
-        name
+            name
+        id
         address
         phone1
         phone2
         email
+        is_active
+        limit_subscribe
     }
     }`;
 

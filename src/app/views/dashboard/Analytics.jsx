@@ -51,7 +51,7 @@ const Dashboard1 = (props) => {
       take: 15,
     },
     onCompleted: (data) => {
-      //console.log(data.order_list);
+      console.log(data.order_list);
       props.refetchOrder(data.order_list)
       //props.success();
 

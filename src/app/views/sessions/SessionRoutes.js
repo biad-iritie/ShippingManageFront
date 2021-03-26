@@ -6,6 +6,7 @@ import ForgotPassword from "./ForgotPassword";
 //import CompSignIn from "./CompSignIn";
 import CompSignUp from "./CompSignUp";
 import Profile from "./Profile";
+import ShipMan from "./ShipMan";
 
 const settings = {
   activeLayout: "layout1",
@@ -54,12 +55,17 @@ const sessionRoutes = [
     path: "/session/profile",
     component: Profile,
   },
-  //OWN
-  /* {
-    path: "/session/comp-sign-in",
-    component: CompSignIn,
+  //SHIPMAN INFO
+  {
+    path: "/Cshipman/info",
+    component: ShipMan,
+    //settings
+  },
+  {
+    path: "/shipman/info",
+    component: ShipMan,
     settings
-  }, */
+  },
   {
     path: "/session/comp-sign-up",
     component: CompSignUp,

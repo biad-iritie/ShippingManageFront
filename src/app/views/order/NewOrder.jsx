@@ -560,7 +560,7 @@ const NewOrder = (props) => {
                                                 type="text"
                                                 name="numKuadi"
                                                 value={numKuadi}
-                                                //validators={["required"]}
+                                                validators={["required"]}
                                                 errorMessages={[<FormattedMessage
                                                     id="input.required"
                                                     defaultMessage="This field is required"

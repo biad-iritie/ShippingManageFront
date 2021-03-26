@@ -69,7 +69,7 @@ const Layout1Topbar = (props) => {
   };
   const changeLanguage = (local) => {
     props.setLanguage(local);
-    alert('ok')
+    //alert('ok')
   };
   /* render() { */
   let { classes, fixed } = props;
@@ -92,7 +92,10 @@ const Layout1Topbar = (props) => {
 
             {/* <div className="hide-on-mobile"> */}
             <div>
-              <IconButton>
+              <IconButton onClick={() => {
+                user.role ? props.history.push("/Cshipman/info") : props.history.push("/shipman/info")
+
+              }}>
                 <Icon>help</Icon>
               </IconButton>
 

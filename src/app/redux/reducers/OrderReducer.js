@@ -13,6 +13,7 @@ const orderReducer = function (state = initialState, action) {
             return [...action.data, ...state];
         }
         case REFETCH_ORDER: {
+            //console.log(action.data);
             return [...action.data];
         }
         case UPDATE_ORDER: {
