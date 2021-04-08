@@ -416,7 +416,7 @@ const DetailOrder = (props) => {
                 }
 
                 {
-                    (order !== null && loading === false) ? (
+                    (order !== null && loading === false) && (
                         <Card>
                             <div className="p-9 h-full" >
                                 <div className={classes.root}>
@@ -770,19 +770,22 @@ const DetailOrder = (props) => {
                                 </div>
                             </div>
                         </Card>
-                    ) : (
-                            <Card>
-                                <div className="p-9 h-full" >
-                                    <div className={classes.root}>
-                                        <FormattedMessage
-                                            id="info.packageNotExist"
-                                            defaultMessage="This Package does'nt exist"
-                                        />
+                    )
+                }
+                {
+                    (loading === false && order === null) && (
+                        <Card>
+                            <div className="p-9 h-full" >
+                                <div className={classes.root}>
+                                    <FormattedMessage
+                                        id="info.packageNotExist"
+                                        defaultMessage="This Package does'nt exist"
+                                    />
 
-                                    </div>
                                 </div>
-                            </Card>
-                        )
+                            </div>
+                        </Card>
+                    )
                 }
             </div>
         </div>
