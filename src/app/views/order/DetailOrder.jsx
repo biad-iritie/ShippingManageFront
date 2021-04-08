@@ -508,13 +508,13 @@ const DetailOrder = (props) => {
                                                                 /> : {order.r_name}
                                                             </Typography>
                                                             <br />
-                                                            <Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                <FormattedMessage
-                                                                    id="title.number"
-                                                                    defaultMessage="Number"
-                                                                /> : {props.user.role ? order.r_phone : ""}
-                                                            </Typography>
-
+                                                            {props.user.role ? (
+                                                                <Typography gutterBottom variant="text-32" className="font-bold capitalize">
+                                                                    <FormattedMessage
+                                                                        id="title.number"
+                                                                        defaultMessage="Number"
+                                                                    /> : {order.r_phone}
+                                                                </Typography>) : ""}
                                                         </Grid>
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
                                                             <Typography gutterBottom variant="text-32" className="capitalize">
