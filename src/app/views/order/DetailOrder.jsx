@@ -500,6 +500,7 @@ const DetailOrder = (props) => {
                                                 <ListItem>
                                                     <Grid container alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
+
                                                             <Typography gutterBottom variant="text-32" className="font-bold capitalize">
                                                                 <FormattedMessage
                                                                     id="title.name"
@@ -511,7 +512,7 @@ const DetailOrder = (props) => {
                                                                 <FormattedMessage
                                                                     id="title.number"
                                                                     defaultMessage="Number"
-                                                                /> : {order.r_phone}
+                                                                /> : {props.user.role ? order.r_phone : ""}
                                                             </Typography>
 
                                                         </Grid>
@@ -618,15 +619,16 @@ const DetailOrder = (props) => {
 
                                                     <Grid container alignItems="center">
                                                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                                                            {props.user.role ? (<Typography gutterBottom variant="text-32" className="font-bold capitalize">
-                                                                <FormattedMessage
-                                                                    id="title.customerName"
-                                                                    defaultMessage="Concerns"
-                                                                    values={{
-                                                                        name: order.sender_name
-                                                                    }}
-                                                                />
-                                                            </Typography>) : ""}
+                                                            {props.user.role ? (
+                                                                <Typography gutterBottom variant="text-32" className="font-bold capitalize">
+                                                                    <FormattedMessage
+                                                                        id="title.customerName"
+                                                                        defaultMessage="Concerns"
+                                                                        values={{
+                                                                            name: order.sender_name
+                                                                        }}
+                                                                    />
+                                                                </Typography>) : ""}
 
 
                                                             <br />
