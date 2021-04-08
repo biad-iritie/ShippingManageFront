@@ -143,5 +143,6 @@
     "Team": "Team",
     "Package": "Package",
     "title.chart1": "Traffic Shipping",
-    "info.serviceType": "Service Type *"
+    "info.serviceType": "Service Type *",
+    "title.packageDetail": " Package Detail"
 }

@@ -39,6 +39,12 @@ export function loginWithEmailAndPassword(user, token) {
   return user;
 };
 
+/**
+ * Sign Up the customer
+ * @param {string} email of the customer
+ * @param {*} names 
+ * @param {*} phone 
+ */
 export function signUpCustomerService(email, names, phone) {
   //console.log(email, names, phone);
   /* const [signUp, { data, error }] = useMutation(SIGN_UP_CUSTOMER);

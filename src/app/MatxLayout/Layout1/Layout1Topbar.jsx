@@ -183,7 +183,7 @@ const Layout1Topbar = (props) => {
               <Button
                 className="capitalize"
                 variant="outlined"
-                color="secondary"
+                //color="secondary"
                 onClick={() => {
                   props.history.push("/session/signin")
                 }}

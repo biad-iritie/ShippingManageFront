@@ -36,8 +36,8 @@ const client = new ApolloClient({
 }) */
 
 const httpLink = createHttpLink({
-    //uri: "http://localhost:4000",
-    uri: "https://my-shipman.com/api"
+    uri: "http://localhost:4000",
+    //uri: "https://my-shipman.com/api"
 });
 /*const httpLink = new HttpLink({
     uri: 'http://localhost:4000'
@@ -48,6 +48,7 @@ const httpLink = createHttpLink({
         reconnect: true
     }
 }); */
+
 
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists

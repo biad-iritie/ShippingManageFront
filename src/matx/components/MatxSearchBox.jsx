@@ -2,6 +2,8 @@ import React, { Component, } from "react";
 import { Icon, IconButton } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import history from "history.js";
+import { connect } from "react-redux";
+
 
 const styles = theme => ({
   root: {
@@ -27,7 +29,6 @@ class MatxSearchBox extends Component {
     switch (event.target.name) {
 
       case "code":
-
         this.setState({ code: event.target.value })
         //console.log(this.state.code);
         break;
@@ -37,14 +38,25 @@ class MatxSearchBox extends Component {
   }
   handleSubmit = (event) => {
     //alert('Le nom a été soumis : ' + this.state.code);
+    console.log(this.props.user.id);
     event.preventDefault();
-    history.push("/order/detail_order", [{
-      order: {
-        code: this.state.code.toUpperCase()
-      },
-    }])
+    if (this.props.user.id) {
+      history.push("/order/C_detail_order", [{
+        order: {
+          code: this.state.code.toUpperCase()
+        },
+      }])
+    } else {
+      history.push("/order/detail_order", [{
+        order: {
+          code: this.state.code.toUpperCase()
+        },
+      }])
+    }
+
   }
   render() {
+
     let { classes } = this.props;
     return (
       <React.Fragment>
@@ -98,5 +110,9 @@ class MatxSearchBox extends Component {
     );
   }
 }
-
-export default withStyles(styles, { withTheme: true })(MatxSearchBox);
+const mapStateToProps = state => ({
+  user: state.user
+});
+export default withStyles(styles, { withTheme: true })(
+  (connect(mapStateToProps)
+  )(MatxSearchBox));

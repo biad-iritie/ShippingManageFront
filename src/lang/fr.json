@@ -142,5 +142,6 @@
     "Info": "Info",
     "Team": "Equipe",
     "Package": "Colis",
-    "info.serviceType": "Type Service *"
+    "info.serviceType": "Type Service *",
+    "title.packageDetail": "Detail Colis"
 }

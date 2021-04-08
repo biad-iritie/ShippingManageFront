@@ -7,28 +7,9 @@ import ForgotPassword from "./ForgotPassword";
 import CompSignUp from "./CompSignUp";
 import Profile from "./Profile";
 import ShipMan from "./ShipMan";
+import { fullScreen } from "../../settings"
 
-const settings = {
-  activeLayout: "layout1",
-  layout1Settings: {
-    topbar: {
-      show: true
-    },
-    leftSidebar: {
-      show: false,
-      mode: "close"
-    }
-  },
-  layout2Settings: {
-    mode: "full",
-    topbar: {
-      show: false
-    },
-    navbar: { show: false }
-  },
-  secondarySidebar: { show: false },
-  footer: { show: true }
-};
+const settings = fullScreen;
 
 const sessionRoutes = [
   {

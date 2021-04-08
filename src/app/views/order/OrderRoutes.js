@@ -2,6 +2,9 @@ import { authRoles } from "../../auth/authRoles";
 import NewOrder from "./NewOrder";
 import ListOrder from "./ListOrder";
 import DetailOrder from './DetailOrder';
+import { fullScreen } from "../../settings"
+
+const settings = fullScreen;
 
 const orderRoutes = [
     {
@@ -17,6 +20,13 @@ const orderRoutes = [
     {
         path: "/order/detail_order",
         component: DetailOrder,
+        settings
+        //auth: authRoles.guest
+    },
+    {
+        path: "/order/C_detail_order",
+        component: DetailOrder,
+        //settings
         //auth: authRoles.guest
     },
 ];
