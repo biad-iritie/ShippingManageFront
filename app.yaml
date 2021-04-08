@@ -4,27 +4,27 @@ databases:
   num_nodes: 1
   size: db-s-dev-database
   version: "12"
-name: shipping-manage-back
-region: fra
+name: shipping
+region: fr
 services:
 - environment_slug: node-js
   envs:
   - key: APP_SECRET
     scope: RUN_TIME
-    value: ThanksGod
+    value: ${shipping.APP_SECRET}
   - key: ALGORITHM
     scope: RUN_AND_BUILD_TIME
-    value: HS256
+    value: ${shipping.ALGORITHM}
   - key: DATABASE_URL
     scope: RUN_AND_BUILD_TIME
-    value: postgresql://shipping:sc8378uprvfduy84@app-983d4f5a-2812-48e0-985b-22961dc01004-do-user-8503985-0.b.db.ondigitalocean.com:25060/shipping?sslmode=require
+    value: ${shipping.DATABASE_URL}
   github:
     branch: master
     repo: biad-iritie/ShippingManageBack
   http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xs
-  name: mshipping-back
+  name: shipping-manage-back
   routes:
   - path: /api
   run_command: npm start
@@ -37,7 +37,7 @@ static_sites:
     value: ${shipping.DATABASE_URL}
   - key: API
     scope: BUILD_TIME
-    value: https://shipping-manage-back-dx9b5.ondigitalocean.app/api
+    value: ${shipping.API}
   github:
     branch: master
     repo: biad-iritie/ShippingManageFront
