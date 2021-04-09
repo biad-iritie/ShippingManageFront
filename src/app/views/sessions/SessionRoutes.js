@@ -7,7 +7,7 @@ import ForgotPassword from "./ForgotPassword";
 import CompSignUp from "./CompSignUp";
 import Profile from "./Profile";
 import ShipMan from "./ShipMan";
-import { fullScreen } from "../../settings"
+import { fullScreen, fullScreenNoFooter } from "../../settings"
 
 const settings = fullScreen;
 

@@ -92,12 +92,11 @@ const Layout1Topbar = (props) => {
 
             {/* <div className="hide-on-mobile"> */}
             <div>
-              {/* <IconButton onClick={() => {
+              <IconButton onClick={() => {
                 user.role ? props.history.push("/Cshipman/info") : props.history.push("/shipman/info")
-
               }}>
                 <Icon>help</Icon>
-              </IconButton> */}
+              </IconButton>
 
 
               <MatxMenu
