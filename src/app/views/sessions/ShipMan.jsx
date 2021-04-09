@@ -31,14 +31,14 @@ export default function ShipMan() {
         //console.log(value);
     }
     return (
-        <div className="flex justify-center mt-5">
+        <div className="flex justify-center mt-5 ml-4">
             <Loading open={loading} />
             <Grid container
                 direction="row"
                 justify="center"
                 alignItems="center"
-                spacing={3}>
-                <Grid item xs={9} >
+                spacing={4}>
+                <Grid item xs={9}>
                     <Document
                         file={shipman}
                         options={{ workerSrc: "/pdf.worker.js" }}
@@ -47,6 +47,7 @@ export default function ShipMan() {
                         onLoadError={(error) => {
                             //console.log(error);
                         }}
+                    //className="ml-5"
                     >
                         <Page pageNumber={pageNumber} />
                         {/* {Array.from(new Array(numPages), (el, index) => (
