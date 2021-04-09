@@ -89,7 +89,7 @@ var step6 = [];
 
 const DetailOrder = (props) => {
     //console.log(props.location.state.order.id);
-    var moment = require('moment');
+    //var moment = require('moment');
     const classes = useStyles();
     const [expanded, setExpanded] = useState("panel1");
     const [variant, setVariant] = useState('error');
