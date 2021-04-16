@@ -144,9 +144,10 @@ export function scrollTo(scrollableElement, elmID) {
 }
 
 export function getTimeDifference(date) {
-  let difference = differenceInSeconds(new Date(), date);
-
-  if (difference < 60) return `${Math.floor(difference)} seconds`;
+  let difference = differenceInSeconds(date, new Date());
+  //console.log(difference);
+  if (difference < 0) return `0 seconds`;
+  else if (difference < 60) return `${Math.floor(difference)} seconds`;
   else if (difference < 3600) return `${Math.floor(difference / 60)} minutes`;
   else if (difference < 86400) return `${Math.floor(difference / 3660)} hours`;
   else if (difference < 86400 * 30)

@@ -4,14 +4,23 @@ import { connect } from "react-redux";
 import AppContext from "app/appContext";
 
 const redirectRoute = props => {
-  const { location, history } = props;
+  const { location, history, user } = props;
   const { pathname } = location;
+  //console.log(user);
+  if (user.role) {
+    history.push({
+      //pathname: "/session/signin",
+      pathname: "/dashboard/analytics",
+      state: { redirectUrl: pathname }
+    });
+  } else {
+    history.push({
+      pathname: "/session/signin",
+      //pathname: "/dashboard/analytics",
+      state: { redirectUrl: pathname }
+    });
+  }
 
-  history.push({
-    //pathname: "/session/signin",
-    pathname: "/dashboard/analytics",
-    state: { redirectUrl: pathname }
-  });
 };
 
 const getAuthStatus = (props, routes) => {

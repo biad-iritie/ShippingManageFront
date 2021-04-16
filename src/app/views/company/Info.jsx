@@ -21,7 +21,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { INFO_COMPANY, UPDATE_COMPANY } from '../../../graphql/User';
 import { Breadcrumb } from "matx";
 import { addCompany } from "../../redux/actions/CompanyAction";
-import { checkError } from "../../../utils";
+import { checkError, getTimeDifference } from "../../../utils";
 import { FormattedMessage } from 'react-intl';
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +53,7 @@ const Info = (props) => {
         errorPolicy: 'all',
         onCompleted: (data) => {
             props.addCompany(data.info_company)
-            console.log(data)
+            //console.log(data)
             setName(data.info_company.name)
             setEmail(data.info_company.email)
             setPhone1(data.info_company.phone1)
@@ -134,7 +134,7 @@ const Info = (props) => {
     };
 
     //const [signup] = useMutation(SIGN_UP);
-    const HandleFormSubmit = event => {
+    const handleFormSubmit = event => {
         event.preventDefault();
 
         //ShowInfo("success", "Validation testing")
@@ -222,18 +222,21 @@ const Info = (props) => {
                         defaultMessage="Remaining Subscription Date:"
                     />
                     <small className="border-radius-4 bg-secondary text-black px-2 py-2px">
-                        {moment(Number(props.company.limit_subscribe)).fromNow(true)}
+                        {
+                            getTimeDifference(Number(props.company.limit_subscribe))
+                            //moment(Number(props.company.limit_subscribe)).fromNow(true)
+                        }
+
                     </small>
                 </Typography>
             </div>
             <Card>
                 <div className="p-9 h-full">
                     <div className={classes.root}>
-                        <ValidatorForm ref={useRef("form")} onSubmit={HandleFormSubmit}>
+                        <ValidatorForm ref={useRef("form")} onSubmit={handleFormSubmit}>
                             <Grid container spacing={6}>
                                 <Grid item lg={6} md={6} sm={12} xs={12}>
                                     <TextValidator
-
                                         autoFocus={true}
                                         className="mb-6 w-full"
                                         variant="outlined"
